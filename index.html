@@ -138,7 +138,10 @@ p{margin:0 0 1em;max-width:64ch}
 .shift:hover .ring{transform:rotate(90deg);border-color:var(--cy);color:var(--cy)}
 .shift .ring svg{width:18px;height:18px}
 .shift kbd{font:500 .8rem/1 "JetBrains Mono",monospace;border:1px solid var(--line);padding:4px 7px;color:var(--mute)}
-.h-floor{position:relative;z-index:2;align-self:end}
+.h-floor{position:relative;z-index:3;align-self:end}
+.word{z-index:4}
+.h-meta{position:relative;z-index:1;pointer-events:none}
+html.dragging,html.dragging *{user-select:none!important;-webkit-user-select:none!important;cursor:grabbing!important}
 .word{position:relative;display:flex;justify-content:space-between;font:800 clamp(2.2rem,9.6vw,11rem)/.82 Syne,sans-serif;letter-spacing:-.02em;margin:0 0 0 -.04em;color:var(--wh)}
 .word span{flex:none;position:relative;display:inline-block;color:transparent;will-change:transform;user-select:none;-webkit-user-select:none;--sh:.05em;transition:--sh .5s var(--ease)}
 .word span::before,.word span::after{content:attr(data-c);position:absolute;left:0;top:0;color:var(--wh)}
@@ -832,10 +835,10 @@ const word=(()=>{
   }
   L.forEach((s,i)=>{
     const pt=e=>{const R=hero.getBoundingClientRect();return {x:e.clientX-R.left,y:e.clientY-R.top}};
-    s.addEventListener('pointerdown',e=>{if(!activate(0,1))return;e.preventDefault();try{s.setPointerCapture(e.pointerId)}catch(x){}const p=pt(e),b=bodies[i];
+    s.addEventListener('pointerdown',e=>{if(!activate(0,1))return;e.preventDefault();root.classList.add('dragging');try{getSelection().removeAllRanges()}catch(x){}try{s.setPointerCapture(e.pointerId)}catch(x){}const p=pt(e),b=bodies[i];
       drag=Mt.Constraint.create({pointA:p,bodyB:b,pointB:{x:p.x-b.position.x,y:p.y-b.position.y},stiffness:.2,damping:.08,length:0});Mt.Composite.add(eng.world,drag);clearTimeout(backT)});
     s.addEventListener('pointermove',e=>{if(drag&&drag.bodyB===bodies[i])drag.pointA=pt(e)});
-    const up=()=>{if(drag&&eng)Mt.Composite.remove(eng.world,drag);if(drag){drag=null;schedule()}};
+    const up=()=>{root.classList.remove('dragging');if(drag&&eng)Mt.Composite.remove(eng.world,drag);if(drag){drag=null;schedule()}};
     s.addEventListener('pointerup',up);s.addEventListener('pointercancel',up);s.addEventListener('lostpointercapture',up);
   });
   addEventListener('resize',()=>{if(eng){stop();L.forEach(s=>s.style.transform='')}});
