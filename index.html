@@ -94,7 +94,12 @@ p{margin:0 0 1em;max-width:64ch}
 .intro{display:none}
 .js-intro .intro{display:grid;place-items:center;position:fixed;inset:0;z-index:200;background:var(--bg0)}
 .intro .stack{display:grid;justify-items:center;gap:clamp(26px,5vh,48px)}
-.iw{position:relative;font:800 clamp(1.9rem,7.4vw,6.2rem)/.9 Syne,sans-serif;letter-spacing:-.02em;color:var(--wh);white-space:nowrap;opacity:0}
+.iw{position:relative;font:800 clamp(1.9rem,7.4vw,6.2rem)/.9 Syne,sans-serif;letter-spacing:-.02em;color:transparent;white-space:nowrap;opacity:0}
+.iw .hh{position:absolute;inset:0;color:var(--wh)}
+.iw .ht{clip-path:inset(0 0 49% 0)}
+.iw .hb{clip-path:inset(53% 0 0 0)}
+.iw.on .hb{animation:iwS .9s cubic-bezier(.3,1.6,.5,1) .95s forwards}
+@keyframes iwS{0%{transform:none}35%{transform:translateX(.16em)}100%{transform:translateX(.07em)}}
 .iw::before,.iw::after{content:attr(data-t);position:absolute;inset:0;pointer-events:none;clip-path:inset(0 0 100% 0)}
 .iw .f{position:absolute;left:-4%;right:-4%;top:51%;height:2px;background:var(--cy);box-shadow:0 0 16px var(--cy);transform:scaleX(0);transform-origin:0 50%}
 .iw.on{opacity:1;animation:iwIn .9s steps(1) both}
@@ -439,7 +444,7 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
 </defs></svg>
 
 <div class="intro" id="intro" aria-hidden="true">
-  <div class="stack"><div class="g" id="iG"><i></i><i></i><i class="sh"></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="iw" id="iW" data-t="PARADIGMUS">PARADIGMUS<i class="f"></i></div></div>
+  <div class="stack"><div class="g" id="iG"><i></i><i></i><i class="sh"></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="iw" id="iW" data-t="PARADIGMUS">PARADIGMUS<span class="hh ht" aria-hidden="true">PARADIGMUS</span><span class="hh hb" aria-hidden="true">PARADIGMUS</span><i class="f"></i></div></div>
   <div class="cnt mono"><span>A carregar o paradigma</span><b id="iPc">00</b></div>
   <button class="sk mono" id="iSk" type="button">Entrar</button>
 </div>
@@ -866,7 +871,7 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
     /* the intro name flies to its place in the hero */
     const fl=iw.cloneNode(true);fl.removeAttribute('id');fl.classList.remove('on');fl.setAttribute('aria-hidden','true');
     fl.style.cssText='position:fixed;left:'+A.left+'px;top:'+A.top+'px;width:'+A.width+'px;height:'+A.height+'px;margin:0;z-index:260;opacity:1;pointer-events:none;transform-origin:50% 50%';
-    fl.querySelector('.f').style.transform='scaleX(1)';document.body.appendChild(fl);iw.style.visibility='hidden';
+    fl.querySelector('.f').style.transform='scaleX(1)';fl.querySelector('.hb').style.transform='translateX(.07em)';document.body.appendChild(fl);iw.style.visibility='hidden';
     const s=vert?B.height/A.width:B.width/A.width,dx=(B.left+B.width/2)-(A.left+A.width/2),dy=(B.top+B.height/2)-(A.top+A.height/2);
     const fly=fl.animate([{transform:'none'},{transform:'translate('+dx*.15+'px,'+dy*.15+'px) rotate('+(vert?20:0)+'deg) scale('+(1+(s-1)*.2)+')',offset:.3},{transform:'translate('+dx+'px,'+dy+'px) rotate('+(vert?90:0)+'deg) scale('+s+')'}],{duration:1050,easing:'cubic-bezier(.75,0,.2,1)',fill:'forwards'});
     [$('#iG'),$('.intro .cnt'),$('#iSk')].forEach(e=>e&&e.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'}));
