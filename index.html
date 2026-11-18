@@ -6,7 +6,7 @@
 <title>Paradigmus Interactive</title>
 <meta name="theme-color" content="#08090b">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJQYXJhZGlnbXVzIj48dGl0bGU+UGFyYWRpZ211czwvdGl0bGU+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQuMDgiIGZpbGw9IiMwYjBkMTAiLz48cmVjdCB4PSIxNC43NyIgeT0iMTQuMjEiIHdpZHRoPSIyOC45MCIgaGVpZ2h0PSIxNi40NSIgZmlsbD0iI2Y0ZjJlYSIvPjxyZWN0IHg9IjIwLjMzIiB5PSIzMy4zMyIgd2lkdGg9IjI4LjkwIiBoZWlnaHQ9IjE2LjQ1IiBmaWxsPSIjZjRmMmVhIi8+PHJlY3QgeD0iMTAuODgiIHk9IjMxLjIyIiB3aWR0aD0iNDIuMjQiIGhlaWdodD0iMS41NiIgZmlsbD0iI2M4ZjUzYyIvPjwvc3ZnPg==">
-<meta name="description" content="Paradigmus Interactive: estúdio do Porto de web, plataformas, experiências 3D e videojogos.">
+<meta name="description" content="Paradigmus Interactive: estúdio de websites em Aveiro. Landing pages, sites comerciais, portfólios e sites institucionais, para qualquer área.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -501,6 +501,13 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
 .mark3d .mcap{bottom:auto;top:calc(109% + 6px);display:grid;justify-items:center;gap:4px}
 .mark3d .mnm{display:block;color:var(--cy);font:700 1rem/1.1 Syne,sans-serif;letter-spacing:0;text-transform:none}
 .mark3d .mhint{font-size:.66rem}}
+.team{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
+.team a{display:grid;gap:6px;padding:18px 20px;border:1px solid var(--line);text-decoration:none;color:var(--wh);transition:border-color .3s,transform .3s var(--ease)}
+.team a:hover{border-color:var(--cy);transform:translateY(-2px)}
+.team .mono{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cy)}
+.team b{font:700 1.15rem/1.2 Syne,sans-serif}
+.team small{color:var(--mute);font-size:.9rem;line-height:1.5}
+@media(max-width:640px){.team{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -544,7 +551,7 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
   <canvas class="glc" id="gl" aria-hidden="true"></canvas>
   <div class="h-top">
     <div>
-      <p class="wel">Estúdio de web e videojogos no Porto. Construímos sites, plataformas e mundos interativos para quem quer sair do padrão.</p>
+      <p class="wel">Estúdio de websites em Aveiro, feito por quem cresceu a fazer videojogos. Landing pages, sites comerciais, portfólios e sites institucionais, para qualquer área de trabalho.</p>
       <div class="cta">
         <a class="btn solid" href="#projetos">Ver o nosso trabalho <svg aria-hidden="true"><use href="#ar"/></svg></a>
         <a class="btn cy" href="#contacto">Falar connosco</a>
@@ -558,35 +565,37 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
   <div class="h-mark"><button class="mark3d" id="mark3d" type="button" aria-label="Mudar o paradigma"><span class="halo" aria-hidden="true"><i class="fade"></i><i class="r1"></i><i class="r2"></i><i class="br"></i></span><svg class="m2d" viewBox="0 0 38 32" aria-hidden="true"><g fill="#f4f2ea"><rect x="3.5" y="0" width="26" height="14.8"/><rect x="8.5" y="17.2" width="26" height="14.8"/></g><rect x="0" y="15.3" width="38" height="1.4" style="fill:var(--cy)"/></svg><span class="mcap mono" aria-hidden="true"><b class="mnm">Topografia</b><span class="mhint"><span class="fine-only">Clique no símbolo</span><span class="coarse-only">Toque <span class="shk2">ou agite </span>para mudar</span></span></span></button></div>
   <div class="h-floor">
     <h1 class="word" id="h-hero" aria-label="Paradigmus Interactive"><span>P</span><span>A</span><span>R</span><span>A</span><span>D</span><span>I</span><span>G</span><span>M</span><span>U</span><span>S</span><i class="fault" aria-hidden="true"></i></h1>
-    <div class="h-meta mono"><span>Interactive</span><span>Web · Plataformas · 3D · Videojogos</span><span>Porto, Portugal</span></div>
+    <div class="h-meta mono"><span>Interactive</span><span>Landing pages · Sites comerciais · Portfólios · Institucionais</span><span>Aveiro, Portugal</span></div>
   </div>
 </section>
 
 <section class="band" id="estudio" aria-labelledby="h-bio">
   <div class="wrap">
     <div class="bio">
-      <div><div class="kick mono">Estúdio</div><h2 id="h-bio">Game devs que constroem a Web. Com outra exigência.</h2></div>
+      <div><div class="kick mono">Estúdio</div><h2 id="h-bio">Game devs que fazem websites.</h2></div>
       <div>
-        <p class="lead">A Paradigmus Interactive nasceu no Porto da vontade de juntar três ofícios que raramente se sentam à mesma mesa: design, engenharia de software e desenvolvimento de videojogos.</p>
-        <p>Dos jogos trouxemos a obsessão pela resposta imediata e pelos mundos que se sentem vivos. Da engenharia, o rigor: código testado, rápido em qualquer rede, seguro e fácil de manter. Do design, a clareza: se alguém precisa de pensar para encontrar um botão, o trabalho ainda não está feito.</p>
-        <p class="mute">Construímos para marcas, instituições e empresas que querem estar à frente, sem deixar ninguém para trás.</p>
+        <p class="lead">A Paradigmus Interactive são dois irmãos, o Ricardo e o Rodrigo Santos. Vimos dos videojogos e fazemos websites: landing pages, sites comerciais, portfólios e sites institucionais, para qualquer área de trabalho.</p>
+        <p>Dos jogos trouxemos o gosto pelos detalhes que se sentem: cada clique responde, cada página tem vida. Mas um site tem de ser, antes de tudo, fácil de usar. Se alguém precisa de pensar para encontrar um botão, o trabalho ainda não está feito.</p>
+        <p class="mute">Cada site é feito à medida, sem modelos prontos, e fala diretamente connosco do início ao fim.</p>
+        <div class="team">
+          <a href="https://ricardosantos.website/" target="_blank" rel="noopener"><span class="mono">Programação e desenvolvimento</span><b>Ricardo Santos</b><small>Formação em Videojogos e Aplicações Multimédia na Universidade Lusófona do Porto.</small></a>
+          <a href="https://rodysan.github.io/Portf-lioSite/" target="_blank" rel="noopener"><span class="mono">Game design, som e QA</span><b>Rodrigo Santos</b><small>Começou pela música, de onde trouxe a disciplina e o rigor.</small></a>
+        </div>
       </div>
     </div>
     <div class="prin">
       <div><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="none" style="stroke:var(--cy)" stroke-width="1.2"/><circle cx="21.5" cy="21" r="5" fill="none" style="stroke:var(--mg)" stroke-width="1.2"/></svg><h3>Clareza primeiro</h3><p>Navegação óbvia e texto legível. A complexidade fica do nosso lado.</p></div>
-      <div><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M23 3L9 23h10l-2 14 14-20H21z" fill="none" style="stroke:var(--cy)" stroke-width="1.2" stroke-linejoin="round"/><path d="M24.5 4.5L10.5 24.5" style="stroke:var(--mg)" stroke-width="1.2"/></svg><h3>Resposta imediata</h3><p>Cada interação responde como num jogo, do 5G ao Wi-Fi do café.</p></div>
-      <div><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="14" r="6" fill="none" style="stroke:var(--cy)" stroke-width="1.2"/><circle cx="28" cy="17" r="4" fill="none" style="stroke:var(--mg)" stroke-width="1.2"/><path d="M3 36c1-7 5-11 11-11s10 4 11 11M23 36c1-5 2.5-8 5-8s5 3 6 8" fill="none" style="stroke:var(--cy)" stroke-width="1.2"/></svg><h3>Para todas as idades</h3><p>Testamos com pessoas reais, dos 15 aos 85 anos, com e sem tecnologia de apoio.</p></div>
-      <div><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4l15 8.5v15L20 36 5 27.5v-15z" fill="none" style="stroke:var(--cy)" stroke-width="1.2" stroke-linejoin="round"/><path d="M5 12.5L20 21l15-8.5M20 21v15" fill="none" style="stroke:var(--mg)" stroke-width="1.2"/></svg><h3>Feito para durar</h3><p>Arquitetura limpa e documentada, pronta para crescer com o negócio.</p></div>
+      <div><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M23 3L9 23h10l-2 14 14-20H21z" fill="none" style="stroke:var(--cy)" stroke-width="1.2" stroke-linejoin="round"/><path d="M24.5 4.5L10.5 24.5" style="stroke:var(--mg)" stroke-width="1.2"/></svg><h3>Resposta imediata</h3><p>Cada clique responde na hora, como num jogo, no computador ou no telemóvel.</p></div>
+      <div><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="14" r="6" fill="none" style="stroke:var(--cy)" stroke-width="1.2"/><circle cx="28" cy="17" r="4" fill="none" style="stroke:var(--mg)" stroke-width="1.2"/><path d="M3 36c1-7 5-11 11-11s10 4 11 11M23 36c1-5 2.5-8 5-8s5 3 6 8" fill="none" style="stroke:var(--cy)" stroke-width="1.2"/></svg><h3>Para todas as idades</h3><p>Letra legível, botões à medida do dedo e navegação simples, para quem usa a internet todos os dias e para quem não usa.</p></div>
+      <div><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4l15 8.5v15L20 36 5 27.5v-15z" fill="none" style="stroke:var(--cy)" stroke-width="1.2" stroke-linejoin="round"/><path d="M5 12.5L20 21l15-8.5M20 21v15" fill="none" style="stroke:var(--mg)" stroke-width="1.2"/></svg><h3>Feito para durar</h3><p>Código limpo e organizado, fácil de atualizar quando o seu negócio mudar.</p></div>
     </div>
     <div class="log">
       <h3 class="mono" style="color:var(--mute);font-weight:400">Registo de mudanças</h3>
       <ol class="tl">
-        <li><b>2021</b><span>Fundação no Porto, com três pessoas e uma ideia fixa.</span></li>
-        <li><b>2022</b><span>Primeiras plataformas à medida para empresas do Norte.</span></li>
-        <li><b>2023</b><span>Abre o laboratório de 3D e WebGL.</span></li>
-        <li><b>2024</b><span>Nasce a Divisão de Entretenimento.</span></li>
-        <li><b>2025</b><span>Projetos para clientes na Europa e nos EUA.</span></li>
-        <li class="now"><b>2026</b><span>Um novo paradigma. Este.</span></li>
+        <li><b>v0.1</b><span>A universidade: aprendemos a fazer videojogos na Universidade Lusófona do Porto.</span></li>
+        <li><b>v0.2</b><span>Fizemos os nossos próprios sites de portfólio.</span></li>
+        <li><b>v0.3</b><span>O primeiro site para outra pessoa: o portfólio da pintora Maria da Graça Silva.</span></li>
+        <li class="now"><b>v1.0</b><span>Nasce a Paradigmus Interactive, e com ela este site.</span></li>
       </ol>
     </div>
   </div>
@@ -596,14 +605,14 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
   <div class="wrap">
     <div class="sec-head">
       <div><div class="kick mono">Serviços</div><h2 id="h-svc">O que fazemos</h2></div>
-      <p class="lead" style="font-size:1.1rem;color:var(--ink)">Seis especialidades, uma só equipa. Abra cada uma para ver o que entregamos, com que tecnologia e em quanto tempo.</p>
+      <p class="lead" style="font-size:1.1rem;color:var(--ink)">Só websites, e bem feitos. Escolha o tipo de site de que precisa e veja o que inclui.</p>
     </div>
     <div class="idx" id="idx"></div>
     <div class="proc">
-      <div><span class="mono">Fase · Descoberta</span><h4>Ouvir e perceber</h4><p>Estudamos o seu público e definimos objetivos claros. 1 a 2 semanas.</p></div>
-      <div><span class="mono">Fase · Design</span><h4>Desenhar e testar</h4><p>Protótipos navegáveis que experimenta antes de escrevermos código. 2 a 4 semanas.</p></div>
-      <div><span class="mono">Fase · Construção</span><h4>Construir à vista</h4><p>Entregas a cada duas semanas numa versão de testes sempre atualizada.</p></div>
-      <div><span class="mono">Fase · Lançamento</span><h4>Lançar e evoluir</h4><p>Publicamos, medimos e continuamos a melhorar consigo.</p></div>
+      <div><span class="mono">Fase · Conversa</span><h4>Ouvir e perceber</h4><p>Falamos consigo para perceber o que precisa, para quem é o site e o que deve conseguir.</p></div>
+      <div><span class="mono">Fase · Design</span><h4>Desenhar e mostrar</h4><p>Mostramos-lhe o aspeto do site antes de o construir, e ajustamos até estar como quer.</p></div>
+      <div><span class="mono">Fase · Construção</span><h4>Construir à vista</h4><p>Vai vendo o site a crescer numa versão de testes e dá a sua opinião pelo caminho.</p></div>
+      <div><span class="mono">Fase · Lançamento</span><h4>Lançar e acompanhar</h4><p>Publicamos o site no seu domínio e continuamos disponíveis para ajustes.</p></div>
     </div>
   </div>
 </section>
@@ -640,8 +649,8 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
         <dl>
           <dt>Nome de código</dt><dd><span class="red" tabindex="0" data-alt="RESTRITO">VERMELHO-SETE</span></dd>
           <dt>Motor</dt><dd>Unreal Engine 5</dd>
-          <dt>Plataformas</dt><dd>PC <span class="red" tabindex="0" data-alt="SEGREDO">e consolas</span></dd>
-          <dt>Género</dt><dd><span class="red" tabindex="0" data-alt="CLASSIFICADO">ação e sobrevivência</span></dd>
+          <dt>Plataformas</dt><dd>PC</dd>
+          <dt>Género</dt><dd><span class="red" tabindex="0" data-alt="CLASSIFICADO">sobrevivência</span></dd>
           <dt>Estado</dt><dd>Em desenvolvimento ativo</dd>
           <dt>Anúncio</dt><dd><span class="red" tabindex="0" data-alt="EM BREVE">quando estiver pronto</span></dd>
         </dl>
@@ -670,11 +679,10 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
     <div>
       <div class="kick mono">Contacto</div>
       <h2 id="h-ct">Diga-nos o que imagina.</h2>
-      <p class="lead" style="margin-top:20px">Respondemos em até dois dias úteis, com perguntas certeiras ou já com um primeiro plano.</p>
+      <p class="lead" style="margin-top:20px">Respondemos o mais depressa possível, com perguntas certeiras ou já com uma primeira ideia.</p>
       <div class="direct">
-        <div><span class="mono">Email</span><a href="mailto:ola@paradigmus.pt">ola@paradigmus.pt</a></div>
-        <div><span class="mono">Telefone</span><a href="tel:+351220000000">+351 220 000 000</a></div>
-        <div><span class="mono">Estúdio</span><b>Rua do Exemplo 100, 4000-000 Porto</b></div>
+        <div><span class="mono">Email</span><a href="mailto:info@paradigmusinteractive.com">info@paradigmusinteractive.com</a></div>
+                <div><span class="mono">Onde</span><b>Aveiro, Portugal. Trabalhamos à distância para todo o lado.</b></div>
       </div>
     </div>
     <div>
@@ -685,7 +693,7 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
         </div>
         <div class="f2">
           <div class="fld"><label for="empresa">Empresa</label><input type="text" id="empresa" name="empresa" autocomplete="organization"></div>
-          <div class="fld"><label for="orc">Orçamento previsto</label><select id="orc" name="orc"><option>Ainda não sei</option><option>Até 5 000 €</option><option>5 000 € a 15 000 €</option><option>15 000 € a 40 000 €</option><option>Mais de 40 000 €</option></select></div>
+          <div class="fld"><label for="orc">Orçamento previsto</label><select id="orc" name="orc"><option>Ainda não sei</option><option>Até 1 000 €</option><option>1 000 € a 2 500 €</option><option>2 500 € a 5 000 €</option><option>Mais de 5 000 €</option></select></div>
         </div>
         <fieldset class="fld"><legend>Tipo de projeto</legend><div class="pick" id="pick"></div></fieldset>
         <div class="fld" id="f-msg"><label for="msg">Mensagem <em class="req">*</em></label><textarea id="msg" name="msg" placeholder="O que quer construir e para quem?"></textarea><span class="err" id="e-msg"></span></div>
@@ -696,7 +704,7 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
       <div class="done" id="done" aria-live="polite">
         <span class="mono c">Pedido preparado</span>
         <h3 tabindex="-1" id="doneH" style="font-size:1.4rem;color:var(--wh)">O seu pedido está pronto a enviar.</h3>
-        <p class="mute" style="margin:0">Abra-o no seu email ou copie o texto para <b style="color:var(--wh)">ola@paradigmus.pt</b>.</p>
+        <p class="mute" style="margin:0">Abra-o no seu email ou copie o texto para <b style="color:var(--wh)">info@paradigmusinteractive.com</b>.</p>
         <pre id="doneTxt"></pre>
         <div class="row"><a class="btn solid" id="mailBtn" href="#">Abrir no email</a><button class="btn cy" id="copyBtn" type="button">Copiar texto</button><button class="btn" id="editBtn" type="button">Editar</button></div>
       </div>
@@ -708,11 +716,13 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
   <div class="wrap faq">
     <div><div class="kick mono">Perguntas frequentes</div><h2 id="h-faq">Respostas diretas</h2></div>
     <div class="list">
-      <details><summary>Quanto custa um projeto? <i aria-hidden="true"></i></summary><p>Depende do âmbito. Depois de uma primeira conversa, enviamos uma proposta fechada, com preço, prazo e entregas descritas fase a fase. Sem surpresas a meio.</p></details>
-      <details><summary>Quanto tempo demora? <i aria-hidden="true"></i></summary><p>Um site institucional demora normalmente entre 6 e 10 semanas. Plataformas maiores são planeadas em fases, para começarem a dar valor cedo.</p></details>
-      <details><summary>Consigo atualizar o site sozinho? <i aria-hidden="true"></i></summary><p>Sim. Entregamos uma área de gestão simples e uma sessão de formação para a sua equipa. Se preferir, tratamos nós de tudo.</p></details>
-      <details><summary>E depois do lançamento? <i aria-hidden="true"></i></summary><p>Temos planos de manutenção com alojamento, cópias de segurança, atualizações de segurança e melhorias contínuas.</p></details>
-      <details><summary>Trabalham com clientes fora de Portugal? <i aria-hidden="true"></i></summary><p>Sim. Trabalhamos em português e inglês, com reuniões remotas e ferramentas partilhadas.</p></details>
+      <details><summary>Quanto custa um site? <i aria-hidden="true"></i></summary><p>Depende do tipo de site e do que precisa. Depois de uma primeira conversa, enviamos uma proposta fechada, com preço e prazo. Sem surpresas a meio.</p></details>
+      <details><summary>Quanto tempo demora? <i aria-hidden="true"></i></summary><p>Uma landing page pode ficar pronta em poucos dias. Um site com várias páginas leva normalmente algumas semanas. O prazo certo vai na proposta.</p></details>
+      <details><summary>Consigo atualizar o site sozinho? <i aria-hidden="true"></i></summary><p>Se vai precisar de mudar textos ou imagens com frequência, combinamos logo no início a forma mais simples de o fazer. Se preferir, tratamos nós das alterações.</p></details>
+      <details><summary>Tratam do domínio e do alojamento? <i aria-hidden="true"></i></summary><p>Ajudamos a escolher e a configurar o domínio e o alojamento, e deixamos tudo ligado e a funcionar.</p></details>
+      <details><summary>E depois do lançamento? <i aria-hidden="true"></i></summary><p>Continuamos disponíveis para ajustes, novas páginas e atualizações. Se fizer sentido, combinamos um acompanhamento mensal.</p></details>
+      <details><summary>Também fazem videojogos ou aplicações? <i aria-hidden="true"></i></summary><p>Os videojogos são um projeto nosso, numa divisão à parte e fechada. Como serviço, fazemos apenas websites.</p></details>
+      <details><summary>Trabalham com clientes fora de Portugal? <i aria-hidden="true"></i></summary><p>Sim. Falamos português e inglês e trabalhamos à distância.</p></details>
     </div>
   </div>
 </section>
@@ -722,12 +732,12 @@ html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *:
 <footer class="foot">
   <p class="fw" aria-hidden="true">PARADIGMUS</p>
   <div class="cols">
-    <div><svg style="width:40px;height:40px;margin-bottom:16px" aria-hidden="true"><use href="#mk"/></svg><p class="mute">Paradigmus Interactive. Sites, plataformas, experiências 3D e videojogos, feitos no Porto para o mundo.</p></div>
+    <div><svg style="width:40px;height:40px;margin-bottom:16px" aria-hidden="true"><use href="#mk"/></svg><p class="mute">Paradigmus Interactive. Websites feitos à medida em Aveiro, para qualquer área de trabalho.</p></div>
     <div><h4 class="mono">Navegar</h4><ul><li><a href="#estudio">Estúdio</a></li><li><a href="#servicos">Serviços</a></li><li><a href="#projetos">Projetos</a></li><li><a href="#entretenimento">Entretenimento</a></li></ul></div>
-    <div><h4 class="mono">Contacto</h4><ul><li><a href="mailto:ola@paradigmus.pt">ola@paradigmus.pt</a></li><li><a href="tel:+351220000000">+351 220 000 000</a></li><li class="mute">Porto, Portugal</li></ul></div>
-    <div><h4 class="mono">Siga-nos</h4><ul><li><a href="https://www.linkedin.com/">LinkedIn</a></li><li><a href="https://www.instagram.com/">Instagram</a></li><li><a href="https://github.com/">GitHub</a></li></ul></div>
+    <div><h4 class="mono">Contacto</h4><ul><li><a href="mailto:info@paradigmusinteractive.com">info@paradigmusinteractive.com</a></li><li class="mute">Aveiro, Portugal</li></ul></div>
+    <div><h4 class="mono">Equipa</h4><ul><li><a href="https://www.linkedin.com/in/ricardo-santos-work" target="_blank" rel="noopener">Ricardo no LinkedIn</a></li><li><a href="https://www.linkedin.com/in/rodrigo-santos-dbh" target="_blank" rel="noopener">Rodrigo no LinkedIn</a></li></ul></div>
   </div>
-  <div class="legal"><span>© <span id="yr">2026</span> Paradigmus Interactive</span><span>História, projetos e contactos deste site são texto de exemplo.</span></div>
+  <div class="legal"><span>© <span id="yr">2026</span> Paradigmus Interactive</span><span>Aveiro, Portugal</span></div>
 </footer>
 </div>
 
@@ -976,16 +986,12 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
 
 /* ===== services index ===== */
 const services=[
- {n:'Sites institucionais e de marca',d:'Sites que impressionam no primeiro segundo e continuam fáceis de usar em todos os seguintes. Design à medida, rápidos e preparados para aparecer bem no Google.',del:['Design à medida da marca','Gestão de conteúdos simples','Multilíngua e SEO técnico','Acessibilidade WCAG 2.2 AA'],tech:'Astro, Next.js, Sanity, Vercel',w:[6,10],ty:'Site'},
- {n:'Plataformas e aplicações web',d:'Portais de clientes, áreas reservadas e produtos SaaS. Arquitetura sólida e segura, pronta para escalar de cem para cem mil utilizadores.',del:['Arquitetura e APIs','Contas e permissões','Painéis e relatórios','Testes automáticos'],tech:'React, Next.js, Node.js, PostgreSQL',w:[12,26],ty:'Plataforma'},
- {n:'Experiências 3D e interativas',d:'Configuradores de produto, visitas virtuais e campanhas que as pessoas partilham. 3D em tempo real no navegador, sem instalar nada.',del:['Configuradores 3D','Visitas virtuais','Shaders e animação','Otimização para telemóvel'],tech:'Three.js, WebGL, WebGPU, Blender',w:[6,12],ty:'3D e interativo'},
- {n:'Lojas online',d:'Comércio eletrónico rápido, claro no checkout e integrado com os meios de pagamento que os portugueses usam.',del:['Shopify ou à medida','MB WAY, Multibanco e cartão','Integração com faturação','Gestão de stock'],tech:'Shopify, Next.js, Stripe, Easypay',w:[8,14],ty:'Loja online'},
- {n:'Design de produto e UX',d:'Pesquisa com pessoas reais, protótipos navegáveis e sistemas de design que mantêm tudo coerente à medida que o produto cresce.',del:['Entrevistas e testes','Protótipos navegáveis','Design system','Testes com várias idades'],tech:'Figma, Maze, Storybook',w:[3,8],ty:'Design e UX'},
- {n:'Acessibilidade, desempenho e manutenção',d:'Auditamos, corrigimos e cuidamos, para o site continuar rápido, seguro e acessível muito depois do lançamento.',del:['Auditorias WCAG','Core Web Vitals','Alojamento e cópias de segurança','Suporte com tempos garantidos'],tech:'Lighthouse, axe, Sentry, Cloudflare',w:null,ty:'Manutenção'}
+ {n:'Landing pages',tag:'Uma página',d:'Uma página, um objetivo: apresentar um produto, um evento, uma campanha ou um lançamento, e levar quem visita a agir.',del:['Design à medida, com uma mensagem clara','Pensada primeiro para o telemóvel','Botões de contacto, inscrição ou compra bem à vista','Rápida a carregar e preparada para o Google'],ideal:'Lançamentos, eventos, campanhas, apps e produtos novos.',ty:'Landing page'},
+ {n:'Sites comerciais',tag:'Negócios',d:'O site do seu negócio: o que faz, onde está e como falar consigo, para transformar visitas em clientes.',del:['Páginas de serviços, produtos ou menu','Contactos, mapa e horários','Pedidos e marcações por email ou WhatsApp','Versões em várias línguas, se precisar'],ideal:'Restaurantes, lojas, clínicas, oficinas, alojamentos e profissionais independentes.',ty:'Site comercial'},
+ {n:'Portfólios',tag:'Criativos',d:'Para mostrar o seu trabalho como ele merece: galerias que valorizam cada peça e um percurso fácil de seguir. Já fizemos os nossos e o de uma pintora.',del:['Galerias com filtros e ampliação','Percurso, exposições ou CV','Contacto direto para encomendas ou propostas','Uma identidade visual só sua'],ideal:'Artistas, fotógrafos, designers, programadores e músicos.',ty:'Portfólio'},
+ {n:'Sites institucionais',tag:'Organizações',d:'A presença online de uma organização: quem são, o que fazem e como chegar até vocês, com a informação sempre fácil de encontrar.',del:['Estrutura clara, mesmo com muita informação','Páginas de notícias, eventos ou atividades','Legível para todas as idades','Fácil de manter atualizado'],ideal:'Associações, escolas, clubes, juntas de freguesia e fundações.',ty:'Site institucional'}
 ];
-$('#idx').innerHTML=services.map((s,i)=>{const lbl=s.w?s.w[0]+'–'+s.w[1]+' semanas':'Contínuo';
-  const bar=s.w?'<i style="left:'+(s.w[0]/26*100)+'%;width:'+((s.w[1]-s.w[0])/26*100)+'%"></i>':'<i style="left:0;width:100%"></i>';
-  return '<details'+(i===0?' open':'')+'><summary><h3>'+s.n+'</h3><span class="wk mono">'+lbl+'</span><span class="pl" aria-hidden="true"></span></summary><div class="open"><div><p>'+s.d+'</p><a class="btn" style="margin-top:22px" href="#contacto" data-type="'+s.ty+'">Pedir proposta <svg aria-hidden="true"><use href="#ar"/></svg></a></div><div><h4 class="mono">O que entregamos</h4><ul>'+s.del.map(x=>'<li>'+x+'</li>').join('')+'</ul></div><div><h4 class="mono">Tecnologia</h4><p>'+s.tech+'</p><div class="meter"><h4 class="mono" style="margin-top:20px">Prazo típico: '+lbl+'</h4><div class="tr" role="img" aria-label="Prazo típico: '+lbl+', numa escala de 0 a 26 semanas">'+bar+'</div><div class="tk mono" aria-hidden="true"><span>0</span><span>13</span><span>26+</span></div></div></div></div></details>'}).join('');
+$('#idx').innerHTML=services.map((s,i)=>'<details'+(i===0?' open':'')+'><summary><h3>'+s.n+'</h3><span class="wk mono">'+s.tag+'</span><span class="pl" aria-hidden="true"></span></summary><div class="open"><div><p>'+s.d+'</p><a class="btn" style="margin-top:22px" href="#contacto" data-type="'+s.ty+'">Pedir proposta <svg aria-hidden="true"><use href="#ar"/></svg></a></div><div><h4 class="mono">O que inclui</h4><ul>'+s.del.map(x=>'<li>'+x+'</li>').join('')+'</ul></div><div><h4 class="mono">Ideal para</h4><p>'+s.ideal+'</p></div></div></details>').join('');
 
 /* ===== project art: line drawings in signal light ===== */
 function rng(seed){let s=seed%2147483647;if(s<=0)s+=2147483646;return()=>(s=s*16807%2147483647)/2147483647}
@@ -1099,7 +1105,7 @@ $$('.red').forEach(el=>{
 })();
 
 /* ===== contact form ===== */
-const types=['Site','Plataforma','3D e interativo','Loja online','Design e UX','Manutenção','Entretenimento','Outro'];
+const types=['Landing page','Site comercial','Portfólio','Site institucional','Ainda não sei','Parceria em jogos'];
 $('#pick').innerHTML=types.map((t,i)=>'<input type="radio" name="tipo" id="tp'+i+'" value="'+t+'"'+(i===0?' checked':'')+'><label for="tp'+i+'">'+t+'</label>').join('');
 document.addEventListener('click',e=>{const a=e.target.closest('[data-type]');if(!a)return;const i=types.indexOf(a.dataset.type);if(i>=0)$('#tp'+i).checked=true});
 const form=$('#form'),done=$('#done');
@@ -1113,7 +1119,7 @@ form.addEventListener('submit',e=>{
   const tipo=(form.querySelector('input[name=tipo]:checked')||{}).value||'';
   const txt='Nome: '+$('#nome').value.trim()+'\nEmail: '+$('#email').value.trim()+'\nEmpresa: '+($('#empresa').value.trim()||'não indicada')+'\nTipo de projeto: '+tipo+'\nOrçamento: '+$('#orc').value+'\n\n'+$('#msg').value.trim();
   $('#doneTxt').textContent=txt;
-  $('#mailBtn').href='mailto:ola@paradigmus.pt?subject='+encodeURIComponent('Novo projeto: '+tipo+', '+$('#nome').value.trim())+'&body='+encodeURIComponent(txt);
+  $('#mailBtn').href='mailto:info@paradigmusinteractive.com?subject='+encodeURIComponent('Novo projeto: '+tipo+', '+$('#nome').value.trim())+'&body='+encodeURIComponent(txt);
   form.style.display='none';done.classList.add('show');$('#doneH').focus();
 });
 $('#copyBtn').onclick=async()=>{const b=$('#copyBtn');try{await navigator.clipboard.writeText($('#doneTxt').textContent);b.textContent='Copiado'}catch(e){const r=document.createRange();r.selectNodeContents($('#doneTxt'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Texto selecionado'}setTimeout(()=>{b.textContent='Copiar texto'},2200)};
