@@ -530,14 +530,8 @@ html.palx *,html.palx *::before,html.palx *::after{transition-property:transform
 /* phones: no live blur behind the header (it has to be recomputed on every scrolled frame); a slightly denser background looks the same */
 .coarse .top.solid{backdrop-filter:none;-webkit-backdrop-filter:none;background:color-mix(in srgb,var(--bg0) 94%,transparent)}
 .coarse dialog::backdrop{backdrop-filter:none;background:rgba(4,6,8,.92)}
-/* light mode: the scattered name is a pure compositor animation (no physics on the processor) */
-.hero.on.flipped .word span.sc,.hero.on .word span.sc,.word span.sc{animation:scat var(--dur,4s) both;animation-delay:var(--dl,0s)}
-@keyframes scat{0%{transform:none;animation-timing-function:cubic-bezier(.15,.7,.3,1)}
-  22%{transform:translate(var(--tx),var(--ty)) rotate(var(--r));animation-timing-function:cubic-bezier(.3,0,.6,1)}
-  27%{transform:translate(var(--tx2),var(--ty2)) rotate(var(--r2))}
-  64%{transform:translate(var(--tx2),var(--ty2)) rotate(var(--r2));animation-timing-function:cubic-bezier(.2,1.25,.3,1)}
-  100%{transform:none}}
-.word span.lg{transition:transform 1.1s cubic-bezier(.2,1.25,.3,1)}
+.wov{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5}
+.word.pwh span{visibility:hidden}
 /* performance: offscreen sections skip layout and paint until they come near the screen */
 main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:auto 1100px}
 .glc{visibility:hidden}.glc.on{visibility:visible}
@@ -877,7 +871,7 @@ const worlds=(()=>{
   const rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)).join(',');
   let palPrev=PALS[0],palT=0;const mixHex=(a,b,k)=>'#'+[1,3,5].map(j=>Math.round(parseInt(a.slice(j,j+2),16)*(1-k)+parseInt(b.slice(j,j+2),16)*k).toString(16).padStart(2,'0')).join('');
   function palette(i){const p=PALS[i],from=palPrev;palPrev=p;const lite=!fine||Q.level>0;root.classList.toggle('litepal',lite);clearTimeout(palT);
-    if(lite&&!reduce){root.classList.add('palx');clearTimeout(root._px);root._px=setTimeout(()=>root.classList.remove('palx'),1600);let n=0;const N=Q.level>=2?4:8;const st=()=>{n++;const k=n/N;for(const c of ['cy','mg','bg','bg0'])root.style.setProperty('--'+c,mixHex(from[c],p[c],k));if(n<N)palT=setTimeout(st,1400/N)};st()}
+    if(lite&&!reduce){root.classList.add('palx');clearTimeout(root._px);root._px=setTimeout(()=>root.classList.remove('palx'),1600);let n=0;const N=!fine?1:Q.level>=2?4:8;const st=()=>{n++;const k=n/N;for(const c of ['cy','mg','bg','bg0'])root.style.setProperty('--'+c,mixHex(from[c],p[c],k));if(n<N)palT=setTimeout(st,1400/N)};st()}
     else for(const k of ['cy','mg','bg','bg0'])root.style.setProperty('--'+k,p[k]);CY=rgb(p.cy);MG=rgb(p.mg);BG0=rgb(p.bg0);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=p.bg0;window.__pCy=p.cy;dispatchEvent(new CustomEvent('paradigm',{detail:p}));const mn=document.querySelector('.mark3d .mnm');if(mn)mn.textContent=defs[i].name}
   const slot=[{w:0,s:{}},{w:1,s:{}}];let cur=0,fading=false,fadeTick=0;
   function size(){const r=hero.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,[1.5,1.25,1][Q.level]);W=r.width;H=r.height;
@@ -958,7 +952,7 @@ function glitch(pow,dur){
   if(reduce)return;const c=$('#gl'),hero=$('#inicio');if(!c)return;
   if(window.__glRemoteOK!==false&&typeof worlds!=='undefined'&&worlds.gl){const dd=Math.min(devicePixelRatio||1,Q.level>0?1:1.5);if(worlds.gl(pow,dur,dd)){
     c.classList.add('on');clearTimeout(c._t);c._t=setTimeout(()=>c.classList.remove('on'),dur+40);
-    for(const el of [$('#h-hero'),$('.h-top'),$('.h-meta')])restart(el,'gl');setTimeout(()=>$$('.gl').forEach(e=>e.classList.remove('gl')),dur+60);sfx.glitch(pow);return}}
+    for(const el of [$('#h-hero'),$('.h-top'),$('.h-meta')])if(!(window.__wov&&el.id==='h-hero'))restart(el,'gl');setTimeout(()=>$$('.gl').forEach(e=>e.classList.remove('gl')),dur+60);sfx.glitch(pow);return}}
   const x=c.getContext('2d');
   const [W,H]=worlds.size(),d=Math.min(devicePixelRatio||1,Q.level>0?1:1.5);if(c.width!==Math.round(W*d)||c.height!==Math.round(H*d)){c.width=Math.round(W*d);c.height=Math.round(H*d)}
   x.setTransform(d,0,0,d,0,0);c.classList.add('on');worlds.snap&&worlds.snap();glPow=Math.max(glPow,pow);glEnd=Math.max(glEnd,performance.now()+dur);
@@ -1002,35 +996,70 @@ const word=(()=>{
   const hero=$('#inicio'),wd=$('#h-hero'),L=$$('#h-hero span');L.forEach((s,i)=>{s.dataset.c=s.textContent;s.style.setProperty('--i',i)});
   let eng=null,bodies=[],home=[],raf=0,drag=null,backT=0;
   /* phones: the letters' physics runs on its own thread too; the page only receives ten positions per frame */
-  let PW=null,pwOn=false,pos=null,pwRaf=0;
+  let PW=null,pwOn=false,pos=null,pwRaf=0,OV=null,backing=false,bmKey='',ovKey='',sz=[];
   try{const ms=document.querySelector('script[src*="matter"]');if(!fine&&!reduce&&window.Worker&&ms){
-    const code=`importScripts(${JSON.stringify(ms.src)});const M=Matter;let eng=null,bodies=[],drag=null,run=false;
+    const code=`importScripts(${JSON.stringify(ms.src)});const M=Matter;let gt0=0,em=60,eng=null,bodies=[],drag=null,run=false,C=null,g=null,dpr=1,BM=[],home=[],phase='idle',bk=null,last=null,shown=true;
+      const bez=(x1,y1,x2,y2)=>t=>{let lo=0,hi=1,u=t;for(let k=0;k<20;k++){u=(lo+hi)/2;const x=3*(1-u)*(1-u)*u*x1+3*(1-u)*u*u*x2+u*u*u;if(x<t)lo=u;else hi=u}return 3*(1-u)*(1-u)*u*y1+3*(1-u)*u*u*y2+u*u*u},ease=bez(.2,1.25,.3,1);
+      function draw(a){if(!g)return;g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,C.width,C.height);for(let i=0;i<BM.length;i++){const m=BM[i];if(!m)continue;const c=Math.cos(a[i*3+2])*dpr,s=Math.sin(a[i*3+2])*dpr,gs=Math.floor((performance.now()-gt0)/107),jx=gs<3?(((i*7+gs*13)%5)-2)*.05*em:0;g.setTransform(c,s,-s,c,(a[i*3]+jx)*dpr,a[i*3+1]*dpr);g.drawImage(m.b,m.ox,m.oy,m.dw,m.dh)}}
+      function resume(){if(!eng||phase==='phys')return;if(last)bodies.forEach((b,i)=>{M.Body.setPosition(b,{x:last[i*3],y:last[i*3+1]});M.Body.setAngle(b,last[i*3+2]);M.Body.setVelocity(b,{x:0,y:0});M.Body.setAngularVelocity(b,0)});phase='phys';if(!run){run=true;raf(loop)}}
       const raf=self.requestAnimationFrame?f=>self.requestAnimationFrame(f):f=>setTimeout(()=>f(performance.now()),16);
-      function loop(){if(!run)return;M.Engine.update(eng,1000/60);const a=new Float32Array(bodies.length*3);bodies.forEach((b,i)=>{a[i*3]=b.position.x;a[i*3+1]=b.position.y;a[i*3+2]=b.angle});postMessage({t:'p',a},[a.buffer]);raf(loop)}
+      function loop(){if(!run)return;const a=new Float32Array(bodies.length*3);
+        if(phase==='back'){const now=performance.now();let done=true;for(let i=0;i<bodies.length;i++){const k=Math.min(1,Math.max(0,(now-bk.t0-i*40)/1300));if(k<1)done=false;const e=ease(k);a[i*3]=bk.a[i*3]+(home[i][0]-bk.a[i*3])*e;a[i*3+1]=bk.a[i*3+1]+(home[i][1]-bk.a[i*3+1])*e;a[i*3+2]=bk.a[i*3+2]*(1-e)}
+          if(done){for(let i=0;i<bodies.length;i++){a[i*3]=home[i][0];a[i*3+1]=home[i][1];a[i*3+2]=0}draw(a);last=a;run=false;phase='homed';postMessage({t:'homed'});return}}
+        else{M.Engine.update(eng,1000/60);bodies.forEach((b,i)=>{a[i*3]=b.position.x;a[i*3+1]=b.position.y;a[i*3+2]=b.angle})}
+        draw(a);last=a.slice();postMessage({t:'p',a},[a.buffer]);if(!shown&&g){shown=true;postMessage({t:'shown'})}raf(loop)}
       onmessage=e=>{const m=e.data;switch(m.t){
-        case 'start':{const B=M.Bodies,W=m.W,H=m.H,T=300;eng=M.Engine.create();
+        case 'init':C=m.c;g=C.getContext('2d');break;
+        case 'size':if(C){C.width=m.w;C.height=m.h}dpr=m.dpr;break;
+        case 'bm':BM=m.list;break;
+        case 'back':if(phase==='phys'&&last){if(drag&&eng)M.Composite.remove(eng.world,drag);drag=null;bk={t0:performance.now(),a:last.slice()};phase='back'}break;
+        case 'start':{if(eng){M.World.clear(eng.world,false);M.Engine.clear(eng)}const B=M.Bodies,W=m.W,H=m.H,T=300;eng=M.Engine.create();home=m.b.map(r=>[r[0],r[1]]);phase='phys';gt0=performance.now();em=m.em||60;shown=false;last=null;
           M.Composite.add(eng.world,[B.rectangle(W/2,H+T/2,W*3,T,{isStatic:true}),B.rectangle(W/2,-T/2,W*3,T,{isStatic:true}),B.rectangle(-T/2,H/2,T,H*3,{isStatic:true}),B.rectangle(W+T/2,H/2,T,H*3,{isStatic:true})]);
           bodies=m.b.map(r=>B.rectangle(r[0],r[1],r[2],r[3],{chamfer:{radius:4},restitution:.35,friction:.3,frictionAir:.015,density:.002}));M.Composite.add(eng.world,bodies);
           M.Events.on(eng,'collisionStart',ev=>{for(const p of ev.pairs){const v=Math.hypot(p.bodyA.velocity.x-p.bodyB.velocity.x,p.bodyA.velocity.y-p.bodyB.velocity.y);if(v>9&&(p.bodyA.isStatic||p.bodyB.isStatic)){postMessage({t:'q'});break}}});
-          eng.gravity.x=m.gx;eng.gravity.y=m.gy;run=true;raf(loop);break}
-        case 'grav':if(eng){eng.gravity.x=m.gx;eng.gravity.y=m.gy}break;
-        case 'kick':bodies.forEach(b=>{M.Body.setVelocity(b,{x:(Math.random()-.5)*14,y:(Math.random()-.5)*14-m.d*4});M.Body.setAngularVelocity(b,(Math.random()-.5)*.35)});break;
-        case 'drag':{const b=bodies[m.i];if(!b)break;drag=M.Constraint.create({pointA:{x:m.x,y:m.y},bodyB:b,pointB:{x:m.x-b.position.x,y:m.y-b.position.y},stiffness:.2,damping:.08,length:0});M.Composite.add(eng.world,drag);break}
+          eng.gravity.x=m.gx;eng.gravity.y=m.gy;if(!run){run=true;raf(loop)}break}
+        case 'grav':if(eng){resume();eng.gravity.x=m.gx;eng.gravity.y=m.gy}break;
+        case 'kick':resume();bodies.forEach(b=>{M.Body.setVelocity(b,{x:(Math.random()-.5)*14,y:(Math.random()-.5)*14-m.d*4});M.Body.setAngularVelocity(b,(Math.random()-.5)*.35)});break;
+        case 'drag':{resume();const b=bodies[m.i];if(!b)break;drag=M.Constraint.create({pointA:{x:m.x,y:m.y},bodyB:b,pointB:{x:m.x-b.position.x,y:m.y-b.position.y},stiffness:.2,damping:.08,length:0});M.Composite.add(eng.world,drag);break}
         case 'move':if(drag)drag.pointA={x:m.x,y:m.y};break;
         case 'up':if(drag&&eng)M.Composite.remove(eng.world,drag);drag=null;break;
-        case 'stop':run=false;if(eng){M.World.clear(eng.world,false);M.Engine.clear(eng)}eng=null;bodies=[];drag=null;break}}`;
+        case 'stop':run=false;phase='idle';if(g){g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,C.width,C.height)}if(eng){M.World.clear(eng.world,false);M.Engine.clear(eng)}eng=null;bodies=[];drag=null;break}}`;
     PW=new Worker(URL.createObjectURL(new Blob([code],{type:'text/javascript'})));
-    PW.onmessage=e=>{const m=e.data;if(m.t==='p'){pos=m.a;if(!pwRaf)pwRaf=requestAnimationFrame(writePW)}else if(m.t==='q')quake(hero)};
-    PW.onerror=()=>{PW=null;pwOn=false};
+    PW.onmessage=e=>{const m=e.data;if(m.t==='p'){pos=m.a;if(!OV&&!pwRaf)pwRaf=requestAnimationFrame(writePW)}else if(m.t==='q')quake(hero);
+      else if(m.t==='shown'){if(pwOn)requestAnimationFrame(()=>{if(pwOn)wd.classList.add('pwh')})}
+      else if(m.t==='homed'&&backing){backing=false;pwOn=false;pos=null;wd.classList.remove('pwh');hitOff();requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!pwOn)PW.postMessage({t:'stop'})}));if(!reduce)restart(wd,'jolt')}};
+    PW.onerror=()=>{PW=null;pwOn=false;wd.classList.remove('pwh')};
+    /* the falling letters are drawn by the worker on this canvas: during the effect the page itself does no work per frame */
+    if('transferControlToOffscreen' in HTMLCanvasElement.prototype&&window.OffscreenCanvas){const c=document.createElement('canvas');c.className='wov';c.setAttribute('aria-hidden','true');hero.appendChild(c);const oc=c.transferControlToOffscreen();PW.postMessage({t:'init',c:oc},[oc]);OV=c;window.__wov=true}
   }}catch(e){PW=null}
   function writePW(){pwRaf=0;if(!pwOn||!pos)return;for(let i=0;i<L.length;i++)L[i].style.transform='translate('+(pos[i*3]-home[i].x).toFixed(1)+'px,'+(pos[i*3+1]-home[i].y).toFixed(1)+'px) rotate('+pos[i*3+2].toFixed(3)+'rad)'}
-  function stop(){if(PW){PW.postMessage({t:'stop'});pwOn=false;pos=null;return}cancelAnimationFrame(raf);raf=0;if(eng){Mt.World.clear(eng.world,false);Mt.Engine.clear(eng)}eng=null;bodies=[]}
-  function back(){if(drag)return;stop();L.forEach((s,i)=>{s.style.transition='transform 1.3s cubic-bezier(.2,1.25,.3,1) '+(i*.04)+'s';s.style.transform=''});
+  /* each letter is drawn once, exactly as on the page (two halves, the lower one slid), into a small image the worker reuses */
+  function makeBM(RS){const cs=getComputedStyle(wd),fs=parseFloat(cs.fontSize),vert=cs.writingMode.indexOf('vertical')===0,S=Math.min(devicePixelRatio||1,2);
+    const key=fs+'|'+vert+'|'+S+'|'+RS.map(r=>r.width.toFixed(1)+'x'+r.height.toFixed(1)).join(',');if(key===bmKey)return;bmKey=key;
+    const font=cs.fontStyle+' '+cs.fontWeight+' '+fs+'px '+cs.fontFamily,col=getComputedStyle(L[0],'::before').color,list=[],tr=[];
+    L.forEach((s,i)=>{const r=RS[i],w=r.width,h=r.height,ch=s.dataset.c,v=getComputedStyle(s).getPropertyValue('--sh').trim(),sh=v.endsWith('em')?parseFloat(v)*fs:parseFloat(v)||0,pad=Math.ceil(Math.abs(sh))+4;
+      const oc=new OffscreenCanvas(Math.ceil((w+2*pad)*S),Math.ceil((h+2*pad)*S)),g=oc.getContext('2d');g.scale(S,S);g.translate(pad,pad);g.font=font;g.fillStyle=col;
+      const mt=g.measureText(ch),A=mt.fontBoundingBoxAscent,D=mt.fontBoundingBoxDescent;
+      const glyph=()=>{if(vert){g.save();g.translate(w,0);g.rotate(Math.PI/2);g.fillText(ch,0,(w-(A+D))/2+A);g.restore()}else g.fillText(ch,0,(h-(A+D))/2+A)};
+      g.save();g.beginPath();vert?g.rect(w*.51,0,w*.49,h):g.rect(0,0,w,h*.51);g.clip();glyph();g.restore();
+      g.save();vert?g.translate(0,sh):g.translate(sh,0);g.beginPath();vert?g.rect(0,0,w*.47,h):g.rect(0,h*.53,w,h*.47);g.clip();glyph();g.restore();
+      const b=oc.transferToImageBitmap();tr.push(b);list.push({b,ox:-w/2-pad,oy:-h/2-pad,dw:oc.width/S,dh:oc.height/S})});
+    PW.postMessage({t:'bm',list},tr)}
+  function ovSize(R){const d=Math.min(devicePixelRatio||1,2),k=R.width+'x'+R.height+'@'+d;if(k===ovKey)return;ovKey=k;PW.postMessage({t:'size',w:Math.round(R.width*d),h:Math.round(R.height*d),dpr:d})}
+  /* while the letters are loose, a touch on one of them grabs it (and does not scroll or press what is underneath) */
+  function hitTest(x,y){const P=pos||(home.length?Float32Array.from(home.flatMap(h=>[h.x,h.y,0])):null);if(!P)return -1;
+    for(let i=L.length-1;i>=0;i--){const dx=x-P[i*3],dy=y-P[i*3+1],a=-P[i*3+2],c=Math.cos(a),s=Math.sin(a),lx=dx*c-dy*s,ly=dx*s+dy*c;if(sz[i]&&Math.abs(lx)<=sz[i][0]/2+10&&Math.abs(ly)<=sz[i][1]/2+10)return i}return -1}
+  const ts=e=>{if(!pwOn)return;const t=e.touches[0],R=hero.getBoundingClientRect();if(t&&hitTest(t.clientX-R.left,t.clientY-R.top)>=0)e.preventDefault()};
+  let hitOn=false;function hitOnF(){if(!hitOn){hitOn=true;hero.addEventListener('touchstart',ts,{passive:false,capture:true})}}
+  function hitOff(){if(hitOn){hitOn=false;hero.removeEventListener('touchstart',ts,{capture:true})}}
+  function stop(){if(PW){PW.postMessage({t:'stop'});pwOn=false;backing=false;pos=null;wd.classList.remove('pwh');hitOff();return}cancelAnimationFrame(raf);raf=0;if(eng){Mt.World.clear(eng.world,false);Mt.Engine.clear(eng)}eng=null;bodies=[]}
+  function back(){if(drag)return;if(OV){if(pwOn){backing=true;PW.postMessage({t:'back'})}return}stop();L.forEach((s,i)=>{s.style.transition='transform 1.3s cubic-bezier(.2,1.25,.3,1) '+(i*.04)+'s';s.style.transform=''});
     setTimeout(()=>{L.forEach(s=>s.style.transition='');wd.classList.remove('jolt');void wd.offsetWidth;if(!reduce)wd.classList.add('jolt')},1500)}
   function schedule(){clearTimeout(backT);backT=setTimeout(back,2600)}
   function activate(gx,gy){
-    if(PW&&!reduce){if(!pwOn){const R=hero.getBoundingClientRect();home=[];L.forEach(s=>{s.style.transition='';s.style.transform=''});const RS=L.map(s=>s.getBoundingClientRect());
-        const b=RS.map(r=>{const h={x:r.left-R.left+r.width/2,y:r.top-R.top+r.height/2};home.push(h);return [h.x,h.y,r.width*.86,r.height*.7]});PW.postMessage({t:'start',W:R.width,H:R.height,b,gx,gy});pwOn=true}
+    if(PW&&!reduce){backing=false;if(!pwOn){const R=hero.getBoundingClientRect();home=[];if(!OV)L.forEach(s=>{s.style.transition='';s.style.transform=''});const RS=L.map(s=>s.getBoundingClientRect());sz=RS.map(r=>[r.width,r.height]);
+        if(OV){ovSize(R);makeBM(RS);hitOnF()}
+        const b=RS.map(r=>{const h={x:r.left-R.left+r.width/2,y:r.top-R.top+r.height/2};home.push(h);return [h.x,h.y,r.width*.86,r.height*.7]});PW.postMessage({t:'start',W:R.width,H:R.height,b,gx,gy,em:parseFloat(getComputedStyle(wd).fontSize)});pwOn=true}
       else PW.postMessage({t:'grav',gx,gy});schedule();return true}
     if(!needMt()||reduce)return false;
     if(!eng){
@@ -1046,41 +1075,36 @@ const word=(()=>{
     }
     eng.gravity.x=gx;eng.gravity.y=gy;schedule();return true;
   }
-  const lite=()=>!fine&&Q.level>=2;
-  function liteScatter(d){const R=hero.getBoundingClientRect(),RS=L.map(s=>s.getBoundingClientRect());
-    L.forEach((s,i)=>{const r=RS[i],cx=r.left-R.left+r.width/2,cy=r.top-R.top+r.height/2;
-      // throw each letter toward the side the gravity points to, inside the hero, like the physics would
-      const gx=d[0],gy=d[1];let tx=(gx?(gx>0?R.width-r.width*.6-cx:r.width*.6-cx):(Math.random()-.5)*R.width*.5)*(.55+Math.random()*.45);
-        let ty=(gy>.5?R.height-r.height*.6-cy:gy<-.5?r.height*.6-cy:(Math.random()-.5)*R.height*.5)*(.55+Math.random()*.45),rot=(Math.random()-.5)*160,cl=(v,a,b)=>Math.max(a,Math.min(b,v));tx=cl(cx+tx,r.width*.5+8,R.width-r.width*.5-8)-cx;ty=cl(cy+ty,r.height*.5+70,R.height-r.height*.5-8)-cy;
-      s.style.transition='';s.style.transform='';s.style.setProperty('--tx',tx.toFixed(0)+'px');s.style.setProperty('--ty',ty.toFixed(0)+'px');s.style.setProperty('--r',rot.toFixed(0)+'deg');
-      s.style.setProperty('--tx2',(tx*.94).toFixed(0)+'px');s.style.setProperty('--ty2',(ty*.94).toFixed(0)+'px');s.style.setProperty('--r2',(rot*.9).toFixed(0)+'deg');s.style.setProperty('--dl',(i*.025)+'s');
-      s.classList.remove('sc')});requestAnimationFrame(()=>requestAnimationFrame(()=>{L.forEach(s=>s.classList.add('sc'));setTimeout(()=>quake(hero),850)}));
-    clearTimeout(L._t);L._t=setTimeout(()=>{L.forEach(s=>s.classList.remove('sc'));if(!reduce)restart(wd,'jolt')},4300)}
-  /* if a change still runs slowly on a phone, the next ones use the light mode */
-  function watchShift(){if(fine||Q.level>=2)return;let n=0,last=0,sum=0;const f=t=>{if(last){sum+=t-last;n++}last=t;if(n<70)requestAnimationFrame(f);else if(sum/n>24)Q.set(2)};requestAnimationFrame(f)}
   function shift(){
     const dirs=[[0,1.2],[0,-1.2],[-1.2,.2],[1.2,.2]],d=dirs[(Math.random()*dirs.length)|0];
-    if(lite()){liteScatter(d);worlds.next();quake(hero);glitch(1,520);sfx.shift();buzz([25,40,70]);window.turnMark&&turnMark();window.spin3d&&spin3d();return}
-    watchShift();
     if(PW&&activate(d[0],d[1]))PW.postMessage({t:'kick',d:d[1]});else if(!PW&&activate(d[0],d[1]))bodies.forEach(b=>{Mt.Body.setVelocity(b,{x:(Math.random()-.5)*14,y:(Math.random()-.5)*14-d[1]*4});Mt.Body.setAngularVelocity(b,(Math.random()-.5)*.35)});
-    if(!reduce)restart(wd,'jolt');
+    if(!reduce&&!OV)restart(wd,'jolt');
     worlds.next();quake(hero);glitch(1,520);sfx.shift();buzz([25,40,70]);window.turnMark&&turnMark();window.spin3d&&spin3d();
   }
   L.forEach((s,i)=>{
     const pt=e=>{const R=hero.getBoundingClientRect();return {x:e.clientX-R.left,y:e.clientY-R.top}};
-    let ld=null;
-    s.addEventListener('pointerdown',e=>{if(lite()){e.preventDefault();try{s.setPointerCapture(e.pointerId)}catch(x){}s.classList.remove('sc','lg');ld={x:e.clientX,y:e.clientY,r:0};root.classList.add('dragging');return}
-      if(!activate(0,1))return;e.preventDefault();root.classList.add('dragging');try{getSelection().removeAllRanges()}catch(x){}try{s.setPointerCapture(e.pointerId)}catch(x){}const p=pt(e);
+    s.addEventListener('pointerdown',e=>{if(OV)return;if(!activate(0,1))return;e.preventDefault();root.classList.add('dragging');try{getSelection().removeAllRanges()}catch(x){}try{s.setPointerCapture(e.pointerId)}catch(x){}const p=pt(e);
       if(PW){drag={i};PW.postMessage({t:'drag',i,x:p.x,y:p.y});clearTimeout(backT);return}const b=bodies[i];
       drag=Mt.Constraint.create({pointA:p,bodyB:b,pointB:{x:p.x-b.position.x,y:p.y-b.position.y},stiffness:.2,damping:.08,length:0});Mt.Composite.add(eng.world,drag);clearTimeout(backT)});
-    s.addEventListener('pointermove',e=>{if(ld){const dx=e.clientX-ld.x,dy=e.clientY-ld.y;if(!ld.f)ld.f=requestAnimationFrame(()=>{ld&&(ld.f=0);s.style.transform='translate('+dx+'px,'+dy+'px) rotate('+(dx*.12).toFixed(1)+'deg)'});return}if(PW){if(drag&&drag.i===i){const p=pt(e);PW.postMessage({t:'move',x:p.x,y:p.y})}return}if(drag&&drag.bodyB===bodies[i])drag.pointA=pt(e)});
-    const up=()=>{root.classList.remove('dragging');if(ld){ld=null;s.classList.add('lg');s.style.transform='';setTimeout(()=>s.classList.remove('lg'),1200);return}if(PW){if(drag){PW.postMessage({t:'up'});drag=null;schedule()}return}if(drag&&eng)Mt.Composite.remove(eng.world,drag);if(drag){drag=null;schedule()}};
+    s.addEventListener('pointermove',e=>{if(OV)return;if(PW){if(drag&&drag.i===i){const p=pt(e);PW.postMessage({t:'move',x:p.x,y:p.y})}return}if(drag&&drag.bodyB===bodies[i])drag.pointA=pt(e)});
+    const up=()=>{if(OV)return;root.classList.remove('dragging');if(PW){if(drag){PW.postMessage({t:'up'});drag=null;schedule()}return}if(drag&&eng)Mt.Composite.remove(eng.world,drag);if(drag){drag=null;schedule()}};
     s.addEventListener('pointerup',up);s.addEventListener('pointercancel',up);s.addEventListener('lostpointercapture',up);
   });
+  /* canvas mode: one set of handlers on the hero for grabbing letters, wherever they are */
+  if(OV){let dg=null,eat=false;const pt=e=>{const R=hero.getBoundingClientRect();return {x:e.clientX-R.left,y:e.clientY-R.top}};
+    hero.addEventListener('pointerdown',e=>{if(e.button>0)return;let i=-1;const p=pt(e);
+      if(pwOn)i=hitTest(p.x,p.y);else{const sp=e.target.closest&&e.target.closest('#h-hero span');i=sp?L.indexOf(sp):-1}
+      if(i<0)return;e.preventDefault();e.stopPropagation();if(!activate(0,1))return;eat=true;setTimeout(()=>eat=false,600);
+      root.classList.add('dragging');try{getSelection().removeAllRanges()}catch(x){}try{hero.setPointerCapture(e.pointerId)}catch(x){}
+      dg={id:e.pointerId};drag={i};PW.postMessage({t:'drag',i,x:p.x,y:p.y});clearTimeout(backT)},true);
+    hero.addEventListener('pointermove',e=>{if(dg&&e.pointerId===dg.id){const p=pt(e);PW.postMessage({t:'move',x:p.x,y:p.y})}});
+    const up=e=>{if(!dg||e.pointerId!==dg.id)return;dg=null;root.classList.remove('dragging');PW.postMessage({t:'up'});drag=null;schedule()};
+    ['pointerup','pointercancel','lostpointercapture'].forEach(t=>hero.addEventListener(t,up));
+    hero.addEventListener('click',e=>{if(eat){eat=false;e.preventDefault();e.stopPropagation()}},true)}
   addEventListener('resize',()=>{if(eng||pwOn){stop();L.forEach(s=>s.style.transform='')}});
-  return {shift};
+  return {shift,_pw:()=>PW};
 })();
-window.doShift=()=>word.shift();{const m=$('#mark3d');m.addEventListener('click',e=>{if(m.dataset.drag==='1'){m.dataset.drag='';return}m.classList.add('used');if(!m.classList.contains('webgl')){m.classList.remove('spin');void m.offsetWidth;m.classList.add('spin');m.classList.add('pulse');setTimeout(()=>m.classList.remove('pulse'),1300)}word.shift()})}
+window.doShift=()=>word.shift();window.__pw=()=>word._pw();{const m=$('#mark3d');m.addEventListener('click',e=>{if(m.dataset.drag==='1'){m.dataset.drag='';return}m.classList.add('used');if(!m.classList.contains('webgl')){m.classList.remove('spin');void m.offsetWidth;m.classList.add('spin');m.classList.add('pulse');setTimeout(()=>m.classList.remove('pulse'),1300)}word.shift()})}
 {const sb=$('#shiftBtn');window.turnMark=()=>{restart(sb,'go')};sb.onclick=()=>{word.shift()}}
 /* fit the name exactly to the width of the screen */
 function fitWords(){for(const el of [$('#h-hero'),$('.foot .fw')]){if(!el)continue;el.style.fontSize='';const base=parseFloat(getComputedStyle(el).fontSize);
@@ -1290,9 +1314,9 @@ try{window.claude?.hot?.snapshot?.(snap)}catch(e){}
 const restore=d=>{if(d)for(const k of ['nome','email','empresa','msg'])if(d[k])$('#'+k).value=d[k]};
 try{if(window.claude?.hot?.ready)window.claude.hot.ready(restore);else restore(window.claude?.hot?.data)}catch(e){}
 
-/* ===== on-device check: open the site with ?diag to see speed, mode and frame rate ===== */
+/* ===== on-device check: open the site with ?diag to see frame rate and what runs on its own thread ===== */
 if(/[?&]diag/.test(location.search)){const d=document.createElement('div');Object.assign(d.style,{position:'fixed',left:'8px',bottom:'8px',zIndex:999,font:'12px/1.4 monospace',background:'rgba(0,0,0,.8)',color:'#0f0',padding:'6px 9px',borderRadius:'6px',pointerEvents:'none',whiteSpace:'pre'});document.body.appendChild(d);
-  let n=0,t0=performance.now(),last=t0,worst=0,fps=0;const f=t=>{n++;worst=Math.max(worst,t-last);last=t;if(t-t0>1000){fps=Math.round(n*1000/(t-t0));d.textContent='fps '+fps+'  pior '+Math.round(worst)+'ms\nmodo '+(Q.level>=2?'leve':'normal')+' (nível '+Q.level+')  velocidade '+(Q.speed||'?')+'\nfundo noutro núcleo: '+(typeof OffscreenCanvas!=='undefined'&&!fine?'sim':'não');n=0;t0=t;worst=0}requestAnimationFrame(f)};requestAnimationFrame(f)}
+  let n=0,t0=performance.now(),last=t0,worst=0;const f=t=>{n++;worst=Math.max(worst,t-last);last=t;if(t-t0>1000){d.textContent='fps '+Math.round(n*1000/(t-t0))+'  pior '+Math.round(worst)+'ms  nível '+Q.level+'\nletras noutro núcleo: '+(window.__wov?'sim':'não')+'\n3D noutro núcleo: '+(window.__3dt?'sim':'não');n=0;t0=t;worst=0}requestAnimationFrame(f)};requestAnimationFrame(f)}
 /* ===== cheat code: type 2005 anywhere to reboot the site, intro and all ===== */
 {let buf='';addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||e.target.isContentEditable)return;
   if(!/^[0-9]$/.test(e.key)){buf='';return}buf=(buf+e.key).slice(-4);if(buf!=='2005')return;buf='';
@@ -1423,20 +1447,17 @@ applyPrefs();
 const btn=document.getElementById('mark3d'),hero=document.getElementById('inicio'),root=document.documentElement;
 const reduce=()=>window.isCalm?window.isCalm():matchMedia('(prefers-reduced-motion: reduce)').matches;
 await new Promise(r=>{const go=()=>('requestIdleCallback' in window?requestIdleCallback(()=>r(),{timeout:2500}):setTimeout(r,500));document.readyState==='complete'?go():addEventListener('load',go,{once:true})});
-let THREE;try{THREE=await import('https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js')}catch(e){}
-const gl=(()=>{try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'))}catch(e){return false}})();
-if(THREE&&gl){
-  const cv=document.createElement('canvas');btn.prepend(cv);btn.classList.add('webgl');
-  const R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:(devicePixelRatio||1)<2,powerPreference:'low-power'});
+const T3='https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js';
+/* the whole scene lives in this function, so it can run on the page (computers) or on its own thread (phones) */
+function make3d(THREE,cv,accHex,aa){
+  const R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:aa,powerPreference:'low-power'});
   R.setClearColor(0,0);R.outputColorSpace=THREE.SRGBColorSpace;
   const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(28,1,.1,100);cam.position.set(0,0,13.5);
-  const css=k=>(root.style.getPropertyValue(k)||getComputedStyle(root).getPropertyValue(k)).trim()||'#c8f53c';
-  const accent=new THREE.Color(window.__pCy||css('--cy')),accentT=accent.clone();
+  const accent=new THREE.Color(accHex),accentT=accent.clone();
   scene.add(new THREE.HemisphereLight(0xf4f2ea,0x101216,1.6));
   const key=new THREE.DirectionalLight(0xffffff,3);key.position.set(-4,6,8);scene.add(key);
   const rim=new THREE.PointLight(accent,60,30,1.6);rim.position.set(4,-2,-3);scene.add(rim);
   const fill=new THREE.PointLight(accent,18,30,1.6);fill.position.set(5,4,6);scene.add(fill);
-  const box=new THREE.BoxGeometry(1,1,1),edges=new THREE.EdgesGeometry(box);
   const bone=new THREE.MeshStandardMaterial({color:0xf4f2ea,roughness:.48,metalness:.08});
   const pieceM=new THREE.MeshStandardMaterial({color:accent,emissive:accent,emissiveIntensity:.35,roughness:.35,metalness:.1});
   const lineM=new THREE.LineBasicMaterial({color:0x0b0d10,transparent:true,opacity:.35});
@@ -1445,52 +1466,86 @@ if(THREE&&gl){
   const top=new THREE.Mesh(slab,bone),bot=new THREE.Mesh(slab,bone);top.add(new THREE.LineSegments(slabE,lineM));bot.add(new THREE.LineSegments(slabE,lineM));
   const fault=new THREE.Mesh(new THREE.BoxGeometry(3.8,.14,1.42),pieceM);mark.add(top,bot,fault);
   const TOPY=.86,SLIDE=.5;   // the lower half has slid half a unit right: the block, broken
-  let W=0,H=0;function size(){const r=cv.getBoundingClientRect();W=r.width;H=r.height;if(!W)return;R.setPixelRatio(Math.min(devicePixelRatio||1,[2,1.5,1][Q.level]));R.setSize(W,H,false);cam.aspect=W/H;cam.updateProjectionMatrix()}
-  new ResizeObserver(size).observe(cv);size();Q.listeners.push(size);
-  // pointer: tilt toward the cursor anywhere in the hero, drag to turn it by hand
-  let tx=0,ty=0,hover=0,hoverT=0,drag=null,vx=0,vy=0,ux=0,uy=0;
-  hero.addEventListener('pointermove',e=>{const r=btn.getBoundingClientRect();tx=Math.max(-1,Math.min(1,(e.clientX-(r.left+r.width/2))/innerWidth*2));ty=Math.max(-1,Math.min(1,(e.clientY-(r.top+r.height/2))/innerHeight*2))});
-  btn.addEventListener('pointerenter',()=>hoverT=1);btn.addEventListener('pointerleave',()=>{hoverT=0});
-  btn.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,moved:0};hoverT=1;btn.setPointerCapture(e.pointerId)});
-  btn.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.moved+=Math.abs(dx)+Math.abs(dy);vy=dx*.012;vx=dy*.012;uy+=vy;ux+=vx;if(drag.moved>8)btn.dataset.drag='1';kick()});
-  const up=e=>{if(!drag)return;drag=null;if(e.pointerType!=='mouse')hoverT=0};btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);
-  // the spin: a full turn on an axis that changes every time, the halves pull apart along the fault and settle back
-  const axes=[[0,1],[1,0],[1,1],[0,-1],[-1,1]];let ai=0,spin=null;
+  const st={tx:0,ty:0,hover:0,hoverT:0,drag:false,vx:0,vy:0,ux:0,uy:0,calm:false,born:0,spin:null,last:performance.now()};
+  const axes=[[0,1],[1,0],[1,1],[0,-1],[-1,1]];let ai=0;
   const ease=t=>1-Math.pow(1-t,4),back=t=>{const c=1.6;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
-  window.spin3d=()=>{btn.classList.add('used');btn.classList.add('pulse');clearTimeout(btn._pt);btn._pt=setTimeout(()=>btn.classList.remove('pulse'),1300);
-    if(reduce()){accent.copy(accentT);kick();return}
-    const a=axes[ai++%axes.length];const TAU=Math.PI*2,fx=spinG.rotation.x,fy=spinG.rotation.y,tx=Math.round(fx/TAU)*TAU+a[0]*TAU,ty=Math.round(fy/TAU)*TAU+a[1]*TAU;spin={t0:performance.now(),dur:1300,fx,fy,ax:tx-fx,ay:ty-fy};kick()};
+  return {st,
+    size(W,H,d){if(!W)return;R.setPixelRatio(d);R.setSize(W,H,false);cam.aspect=W/H;cam.updateProjectionMatrix()},
+    dragBy(dx,dy){st.vy=dx*.012;st.vx=dy*.012;st.uy+=st.vy;st.ux+=st.vx},
+    color(h,now){accentT.set(h);if(now)accent.copy(accentT)},
+    spin(){if(st.calm){accent.copy(accentT);return}const a=axes[ai++%axes.length],TAU=Math.PI*2,fx=spinG.rotation.x,fy=spinG.rotation.y,tx=Math.round(fx/TAU)*TAU+a[0]*TAU,ty=Math.round(fy/TAU)*TAU+a[1]*TAU;st.spin={t0:performance.now(),dur:1300,fx,fy,ax:tx-fx,ay:ty-fy}},
+    idle(now){return !st.spin&&!st.drag&&Math.abs(st.hover-st.hoverT)<.01&&st.born&&(now-st.born)>2400},
+    frame(now){const dt=Math.min(.05,(now-st.last)/1000);st.last=now;const t=now/1000,calm=st.calm;
+      st.hover+=(st.hoverT-st.hover)*Math.min(1,dt*10);
+      let breathe=0;const sp=st.spin;
+      if(sp){const k=Math.min(1,(now-sp.t0)/sp.dur),e=back(k);spinG.rotation.x=sp.fx+sp.ax*e;spinG.rotation.y=sp.fy+sp.ay*e;breathe=Math.sin(Math.min(1,k*1.25)*Math.PI);
+        if(k>=1){spinG.rotation.x=0;spinG.rotation.y=0;st.spin=null}}
+      if(!st.drag){st.ux+=st.vx;st.uy+=st.vy;st.vx*=.9;st.vy*=.9;st.ux*=.9;st.uy*=.9}
+      mark.rotation.x=(calm?0:Math.cos(t*.5)*.08)-.18+st.ty*.35+st.ux;
+      mark.rotation.y=(calm?0:Math.sin(t*.4)*.2)+.18+st.tx*.45+st.uy;
+      mark.position.y=(calm?0:Math.sin(t*.9)*.08);
+      const age=st.born?(now-st.born)/1000:0,pa=calm?1:Math.max(0,Math.min(1,age/.7)),ea=ease(pa),crack=calm?1:back(Math.max(0,Math.min(1,(age-.9)/.7)));
+      const sl=SLIDE*crack*(1-st.hover*.95)+breathe*.6,open=breathe*.55;
+      top.position.set(-SLIDE/2,TOPY+(1-ea)*4+open,0);bot.position.set(-SLIDE/2+sl,-TOPY-(1-ea)*4-open,0);
+      top.scale.setScalar(.001+.999*ea);bot.scale.setScalar(.001+.999*ea);
+      const lk=calm?1:Math.max(0,Math.min(1,(age-.9)/.3));fault.scale.set(.001+.999*lk*(1-st.hover*.25)*(1+breathe*.25),1+breathe*1.5,1);fault.position.x=-1.9*(1-fault.scale.x)+(-SLIDE/2+SLIDE/2);
+      pieceM.emissiveIntensity=.5+breathe*1.2;
+      accent.lerp(accentT,Math.min(1,dt*3));pieceM.color.copy(accent);pieceM.emissive.copy(accent);rim.color.copy(accent);fill.color.copy(accent);
+      R.render(scene,cam);
+      return !calm||st.spin||st.drag||Math.abs(st.vx)+Math.abs(st.vy)>.001||Math.abs(st.hover-st.hoverT)>.002||!accent.equals(accentT)||(st.born&&age<2.2)}}}
+/* the render loop: skips every other frame when the phone asks for less, sleeps when nothing moves or the hero is off screen */
+function loop3d(api,raf,getQ){let r=0,vis=true,hidden=false,skip=0;
+  function frame(now){r=0;if(hidden||!vis)return;if(getQ()>=1&&api.idle(now)&&(skip^=1)){kick();return}const busy=api.frame(now);if(busy||!api.st.born)kick()}
+  function kick(){if(!r&&vis&&!hidden)r=raf(frame)}
+  return {kick,vis(v){vis=v;if(v)kick()},hidden(h){hidden=h;if(!h){api.st.last=performance.now();kick()}}}}
+const css=k=>(root.style.getPropertyValue(k)||getComputedStyle(root).getPropertyValue(k)).trim()||'#c8f53c';
+const fine=matchMedia('(pointer:fine)').matches;
+let off=false;try{off=!fine&&'transferControlToOffscreen' in HTMLCanvasElement.prototype&&!!new OffscreenCanvas(1,1).getContext('webgl')}catch(e){off=false}
+const gl=(()=>{try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'))}catch(e){return false}})();
+let S=null;   // S: how the page talks to the scene, wherever it runs
+const dprQ=()=>Math.min(devicePixelRatio||1,[2,1.5,1][Q.level]),aa=(devicePixelRatio||1)<2;
+async function onPage(cv){let THREE;try{THREE=await import(T3)}catch(e){return null}
+  const api=make3d(THREE,cv,window.__pCy||css('--cy'),aa),L=loop3d(api,f=>requestAnimationFrame(f),()=>Q.level);
+  return {set(k,v){api.st[k]=v;L.kick()},dragBy(dx,dy){api.dragBy(dx,dy);L.kick()},color(h,n){api.color(h,n);L.kick()},spin(){api.spin();L.kick()},born(){api.st.born=performance.now();L.kick()},
+    size(W,H){api.size(W,H,dprQ());L.kick()},vis:L.vis,hidden:L.hidden,kick:L.kick}}
+function onThread(cv){const oc=cv.transferControlToOffscreen();
+  const src='import * as THREE from '+JSON.stringify(T3)+';\n'+make3d.toString()+'\n'+loop3d.toString()+'\n'+
+    'let api=null,L=null,q=1;const raf=self.requestAnimationFrame?f=>self.requestAnimationFrame(f):f=>setTimeout(()=>f(performance.now()),16);\n'+
+    'onmessage=e=>{const m=e.data;if(m.t==="init"){try{api=make3d(THREE,m.c,m.acc,m.aa);L=loop3d(api,raf,()=>q);api.st.calm=m.calm;postMessage({t:"ok"});L.kick()}catch(x){postMessage({t:"fail"})}return}if(!api)return;'+
+    'switch(m.t){case "set":api.st[m.k]=m.v;break;case "drag":api.dragBy(m.dx,m.dy);break;case "color":api.color(m.h,m.n);break;case "spin":api.spin();break;case "born":api.st.born=performance.now();break;'+
+    'case "size":api.size(m.w,m.h,m.d);break;case "q":q=m.q;break;case "vis":L.vis(m.v);return;case "hidden":L.hidden(m.v);return}L.kick()}';
+  const w=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})),{type:'module'});
+  w.postMessage({t:'init',c:oc,acc:window.__pCy||css('--cy'),aa,calm:reduce()},[oc]);w.postMessage({t:'q',q:Q.level});Q.listeners.push(l=>w.postMessage({t:'q',q:l}));
+  const P=m=>w.postMessage(m);
+  return new Promise(res=>{const to=setTimeout(()=>res(null),12000);w.onmessage=e=>{if(e.data.t==='ok'){clearTimeout(to);res({set(k,v){P({t:'set',k,v})},dragBy(dx,dy){P({t:'drag',dx,dy})},color(h,n){P({t:'color',h,n})},spin(){P({t:'spin'})},born(){P({t:'born'})},
+      size(W,H){P({t:'size',w:W,h:H,d:dprQ()})},vis(v){P({t:'vis',v})},hidden(v){P({t:'hidden',v})},kick(){P({t:'set',k:'_',v:0})}})}else if(e.data.t==='fail'){clearTimeout(to);w.terminate();res(null)}};w.onerror=()=>{clearTimeout(to);w.terminate();res(null)}})}
+if(gl){
+  let cv=document.createElement('canvas');btn.prepend(cv);
+  if(off){S=await onThread(cv);if(S)window.__3dt=true}
+  if(!S&&off){cv.remove();cv=document.createElement('canvas');btn.prepend(cv)}   // the thread could not start it: draw on the page instead
+  if(!S)S=await onPage(cv);
+  if(!S)cv.remove();
+}
+if(S){
+  btn.classList.add('webgl');
+  let W=0,H=0;const size=()=>{const r=cv0().getBoundingClientRect();W=r.width;H=r.height;if(W)S.size(W,H)};function cv0(){return btn.querySelector('canvas')}
+  new ResizeObserver(size).observe(cv0());size();Q.listeners.push(size);
+  S.set('calm',reduce());
+  // pointer: tilt toward the cursor anywhere in the hero, drag to turn it by hand
+  let drag=null,tf=0,ptx=0,pty=0;
+  hero.addEventListener('pointermove',e=>{const r=btn.getBoundingClientRect();ptx=Math.max(-1,Math.min(1,(e.clientX-(r.left+r.width/2))/innerWidth*2));pty=Math.max(-1,Math.min(1,(e.clientY-(r.top+r.height/2))/innerHeight*2));
+    if(!tf)tf=requestAnimationFrame(()=>{tf=0;S.set('tx',ptx);S.set('ty',pty)})});
+  btn.addEventListener('pointerenter',()=>S.set('hoverT',1));btn.addEventListener('pointerleave',()=>S.set('hoverT',0));
+  btn.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,moved:0};S.set('hoverT',1);S.set('drag',true);btn.setPointerCapture(e.pointerId)});
+  btn.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.moved+=Math.abs(dx)+Math.abs(dy);S.dragBy(dx,dy);if(drag.moved>8)btn.dataset.drag='1'});
+  const up=e=>{if(!drag)return;drag=null;S.set('drag',false);if(e.pointerType!=='mouse')S.set('hoverT',0)};btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);
+  window.spin3d=()=>{btn.classList.add('used');btn.classList.add('pulse');clearTimeout(btn._pt);btn._pt=setTimeout(()=>btn.classList.remove('pulse'),1300);S.spin()};
   // assembly when the hero first appears
-  let born=0;const birth=()=>{if(!born&&hero.classList.contains('on'))born=performance.now()};
-  let raf=0,vis=true,last=performance.now();
-  new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis)kick()}).observe(hero);
-  function kick(){if(!raf&&vis)raf=requestAnimationFrame(frame)}
-  let skip=0;function frame(now){raf=0;if(document.hidden)return;if(Q.level>=1&&!spin&&!drag&&Math.abs(hover-hoverT)<.01&&born&&(now-born)>2400&&(skip^=1)){kick();return}const dt=Math.min(.05,(now-last)/1000);last=now;const t=now/1000,calm=reduce();birth();
-    hover+=(hoverT-hover)*Math.min(1,dt*10);
-    // spin
-    let breathe=0;
-    if(spin){const k=Math.min(1,(now-spin.t0)/spin.dur),e=back(k);spinG.rotation.x=spin.fx+spin.ax*e;spinG.rotation.y=spin.fy+spin.ay*e;breathe=Math.sin(Math.min(1,k*1.25)*Math.PI);
-      if(k>=1){spinG.rotation.x=0;spinG.rotation.y=0;spin=null}}
-    // hand rotation springs back
-    if(!drag){ux+=vx;uy+=vy;vx*=.9;vy*=.9;ux*=.9;uy*=.9}
-    mark.rotation.x=(calm?0:Math.cos(t*.5)*.08)-.18+ty*.35+ux;
-    mark.rotation.y=(calm?0:Math.sin(t*.4)*.2)+.18+tx*.45+uy;
-    mark.position.y=(calm?0:Math.sin(t*.9)*.08);
-    // arrival: a whole block forms, then cracks; hover closes the fault; a spin pulls the halves apart
-    const age=born?(now-born)/1000:0,pa=calm?1:Math.max(0,Math.min(1,age/.7)),ea=ease(pa),crack=calm?1:back(Math.max(0,Math.min(1,(age-.9)/.7)));
-    const sl=SLIDE*crack*(1-hover*.95)+breathe*.6,open=breathe*.55;
-    top.position.set(-SLIDE/2,TOPY+(1-ea)*4+open,0);bot.position.set(-SLIDE/2+sl,-TOPY-(1-ea)*4-open,0);
-    top.scale.setScalar(.001+.999*ea);bot.scale.setScalar(.001+.999*ea);
-    const lk=calm?1:Math.max(0,Math.min(1,(age-.9)/.3));fault.scale.set(.001+.999*lk*(1-hover*.25)*(1+breathe*.25),1+breathe*1.5,1);fault.position.x=-1.9*(1-fault.scale.x)+(-SLIDE/2+SLIDE/2);
-    pieceM.emissiveIntensity=.5+breathe*1.2;
-    // colour follows the paradigm
-    accent.lerp(accentT,Math.min(1,dt*3));pieceM.color.copy(accent);pieceM.emissive.copy(accent);rim.color.copy(accent);fill.color.copy(accent);
-    R.render(scene,cam);
-    const busy=!calm||spin||drag||Math.abs(vx)+Math.abs(vy)>.001||Math.abs(hover-hoverT)>.002||!accent.equals(accentT)||(born&&age<2.2);
-    if(busy||!born)kick()}
-  window.kick3d=kick;kick();
-  addEventListener('paradigm',e=>{accentT.set(e.detail.cy);if(reduce())accent.copy(accentT);if(!spin){btn.classList.add('pulse');clearTimeout(btn._pt);btn._pt=setTimeout(()=>btn.classList.remove('pulse'),1300)}kick()});
-  addEventListener('keydown',e=>{if(e.key==='p'||e.key==='P')kick()});document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();kick()}});
+  const birth=()=>{if(hero.classList.contains('on')){S.born();return true}};if(!birth()){const mo=new MutationObserver(()=>{if(birth())mo.disconnect()});mo.observe(hero,{attributes:true,attributeFilter:['class']})}
+  new IntersectionObserver(es=>S.vis(es[0].isIntersecting)).observe(hero);
+  window.kick3d=()=>{S.set('calm',reduce());S.kick()};
+  addEventListener('paradigm',e=>{S.color(e.detail.cy,reduce());if(!btn.classList.contains('pulse')){btn.classList.add('pulse');clearTimeout(btn._pt);btn._pt=setTimeout(()=>btn.classList.remove('pulse'),1300)}});
+  document.addEventListener('visibilitychange',()=>S.hidden(document.hidden));
 }
 </script>
 </body>
