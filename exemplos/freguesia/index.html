@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freguesia de Vila Serena</title>
+<meta name="description" content="Serviços, agenda e notícias da Freguesia de Vila Serena. Site de demonstração da Paradigmus Interactive.">
+<meta name="theme-color" content="#0f3460">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Public+Sans:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f1;--card:#ffffff;--ink:#111b2b;--ink2:#46526a;--blue:#0f3460;--blue2:#1d5aa6;--green:#1b7a57;--sun:#f3c33c;--line:#dfe2e8;--soft:#e9eef6;--fs:1;--r:18px}
+html.hc{--bg:#000;--card:#000;--ink:#fff;--ink2:#fff;--blue:#ffe14d;--blue2:#ffe14d;--green:#7dffb3;--sun:#ffe14d;--line:#fff;--soft:#1a1a1a}
+html.hc .hero{background:#000!important}html.hc .hero *{color:#fff}html.hc .btn{color:#000!important}
+*{box-sizing:border-box}html{scroll-behavior:smooth;font-size:calc(17px * var(--fs))}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.65 "Atkinson Hyperlegible",system-ui,sans-serif}
+a{color:var(--blue2)}h1,h2,h3{font-family:"Public Sans",system-ui,sans-serif;letter-spacing:-.02em;line-height:1.1;margin:0}
+.wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+:focus-visible{outline:4px solid var(--sun);outline-offset:2px;border-radius:6px}
+.skip{position:absolute;left:12px;top:-60px;background:var(--sun);color:#111;padding:10px 16px;border-radius:10px;z-index:100;font-weight:700}.skip:focus{top:12px}
+.util{background:var(--blue);color:#fff;font-size:.9rem}
+.util .wrap{display:flex;justify-content:space-between;align-items:center;min-height:46px;gap:14px;flex-wrap:wrap}
+.util .ac{display:flex;gap:8px;align-items:center}
+.util button{min-height:36px;min-width:36px;padding:0 12px;border-radius:999px;border:1.5px solid rgba(255,255,255,.4);background:none;color:#fff;font:700 .85rem "Atkinson Hyperlegible";cursor:pointer}
+.util button[aria-pressed=true]{background:var(--sun);color:#111;border-color:var(--sun)}
+html.hc .util{background:#000;border-bottom:2px solid #fff}
+.st{display:inline-flex;align-items:center;gap:8px}.st i{width:10px;height:10px;border-radius:50%;background:#7dffb3}.st.c i{background:#ff8a7a}
+header.mh{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+header.mh .wrap{display:flex;align-items:center;justify-content:space-between;min-height:84px;gap:20px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink)}
+.brand svg{width:46px;height:52px;flex:none}
+.brand b{display:block;font:800 1.15rem/1.1 "Public Sans",sans-serif}.brand span{font-size:.85rem;color:var(--ink2)}
+nav.mn{display:flex;gap:6px}nav.mn a{padding:10px 14px;border-radius:12px;text-decoration:none;color:var(--ink);font-weight:700}nav.mn a:hover{background:var(--soft)}
+@media(max-width:900px){nav.mn{display:none}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 22px;border-radius:14px;border:0;background:var(--blue);color:#fff;font:700 1rem "Atkinson Hyperlegible";text-decoration:none;cursor:pointer}
+.btn:hover{background:var(--blue2)}.btn.s{background:var(--card);color:var(--blue);border:2px solid var(--blue)}
+/* hero */
+.hero{background:var(--blue);color:#fff;padding:70px 0 90px;position:relative;overflow:hidden}
+.hero .art{position:absolute;right:-60px;bottom:-40px;width:520px;opacity:.16}
+.hero h1{font-size:clamp(2.4rem,5.6vw,4.2rem);max-width:12em}
+.hero p{font-size:1.15rem;opacity:.88;max-width:34em;margin:16px 0 28px}
+.srch{position:relative;max-width:760px}
+.srch input{width:100%;min-height:68px;border-radius:18px;border:3px solid transparent;padding:0 60px 0 22px;font:400 1.15rem "Atkinson Hyperlegible";background:#fff;color:#111b2b;box-shadow:0 20px 40px -20px rgba(0,0,0,.5)}
+.srch input:focus{outline:none;border-color:var(--sun)}
+.srch svg{position:absolute;right:20px;top:22px;width:24px;height:24px;color:#46526a}
+.res{position:absolute;left:0;right:0;top:calc(100% + 8px);background:#fff;color:#111b2b;border-radius:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.45);overflow:hidden;display:none;z-index:20;max-height:420px;overflow-y:auto}
+.res.on{display:block}
+.res button{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;width:100%;text-align:left;padding:14px 18px;border:0;background:none;border-bottom:1px solid #eef0f4;cursor:pointer;font:inherit;color:inherit}
+.res button:hover,.res button.sel{background:#eef3fb}
+.res .ic{width:44px;height:44px;border-radius:12px;background:#e9eef6;display:grid;place-items:center;color:#0f3460}
+.res small{color:#46526a}.res .tg{font-size:.8rem;font-weight:700;color:#1b7a57;white-space:nowrap}
+.res .no{padding:20px;color:#46526a}
+html.hc .res,html.hc .srch input{background:#000;color:#fff;border-color:#fff}html.hc .res button{border-color:#fff}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.chips button{min-height:42px;padding:0 16px;border-radius:999px;border:1.5px solid rgba(255,255,255,.45);background:rgba(255,255,255,.06);color:#fff;font:700 .92rem "Atkinson Hyperlegible";cursor:pointer}
+.chips button:hover{background:rgba(255,255,255,.18)}
+/* strip */
+.strip{margin-top:-46px;position:relative;z-index:5}
+.strip .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.strip .card{box-shadow:0 20px 40px -28px rgba(15,52,96,.5)}
+.strip .k{font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.strip h3{font-size:1.25rem;margin:8px 0 4px}.strip p{margin:0;color:var(--ink2)}
+@media(max-width:860px){.strip .wrap{grid-template-columns:1fr}}
+section{padding:90px 0}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:34px;flex-wrap:wrap}
+.sh h2{font-size:clamp(1.9rem,3.6vw,2.8rem)}.sh p{color:var(--ink2);max-width:34em;margin:8px 0 0}
+/* services grid */
+.svc{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.svc button{display:grid;gap:10px;text-align:left;padding:22px;border-radius:var(--r);border:1px solid var(--line);background:var(--card);cursor:pointer;font:inherit;color:var(--ink);transition:transform .25s,border-color .25s,box-shadow .25s;min-height:170px;align-content:start}
+.svc button:hover{transform:translateY(-3px);border-color:var(--blue2);box-shadow:0 18px 30px -22px rgba(15,52,96,.6)}
+.svc .ic{width:52px;height:52px;border-radius:14px;background:var(--soft);display:grid;place-items:center;color:var(--blue)}
+.svc b{font:800 1.08rem "Public Sans",sans-serif}.svc span{color:var(--ink2);font-size:.92rem}
+@media(max-width:960px){.svc{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.svc{grid-template-columns:1fr}}
+/* modal */
+dialog{border:0;border-radius:24px;padding:0;width:min(620px,calc(100% - 28px));background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(10,20,40,.55)}
+.md{padding:30px;display:grid;gap:16px}
+.md h3{font-size:1.6rem}.md dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:0}.md dt{font-weight:700}.md dd{margin:0;color:var(--ink2)}
+.md ul{margin:0;padding-left:20px;color:var(--ink2)}
+.md .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px}
+/* report */
+.rep{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;align-items:stretch}
+.cats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+.cats label{display:flex;align-items:center;gap:10px;padding:14px;border:2px solid var(--line);border-radius:14px;cursor:pointer;font-weight:700}
+.cats input{position:absolute;opacity:0}.cats label:has(input:checked){border-color:var(--blue);background:var(--soft)}
+.cats label:has(input:focus-visible){outline:4px solid var(--sun)}
+textarea{width:100%;min-height:110px;border-radius:14px;border:2px solid var(--line);padding:14px;font:400 1rem "Atkinson Hyperlegible";background:var(--card);color:var(--ink);resize:vertical}
+.mapc{border-radius:var(--r);border:1px solid var(--line);overflow:hidden;position:relative;min-height:420px;background:#e8eadf;cursor:crosshair}
+.mapc svg{position:absolute;inset:0;width:100%;height:100%}
+.mapc .hint{position:absolute;left:14px;top:14px;background:var(--card);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:.88rem;font-weight:700;color:var(--ink)}
+.drop{transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.ok{display:none;background:#e3f4ec;color:#0d4a33;border-radius:14px;padding:14px 16px;font-weight:700}.ok.on{display:block}
+html.hc .ok{background:#000;color:#7dffb3;border:2px solid #7dffb3}
+@media(max-width:900px){.rep{grid-template-columns:1fr}.mapc{min-height:320px}}
+/* agenda */
+.ag{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start}
+.cal{padding:20px}.cal h3{font-size:1.15rem;display:flex;justify-content:space-between;align-items:center}
+.cal .g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:14px;text-align:center}
+.cal .g span{font-size:.78rem;font-weight:700;color:var(--ink2);padding:6px 0}
+.cal .g button{aspect-ratio:1;border:0;border-radius:10px;background:none;font:700 .92rem "Atkinson Hyperlegible";color:var(--ink);cursor:pointer;position:relative}
+.cal .g button.has::after{content:"";position:absolute;left:50%;bottom:5px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--green)}
+.cal .g button.td{outline:2px solid var(--blue2)}.cal .g button.on{background:var(--blue);color:#fff}.cal .g button.on::after{background:var(--sun)}
+.cal .g button:disabled{opacity:.25;cursor:default}
+.flt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.flt button{min-height:42px;padding:0 16px;border-radius:999px;border:2px solid var(--line);background:var(--card);font:700 .9rem "Atkinson Hyperlegible";cursor:pointer;color:var(--ink)}
+.flt button[aria-pressed=true]{border-color:var(--blue);background:var(--blue);color:#fff}
+.evl{display:grid;gap:12px}
+.ev{display:grid;grid-template-columns:76px 1fr auto;gap:18px;align-items:center;padding:18px 20px}
+.ev .d{text-align:center;border-radius:14px;background:var(--soft);padding:8px 0}.ev .d b{display:block;font:800 1.6rem/1 "Public Sans"}.ev .d small{font-weight:700;color:var(--ink2);text-transform:uppercase;font-size:.75rem}
+.ev h3{font-size:1.12rem}.ev p{margin:2px 0 0;color:var(--ink2);font-size:.95rem}
+.pill{font-size:.8rem;font-weight:700;padding:6px 12px;border-radius:999px;white-space:nowrap}
+.p-cul{background:#efe7fb;color:#4b2a8a}.p-des{background:#e3f4ec;color:#0d5a3e}.p-sen{background:#fdf1d6;color:#7a5200}.p-jov{background:#e2efff;color:#0f3f86}
+html.hc .pill{background:#000!important;color:#fff!important;border:1.5px solid #fff}
+.ev.hide{display:none}
+@media(max-width:900px){.ag{grid-template-columns:1fr}.ev{grid-template-columns:64px 1fr}.ev .pill{grid-column:2;justify-self:start}}
+/* news + docs */
+.nw{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.nw article{overflow:hidden;padding:0}.nw .im{aspect-ratio:16/9;display:block}.nw .im svg{width:100%;height:100%}
+.nw .tx{padding:20px}.nw time{font-size:.85rem;color:var(--ink2);font-weight:700}.nw h3{font-size:1.18rem;margin:6px 0}.nw p{margin:0;color:var(--ink2);font-size:.95rem}
+@media(max-width:900px){.nw{grid-template-columns:1fr}}
+.docs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.docs a{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 20px;border-radius:14px;border:1px solid var(--line);background:var(--card);text-decoration:none;color:var(--ink);font-weight:700}
+.docs a:hover{border-color:var(--blue2)}.docs small{display:block;font-weight:400;color:var(--ink2)}
+.docs .f{font-size:.75rem;font-weight:700;padding:5px 9px;border-radius:8px;background:#fde4e1;color:#9b2316}
+html.hc .docs .f{background:#000;color:#fff;border:1px solid #fff}
+@media(max-width:720px){.docs{grid-template-columns:1fr}}
+/* contact */
+.ct{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ct .card h3{font-size:1.1rem;margin-bottom:8px}.ct .card p{margin:0;color:var(--ink2)}
+.ct table{width:100%;border-collapse:collapse;font-size:.95rem}.ct td{padding:5px 0;border-bottom:1px solid var(--line)}.ct td:last-child{text-align:right;font-weight:700}
+@media(max-width:900px){.ct{grid-template-columns:1fr}}
+footer{background:var(--blue);color:#fff;padding:50px 0 34px;margin-top:40px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{color:#fff}footer p{margin:0;opacity:.85;max-width:36em;font-size:.92rem}
+html.hc footer{background:#000;border-top:2px solid #fff}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+<div class="util">
+  <div class="wrap">
+    <span class="st" id="st"><i></i><span id="stT">Secretaria</span></span>
+    <div class="ac" role="group" aria-label="Acessibilidade">
+      <button type="button" id="fsM" aria-label="Diminuir o tamanho da letra">A−</button>
+      <button type="button" id="fsP" aria-label="Aumentar o tamanho da letra">A+</button>
+      <button type="button" id="hcB" aria-pressed="false">Alto contraste</button>
+    </div>
+  </div>
+</div>
+<header class="mh">
+  <div class="wrap">
+    <a class="brand" href="#"><svg viewBox="0 0 46 52" aria-hidden="true"><path d="M3 4h40v22c0 13-9 21-20 24C12 47 3 39 3 26z" fill="#0f3460"/><path d="M3 4h40v12H3z" fill="#1d5aa6"/><circle cx="23" cy="10" r="3.4" fill="#f3c33c"/><path d="M10 34c4-6 8-6 13 0s9 6 13 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M10 41c4-6 8-6 13 0s9 6 13 0" fill="none" stroke="#7dc6a6" stroke-width="2.4" stroke-linecap="round"/><path d="M17 27l6-8 6 8z" fill="#fff"/></svg><div><b>Freguesia de Vila Serena</b><span>Junta de Freguesia</span></div></a>
+    <nav class="mn" aria-label="Principal"><a href="#servicos">Serviços</a><a href="#reportar">Reportar</a><a href="#agenda">Agenda</a><a href="#noticias">Notícias</a><a href="#contactos">Contactos</a></nav>
+  </div>
+</header>
+
+<main id="conteudo">
+<section class="hero">
+  <svg class="art" viewBox="0 0 400 300" aria-hidden="true"><path d="M0 220c60-40 120-40 200 0s140 40 200 0v80H0z" fill="#fff"/><path d="M60 220V140l40-30 40 30v80M180 220V100l50-40 50 40v120M300 220v-70l30-24 30 24v70" fill="none" stroke="#fff" stroke-width="6"/><circle cx="330" cy="50" r="26" fill="#f3c33c"/></svg>
+  <div class="wrap">
+    <h1>Como podemos ajudar hoje?</h1>
+    <p>Encontre o serviço de que precisa, veja o que tem de levar e quanto custa. Sem filas para perguntar.</p>
+    <div class="srch">
+      <label for="q" class="skip" style="position:absolute;clip-path:inset(50%)">Pesquisar serviços</label>
+      <input id="q" type="search" placeholder="Ex.: atestado de residência, cão, cemitério…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="res" aria-autocomplete="list">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <div class="res" id="res" role="listbox" aria-label="Resultados"></div>
+    </div>
+    <div class="chips" aria-label="Pesquisas frequentes"><button type="button" data-q="atestado">Atestados</button><button type="button" data-q="cão">Licença de canídeos</button><button type="button" data-q="recenseamento">Recenseamento</button><button type="button" data-q="espaço">Espaço Cidadão</button><button type="button" data-q="cemitério">Cemitério</button></div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="card"><div class="k">Hoje</div><h3 id="todayH">Secretaria</h3><p id="todayP">9h00 – 12h30 · 14h00 – 17h30</p></div>
+    <div class="card"><div class="k">Próxima assembleia</div><h3>27 de novembro, 21h00</h3><p>Salão nobre da junta. Aberta a todos os fregueses.</p></div>
+    <div class="card"><div class="k">Aviso</div><h3>Recolha de monstros</h3><p>Primeira terça-feira de cada mês. Marque pelo telefone.</p></div>
+  </div>
+</div>
+
+<section id="servicos">
+  <div class="wrap">
+    <div class="sh"><div><h2>Serviços mais pedidos</h2><p>Carregue num serviço para ver os documentos necessários, o custo e o prazo.</p></div></div>
+    <div class="svc" id="svc"></div>
+  </div>
+</section>
+
+<section id="reportar" style="background:var(--soft)">
+  <div class="wrap">
+    <div class="sh"><div><h2>Viu um problema na rua?</h2><p>Diga-nos o que é e onde fica. Carregue no mapa para marcar o sítio.</p></div></div>
+    <div class="rep">
+      <form class="card" id="repF" novalidate>
+        <fieldset style="border:0;padding:0;margin:0"><legend style="font-weight:700;font-size:1.05rem">O que encontrou?</legend>
+          <div class="cats">
+            <label><input type="radio" name="cat" value="Buraco na estrada" checked>🕳️ Buraco</label>
+            <label><input type="radio" name="cat" value="Iluminação avariada">💡 Iluminação</label>
+            <label><input type="radio" name="cat" value="Lixo ou entulho">🗑️ Lixo</label>
+            <label><input type="radio" name="cat" value="Árvore ou ramo caído">🌳 Árvore</label>
+          </div></fieldset>
+        <label for="dsc" style="font-weight:700">Descrição (opcional)</label>
+        <textarea id="dsc" placeholder="Ex.: buraco grande junto à paragem do autocarro."></textarea>
+        <p id="locT" style="color:var(--ink2);margin:12px 0">Ainda não marcou o sítio no mapa.</p>
+        <button class="btn" type="submit" style="width:100%">Enviar participação</button>
+        <div class="ok" id="ok" role="status" style="margin-top:12px"></div>
+      </form>
+      <div class="mapc" id="map" role="application" aria-label="Mapa da freguesia. Carregue para marcar o local do problema.">
+        <svg viewBox="0 0 600 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="600" height="440" fill="#e8eadf"/>
+          <path d="M0 330C120 300 220 360 340 320S520 250 600 270V440H0z" fill="#bfd8e6"/>
+          <g fill="#cfe0c3"><circle cx="110" cy="110" r="60"/><rect x="420" y="60" width="140" height="90" rx="20"/></g>
+          <g stroke="#fff" stroke-width="16" fill="none" stroke-linecap="round"><path d="M0 200H600"/><path d="M250 0V440"/><path d="M0 60L600 300"/><path d="M420 200V440"/></g>
+          <g fill="#d9d6c8"><rect x="280" y="30" width="110" height="70" rx="8"/><rect x="280" y="220" width="110" height="80" rx="8"/><rect x="40" y="230" width="170" height="60" rx="8"/><rect x="450" y="210" width="110" height="50" rx="8"/></g>
+          <rect x="280" y="220" width="110" height="80" rx="8" fill="#0f3460"/><text x="335" y="266" text-anchor="middle" style="font:700 13px 'Atkinson Hyperlegible';fill:#fff">Junta</text>
+          <text x="110" y="114" text-anchor="middle" style="font:700 13px 'Atkinson Hyperlegible';fill:#3d5b30">Parque</text>
+          <text x="490" y="110" text-anchor="middle" style="font:700 13px 'Atkinson Hyperlegible';fill:#3d5b30">Escola</text>
+          <text x="140" y="372" style="font:700 13px 'Atkinson Hyperlegible';fill:#2f5a74">Rio Sereno</text>
+          <g id="pin" class="drop" style="display:none"><path d="M0-34c-12 0-20 8-20 19C-20 0 0 14 0 14S20 0 20-15c0-11-8-19-20-19z" fill="#d23b2a"/><circle cy="-16" r="7" fill="#fff"/></g>
+        </svg>
+        <span class="hint">Carregue no mapa para marcar o sítio</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="agenda">
+  <div class="wrap">
+    <div class="sh"><div><h2>Agenda da freguesia</h2><p>Escolha um dia no calendário ou filtre por tema.</p></div></div>
+    <div class="ag">
+      <div class="card cal"><h3><span id="calT">Novembro</span><span style="font-size:.85rem;color:var(--ink2)">2026</span></h3><div class="g" id="cal"></div><button type="button" class="btn s" id="allD" style="width:100%;margin-top:14px;min-height:44px">Ver todos os dias</button></div>
+      <div>
+        <div class="flt" id="flt" role="group" aria-label="Filtrar por tema"><button type="button" aria-pressed="true" data-t="all">Tudo</button><button type="button" aria-pressed="false" data-t="cul">Cultura</button><button type="button" aria-pressed="false" data-t="des">Desporto</button><button type="button" aria-pressed="false" data-t="sen">Sénior</button><button type="button" aria-pressed="false" data-t="jov">Juventude</button></div>
+        <div class="evl" id="evl" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="noticias" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sh"><div><h2>Notícias</h2></div><a href="#" style="font-weight:700">Todas as notícias →</a></div>
+    <div class="nw">
+      <article class="card"><span class="im"><svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" fill="#1b7a57"/><g fill="#7dc6a6"><circle cx="70" cy="120" r="40"/><circle cx="120" cy="100" r="50"/><circle cx="250" cy="120" r="44"/></g><rect x="0" y="140" width="320" height="40" fill="#0d5a3e"/><path d="M40 150h240" stroke="#f3c33c" stroke-width="4" stroke-dasharray="14 10"/></svg></span><div class="tx"><time>12 nov 2026</time><h3>Novo percurso pedonal junto ao rio</h3><p>Dois quilómetros de passadiço, com bancos e iluminação, abrem já em dezembro.</p></div></article>
+      <article class="card"><span class="im"><svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" fill="#f3c33c"/><rect x="40" y="40" width="240" height="110" rx="14" fill="#fff"/><g fill="#0f3460"><rect x="62" y="62" width="60" height="8" rx="4"/><rect x="62" y="80" width="190" height="8" rx="4" opacity=".4"/><rect x="62" y="96" width="160" height="8" rx="4" opacity=".4"/></g><circle cx="248" cy="120" r="18" fill="#1b7a57"/><path d="M240 120l6 6 10-12" stroke="#fff" stroke-width="3" fill="none"/></svg></span><div class="tx"><time>5 nov 2026</time><h3>Atestados passam a ser pedidos online</h3><p>Já pode pedir o atestado de residência sem sair de casa e levantá-lo no dia seguinte.</p></div></article>
+      <article class="card"><span class="im"><svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" fill="#0f3460"/><g fill="none" stroke="#fff" stroke-width="3"><circle cx="110" cy="96" r="34"/><circle cx="210" cy="96" r="34"/></g><path d="M150 60l20 36-20 36" fill="none" stroke="#f3c33c" stroke-width="4"/><g fill="#1d5aa6"><rect x="20" y="150" width="280" height="10" rx="5"/></g></svg></span><div class="tx"><time>28 out 2026</time><h3>Bicicletas partilhadas chegam à freguesia</h3><p>Três estações, junto à escola, ao mercado e à estação de comboios.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section id="transparencia" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sh"><div><h2>Transparência</h2><p>Os documentos da junta, sempre disponíveis.</p></div></div>
+    <div class="docs">
+      <a href="#"><span>Orçamento para 2027<small>Aprovado em assembleia · 1,2 MB</small></span><span class="f">PDF</span></a>
+      <a href="#"><span>Plano de atividades 2027<small>Proposta do executivo · 860 KB</small></span><span class="f">PDF</span></a>
+      <a href="#"><span>Ata da assembleia de setembro<small>Sessão ordinária · 420 KB</small></span><span class="f">PDF</span></a>
+      <a href="#"><span>Regulamento do cemitério<small>Versão em vigor · 310 KB</small></span><span class="f">PDF</span></a>
+    </div>
+  </div>
+</section>
+
+<section id="contactos" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sh"><div><h2>Contactos e horários</h2></div></div>
+    <div class="ct">
+      <div class="card"><h3>Sede da junta</h3><p>Largo da Igreja, 1<br>0000-000 Vila Serena</p><p style="margin-top:12px"><a href="tel:+351200000000">200 000 000</a><br><a href="mailto:geral@vilaserena.pt">geral@vilaserena.pt</a></p></div>
+      <div class="card"><h3>Secretaria</h3><table><tr><td>Segunda a sexta</td><td>9h00 – 12h30</td></tr><tr><td></td><td>14h00 – 17h30</td></tr><tr><td>Sábado e domingo</td><td>Encerrado</td></tr></table></div>
+      <div class="card"><h3>Espaço Cidadão</h3><table><tr><td>Segunda a sexta</td><td>9h00 – 16h00</td></tr><tr><td>Marcações</td><td>200 000 001</td></tr><tr><td>Acessível</td><td>Rampa e balcão baixo</td></tr></table></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b style="font:800 1.2rem 'Public Sans'">Freguesia de Vila Serena</b><p style="margin-top:6px">Largo da Igreja, 1 · geral@vilaserena.pt</p></div>
+    <p>Site de demonstração criado pela <a href="../../">Paradigmus Interactive</a>. A freguesia, os serviços, as pessoas e os contactos são fictícios.</p>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dlgT"><div class="md" id="md"></div></dialog>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const I={doc:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg>',
+ dog:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 10l2-5 3 3h4l3-3 2 5v5a5 5 0 0 1-5 5h-4a5 5 0 0 1-5-5z"/><circle cx="9.5" cy="12" r=".5" fill="currentColor"/><circle cx="14.5" cy="12" r=".5" fill="currentColor"/></svg>',
+ vote:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 13h16v8H4z"/><path d="M8 13V5h8v8M10 9l1.5 1.5L14 8"/></svg>',
+ id:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.4"/><path d="M5.5 16c1-2 5-2 6 0M14 10h4M14 14h3"/></svg>',
+ grave:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 21V9a5 5 0 0 1 10 0v12M4 21h16M12 9v6M9.5 11.5h5"/></svg>',
+ home:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9H3z"/><path d="M10 20v-5h4v5"/></svg>',
+ sun:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></svg>',
+ bus:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M7 21v-3M17 21v-3"/><circle cx="8" cy="14.5" r=".6" fill="currentColor"/><circle cx="16" cy="14.5" r=".6" fill="currentColor"/></svg>'};
+const S=[
+ {n:'Atestado de residência',d:'Comprova onde vive, para escolas, bancos ou outras entidades.',i:'doc',k:'atestado residência morada',docs:['Cartão de Cidadão','Comprovativo de morada (fatura recente)','Duas testemunhas recenseadas, se necessário'],c:'5,00 €',p:'No próprio dia ou no dia seguinte',on:1},
+ {n:'Atestado de agregado familiar',d:'Para apoios sociais, bolsas de estudo ou IRS.',i:'doc',k:'atestado agregado família',docs:['Cartão de Cidadão de todos os membros','Comprovativo de morada'],c:'5,00 €',p:'1 dia útil',on:1},
+ {n:'Licença de canídeos e gatos',d:'Registo anual obrigatório do seu animal de companhia.',i:'dog',k:'cão gato canídeos licença animal',docs:['Boletim sanitário com vacina da raiva','Número do microchip','Cartão de Cidadão do dono'],c:'Desde 8,00 €',p:'No momento',on:0},
+ {n:'Recenseamento eleitoral',d:'Atualize a sua morada de voto ou consulte onde vota.',i:'vote',k:'recenseamento eleitoral votar voto',docs:['Cartão de Cidadão'],c:'Gratuito',p:'No momento',on:0},
+ {n:'Espaço Cidadão',d:'Renovar o Cartão de Cidadão, carta de condução e outros serviços do Estado.',i:'id',k:'espaço cidadão cartão carta condução',docs:['Marcação prévia','Documento a renovar'],c:'Conforme o serviço',p:'Conforme o serviço',on:0},
+ {n:'Cemitério',d:'Concessão de sepulturas, trasladações e horários.',i:'grave',k:'cemitério sepultura funeral',docs:['Documento de identificação do requerente','Certidão de óbito, se aplicável'],c:'Ver regulamento',p:'2 a 5 dias úteis',on:0},
+ {n:'Cedência de salas',d:'Peça o salão da junta para reuniões e atividades de associações.',i:'home',k:'sala salão cedência espaço associação',docs:['Pedido escrito com data e atividade'],c:'Gratuito para associações',p:'5 dias úteis',on:1},
+ {n:'Transporte sénior',d:'Boleia gratuita para consultas médicas para maiores de 65 anos.',i:'bus',k:'transporte sénior idosos consulta boleia',docs:['Cartão de Cidadão','Marcação da consulta'],c:'Gratuito',p:'Marcar com 48 horas',on:0}];
+$('#svc').innerHTML=S.map((s,i)=>'<button type="button" data-s="'+i+'"><span class="ic">'+I[s.i]+'</span><b>'+s.n+'</b><span>'+s.d+'</span></button>').join('');
+function openS(i){const s=S[i];$('#md').innerHTML='<h3 id="dlgT">'+s.n+'</h3><p style="margin:0;color:var(--ink2)">'+s.d+'</p><dl><dt>Custo</dt><dd>'+s.c+'</dd><dt>Prazo</dt><dd>'+s.p+'</dd></dl><div><b>O que precisa de levar</b><ul>'+s.docs.map(d=>'<li>'+d+'</li>').join('')+'</ul></div><div class="row"><button class="btn s" type="button" data-x>Fechar</button>'+(s.on?'<button class="btn" type="button" data-x>Pedir online</button>':'<a class="btn" href="#contactos" data-x>Ver horários</a>')+'</div>';$('#dlg').showModal()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(b){openS(+b.dataset.s);return}if(e.target.closest('[data-x]'))$('#dlg').close()});
+$('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').close()});
+/* search as you type */
+const norm=t=>t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+let sel=-1;
+function search(){const q=norm($('#q').value.trim()),r=$('#res');if(!q){r.classList.remove('on');$('#q').setAttribute('aria-expanded','false');return}
+  const hits=S.map((s,i)=>({s,i})).filter(({s})=>norm(s.n+' '+s.k+' '+s.d).includes(q));sel=-1;
+  r.innerHTML=hits.length?hits.map(({s,i})=>'<button type="button" role="option" data-s="'+i+'"><span class="ic">'+I[s.i]+'</span><span><b>'+s.n+'</b><br><small>'+s.d+'</small></span><span class="tg">'+(s.on?'Online':'Presencial')+'</span></button>').join(''):'<div class="no">Não encontrámos “'+$('#q').value+'”. Ligue-nos para o 200 000 000 e ajudamos.</div>';
+  r.classList.add('on');$('#q').setAttribute('aria-expanded','true')}
+$('#q').addEventListener('input',search);
+$('#q').addEventListener('keydown',e=>{const bs=$$('#res button');if(!bs.length)return;if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();sel=(sel+(e.key==='ArrowDown'?1:-1)+bs.length)%bs.length;bs.forEach((b,i)=>b.classList.toggle('sel',i===sel))}if(e.key==='Enter'&&sel>=0){e.preventDefault();bs[sel].click()}});
+document.addEventListener('click',e=>{if(!e.target.closest('.srch'))$('#res').classList.remove('on')});
+$$('.chips button').forEach(b=>b.onclick=()=>{$('#q').value=b.dataset.q;search();$('#q').focus()});
+/* accessibility controls, remembered */
+const st={fs:1,hc:false};try{Object.assign(st,JSON.parse(localStorage.getItem('vs-a11y')||'{}'))}catch(e){}
+function apply(){document.documentElement.style.setProperty('--fs',st.fs);document.documentElement.classList.toggle('hc',st.hc);$('#hcB').setAttribute('aria-pressed',st.hc);try{localStorage.setItem('vs-a11y',JSON.stringify(st))}catch(e){}}
+$('#fsP').onclick=()=>{st.fs=Math.min(1.4,+(st.fs+.1).toFixed(1));apply()};$('#fsM').onclick=()=>{st.fs=Math.max(.9,+(st.fs-.1).toFixed(1));apply()};$('#hcB').onclick=()=>{st.hc=!st.hc;apply()};apply();
+/* office open now */
+function office(){const d=new Date(),w=d.getDay(),m=d.getHours()*60+d.getMinutes(),open=w>0&&w<6&&((m>=540&&m<750)||(m>=840&&m<1050));
+  $('#st').classList.toggle('c',!open);$('#stT').textContent='Secretaria '+(open?'aberta agora':'fechada agora');
+  $('#todayH').textContent=w>0&&w<6?(open?'Estamos abertos':'Fechado neste momento'):'Fim de semana';$('#todayP').textContent=w>0&&w<6?'Hoje: 9h00 – 12h30 · 14h00 – 17h30':'A secretaria reabre segunda às 9h00'}
+office();setInterval(office,60000);
+/* report a problem */
+let spot=null;const map=$('#map'),pin=$('#pin');
+map.addEventListener('click',e=>{const sv=map.querySelector('svg'),pt=sv.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform(sv.getScreenCTM().inverse());spot=p;
+  pin.style.display='';pin.setAttribute('transform','translate('+p.x.toFixed(0)+' '+(p.y-30).toFixed(0)+')');requestAnimationFrame(()=>pin.setAttribute('transform','translate('+p.x.toFixed(0)+' '+p.y.toFixed(0)+')'));
+  $('#locT').textContent='Sítio marcado no mapa. Pode mudar carregando noutro ponto.';map.querySelector('.hint').textContent='Sítio marcado ✓'});
+$('#repF').addEventListener('submit',e=>{e.preventDefault();const ok=$('#ok');
+  if(!spot){$('#locT').innerHTML='<b style="color:#c0392b">Marque primeiro o sítio no mapa.</b>';map.focus?.();return}
+  const n='VS-'+String(Math.floor(1000+Math.random()*9000));ok.textContent='Obrigado! A sua participação ('+$('input[name=cat]:checked').value.toLowerCase()+') ficou registada com o número '+n+'. Vamos tratar disto.';ok.classList.add('on')});
+/* agenda */
+const E=[[3,'Hora do conto na biblioteca','Biblioteca da junta · 10h30','cul'],[8,'Caminhada pelo Rio Sereno','Partida no largo · 9h00','des'],[12,'Ginástica sénior','Pavilhão · 10h00','sen'],[14,'Torneio de futsal jovem','Pavilhão · 15h00','jov'],[19,'Oficina de informática para seniores','Espaço Cidadão · 14h30','sen'],[21,'Concerto da banda filarmónica','Igreja matriz · 21h30','cul'],[22,'Corrida solidária de São Martinho','Parque · 9h30','des'],[27,'Assembleia de freguesia','Salão nobre · 21h00','cul'],[29,'Feira de troca de brinquedos','Largo da Igreja · 10h00','jov']];
+const T={cul:['Cultura','p-cul'],des:['Desporto','p-des'],sen:['Sénior','p-sen'],jov:['Juventude','p-jov']};let fT='all',fD=0;
+const days=new Set(E.map(e=>e[0])),today=new Date(),td=today.getMonth()===10&&today.getFullYear()===2026?today.getDate():0;
+$('#cal').innerHTML=['S','T','Q','Q','S','S','D'].map(d=>'<span>'+d+'</span>').join('')+'<i></i><i></i><i></i><i></i><i></i><i></i>'+Array.from({length:30},(_,i)=>'<button type="button" data-d="'+(i+1)+'" class="'+(days.has(i+1)?'has ':'')+(i+1===td?'td':'')+'"'+(days.has(i+1)?' aria-label="'+(i+1)+' de novembro, tem eventos"':' disabled')+'>'+(i+1)+'</button>').join('');
+function agenda(){const L=E.filter(e=>(fT==='all'||e[3]===fT)&&(!fD||e[0]===fD));
+  $('#evl').innerHTML=L.length?L.map(e=>'<article class="card ev"><div class="d"><b>'+e[0]+'</b><small>nov</small></div><div><h3>'+e[1]+'</h3><p>'+e[2]+'</p></div><span class="pill '+T[e[3]][1]+'">'+T[e[3]][0]+'</span></article>').join(''):'<p class="card">Não há eventos com estes filtros.</p>';
+  $$('#cal button').forEach(b=>b.classList.toggle('on',+b.dataset.d===fD))}
+$('#cal').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;fD=+b.dataset.d===fD?0:+b.dataset.d;agenda()});
+$('#allD').onclick=()=>{fD=0;agenda()};
+$$('#flt button').forEach(b=>b.onclick=()=>{fT=b.dataset.t;$$('#flt button').forEach(x=>x.setAttribute('aria-pressed',x===b));agenda()});agenda();
+</script>
+</body>
+</html>

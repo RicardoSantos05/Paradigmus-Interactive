@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luma Lab · Ciência em 60 segundos</title>
+<meta name="description" content="Luma Lab: experiências caseiras e ciência em 60 segundos. Site de demonstração da Paradigmus Interactive.">
+<meta name="theme-color" content="#ffd23f">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8ec;--ink:#141218;--y:#ffd23f;--p:#ff5fa2;--b:#4c7dff;--g:#2ee59d;--o:#ff7a2f;--line:3px solid var(--ink);--sh:6px 6px 0 var(--ink);--ease:cubic-bezier(.3,1.4,.5,1)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "DM Sans",system-ui,sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background-image:radial-gradient(rgba(20,18,24,.13) 1.2px,transparent 1.2px);background-size:22px 22px}
+a{color:inherit}h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;letter-spacing:-.03em;line-height:.95;margin:0}
+.mono{font-family:"Space Mono",monospace;font-weight:700;letter-spacing:.02em}
+.wrap{width:min(1200px,100% - 40px);margin-inline:auto}
+:focus-visible{outline:4px solid var(--b);outline-offset:3px}
+.box{background:#fff;border:var(--line);border-radius:22px;box-shadow:var(--sh)}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:0 24px;border:var(--line);border-radius:999px;background:var(--y);color:var(--ink);font:800 1.05rem "Bricolage Grotesque",sans-serif;text-decoration:none;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.w{background:#fff}.btn.p{background:var(--p)}
+/* header */
+.top{position:sticky;top:12px;z-index:60;margin-top:12px}
+.top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 12px 10px 18px;border-radius:999px}
+.logo{font:800 1.5rem "Bricolage Grotesque";text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo i{width:30px;height:30px;border-radius:50%;background:var(--p);border:var(--line);display:grid;place-items:center;font-style:normal}
+.nav{display:flex;gap:4px}.nav a{padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:700}.nav a:hover{background:var(--y)}
+.live{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:var(--line);font-size:.82rem;background:#fff}
+.live i{width:10px;height:10px;border-radius:50%;background:#bbb}.live.on{background:#ff3b3b;color:#fff}.live.on i{background:#fff;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+@media(max-width:900px){.nav{display:none}}
+.live{white-space:nowrap}@media(max-width:520px){.live{font-size:.7rem;padding:7px 10px}.kick{font-size:.72rem!important}}
+/* hero */
+.hero{position:relative;padding:70px 0 60px}
+.hero .wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(3.4rem,9.4vw,8.4rem)}
+.hero h1 .w{display:inline-block;transition:transform .3s var(--ease)}.hero h1 .w:hover{transform:rotate(-6deg) scale(1.08)}
+.hero h1 .hl{background:var(--y);padding:0 .12em;border:var(--line);border-radius:18px;box-shadow:var(--sh);display:inline-block;transform:rotate(-2deg)}
+.hero p{font-size:1.2rem;max-width:30em;margin:24px 0 30px}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.stats div{padding:12px 18px;border-radius:16px;border:var(--line);background:#fff;box-shadow:4px 4px 0 var(--ink)}
+.stats b{display:block;font:800 1.8rem/1 "Bricolage Grotesque"}.stats span{font-size:.85rem;font-weight:500}
+.phone{justify-self:center;width:min(300px,100%);aspect-ratio:9/18;border:var(--line);border-radius:40px;background:var(--ink);padding:12px;box-shadow:10px 10px 0 var(--p);transform:rotate(4deg);position:relative}
+.scr{position:relative;width:100%;height:100%;border-radius:30px;overflow:hidden;background:linear-gradient(170deg,#4c7dff,#7b4cff)}
+.scr svg{position:absolute;inset:0;width:100%;height:100%}
+.bub{animation:rise 2.4s ease-in infinite}.bub:nth-child(2){animation-delay:.6s}.bub:nth-child(3){animation-delay:1.2s}.bub:nth-child(4){animation-delay:1.8s}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-150px);opacity:0}}
+.cap{position:absolute;left:14px;right:14px;bottom:70px;text-align:center;font:800 1.15rem/1.15 "Bricolage Grotesque";color:#fff;text-shadow:0 2px 0 #000,0 0 12px rgba(0,0,0,.4)}
+.cap span{background:var(--y);color:var(--ink);text-shadow:none;padding:0 6px;border-radius:6px}
+.prog{position:absolute;left:14px;right:14px;bottom:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.35)}.prog i{display:block;height:100%;width:0;background:#fff;border-radius:3px}
+.side{position:absolute;right:10px;bottom:110px;display:grid;gap:14px;color:#fff;font:700 .72rem "DM Sans";text-align:center}
+.side b{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.25);font-size:1.1rem;margin:0 auto 3px}
+.stk{position:absolute;z-index:5;padding:10px 16px;border:var(--line);border-radius:14px;font:800 1rem "Bricolage Grotesque";cursor:grab;user-select:none;touch-action:none;box-shadow:4px 4px 0 var(--ink);transition:box-shadow .2s}
+.stk:active{cursor:grabbing;box-shadow:8px 8px 0 var(--ink)}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}.phone{width:240px}.stk{display:none}}
+/* marquee */
+.mq{background:var(--ink);color:var(--y);border-block:var(--line);transform:rotate(-1.5deg);margin:30px -20px;overflow:hidden;padding:14px 0}
+.mq div{display:flex;gap:40px;width:max-content;animation:mq 26s linear infinite;font:800 1.6rem "Bricolage Grotesque"}
+.mq span::after{content:"✦";margin-left:40px;color:var(--p)}
+@keyframes mq{to{transform:translateX(-50%)}}
+section{padding:100px 0}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:34px}
+.sh h2{font-size:clamp(2.6rem,6vw,4.8rem)}.sh p{max-width:28em;margin:0;font-size:1.05rem}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{min-height:46px;padding:0 18px;border:var(--line);border-radius:999px;background:#fff;font:700 .95rem "DM Sans";cursor:pointer;color:var(--ink)}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--y)}
+/* videos */
+.vids{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.vd{padding:0;overflow:hidden;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:transform .25s var(--ease),box-shadow .25s}
+.vd:hover{transform:translate(-3px,-3px) rotate(-.6deg);box-shadow:10px 10px 0 var(--ink)}
+.th{position:relative;aspect-ratio:16/10;border-bottom:var(--line);overflow:hidden}
+.th svg{width:100%;height:100%}
+.th .t{position:absolute;left:14px;top:14px;right:40%;font:800 1.45rem/1 "Bricolage Grotesque";color:#fff;text-shadow:3px 3px 0 var(--ink);text-transform:uppercase}
+.th .du{position:absolute;right:10px;bottom:10px;background:var(--ink);color:#fff;padding:3px 8px;border-radius:8px;font-size:.78rem}
+.th .pl{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .25s}.vd:hover .pl{opacity:1}
+.th .pl b{width:66px;height:66px;border-radius:50%;background:var(--y);border:var(--line);display:grid;place-items:center;font-size:1.4rem}
+.vd .tx{padding:16px 18px}.vd h3{font-size:1.25rem;line-height:1.1}.vd p{margin:8px 0 0;font-size:.88rem;opacity:.7}
+.vd.hide{display:none}
+@media(max-width:960px){.vids{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.vids{grid-template-columns:1fr}}
+/* poll */
+.poll{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;padding:40px;background:var(--g)}
+.poll h2{font-size:clamp(2rem,4.4vw,3.4rem)}
+.opts{display:grid;gap:12px}
+.opts button{position:relative;overflow:hidden;min-height:64px;border:var(--line);border-radius:16px;background:#fff;text-align:left;padding:0 20px;font:800 1.15rem "Bricolage Grotesque";cursor:pointer;color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.opts button i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--y);transition:width 1s var(--ease);z-index:0}
+.opts button span{position:relative;z-index:1;display:flex;justify-content:space-between}
+.opts.done button{cursor:default}.opts button.me i{background:var(--p)}
+@media(max-width:860px){.poll{grid-template-columns:1fr;padding:26px}}
+/* media kit */
+.kit{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.kit .box{padding:28px}
+.bars{display:grid;gap:12px;margin-top:16px}
+.bars div{display:grid;grid-template-columns:80px 1fr 44px;gap:12px;align-items:center;font-weight:700;font-size:.92rem}
+.bars u{height:18px;border:2px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden;text-decoration:none}
+.bars u i{display:block;height:100%;width:0;background:var(--b);transition:width 1.2s var(--ease)}
+.pk{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px}
+.pk .box{padding:26px;display:grid;gap:12px;align-content:start}
+.pk h3{font-size:1.6rem}.pk .pr{font:800 2.4rem/1 "Bricolage Grotesque"}.pk .pr small{font-size:1rem}
+.pk ul{margin:0;padding-left:18px}.pk .box.hot{background:var(--y);transform:rotate(-1deg)}
+.pk .tag{justify-self:start;font-size:.75rem;padding:4px 10px;border-radius:999px;background:var(--ink);color:var(--y)}
+@media(max-width:960px){.kit,.pk{grid-template-columns:1fr}}
+/* newsletter */
+.nl{padding:50px;background:var(--p);text-align:center;position:relative;overflow:hidden}
+.nl h2{font-size:clamp(2.2rem,5.4vw,4.2rem)}
+.nl form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.nl input{min-height:56px;min-width:min(340px,100%);border:var(--line);border-radius:999px;padding:0 22px;font:500 1.05rem "DM Sans";box-shadow:4px 4px 0 var(--ink)}
+.nl .msg{font-weight:700;margin-top:14px;min-height:1.6em}
+dialog{border:var(--line);border-radius:26px;padding:0;width:min(420px,calc(100% - 28px));background:var(--ink);box-shadow:10px 10px 0 var(--y)}
+dialog::backdrop{background:rgba(20,18,24,.6)}
+.pv{aspect-ratio:9/16;position:relative;overflow:hidden;border-radius:22px}
+.pv svg{position:absolute;inset:0;width:100%;height:100%}
+.pv .cap{bottom:56px}.pv .x{position:absolute;right:12px;top:12px;width:44px;height:44px;border-radius:50%;border:var(--line);background:var(--y);font-size:1.3rem;cursor:pointer;z-index:3}
+.pv .yt{position:absolute;left:14px;top:14px;z-index:3;padding:8px 12px;border-radius:999px;border:var(--line);background:#fff;font-weight:700;font-size:.85rem;text-decoration:none}
+footer{padding:60px 0 50px}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:end}
+footer .big{font:800 clamp(3.4rem,11vw,9rem)/.85 "Bricolage Grotesque";letter-spacing:-.05em}
+.soc{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.soc a{padding:10px 16px;border:var(--line);border-radius:999px;background:#fff;text-decoration:none;font-weight:700}
+.demo{max-width:30em;font-size:.88rem}
+.rv{opacity:0;transform:translateY(30px) rotate(1deg);transition:opacity .7s,transform .7s var(--ease)}.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap top"><div class="in box">
+  <a class="logo" href="#"><i>✦</i>luma.lab</a>
+  <nav class="nav" aria-label="Principal"><a href="#videos">Vídeos</a><a href="#pergunta">Pergunta da semana</a><a href="#marcas">Para marcas</a><a href="#newsletter">Newsletter</a></nav>
+  <span class="live mono" id="live"><i></i><span id="liveT">Próximo direto</span></span>
+</div></div>
+
+<main>
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div>
+      <span class="mono kick" style="display:inline-block;font-size:.85rem;background:#fff;border:var(--line);padding:6px 12px;border-radius:999px">Ciência caseira · todas as terças e sextas</span>
+      <h1 style="margin-top:22px" id="h1"><span class="w">Ciência</span> <span class="w">em</span><br><span class="hl"><span class="w">60</span> <span class="w">segundos.</span></span></h1>
+      <p>Experiências com coisas que tens na cozinha, factos estranhos e respostas às perguntas que ninguém se lembrou de fazer.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="#videos">Ver os últimos vídeos ▶</a><a class="btn w" href="#marcas">Trabalhar comigo</a></div>
+      <div class="stats"><div><b data-n="1.2" data-s="M">0</b><span>seguidores</span></div><div><b data-n="48" data-s="M">0</b><span>visualizações</span></div><div><b data-n="312" data-s="">0</b><span>experiências</span></div></div>
+    </div>
+    <div class="phone" aria-label="Pré-visualização de um vídeo curto" role="img">
+      <div class="scr">
+        <svg viewBox="0 0 270 540" aria-hidden="true">
+          <circle cx="210" cy="90" r="70" fill="#7b4cff" opacity=".5"/>
+          <path d="M100 210h70M110 210v70l-40 120c-6 18 6 30 24 30h82c18 0 30-12 24-30l-40-120v-70" fill="#fff" fill-opacity=".18" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M84 340h102l14 50c4 14-4 24-18 24H88c-14 0-22-10-18-24z" fill="#2ee59d"/>
+          <g fill="#fff"><circle class="bub" cx="120" cy="370" r="7"/><circle class="bub" cx="148" cy="380" r="5"/><circle class="bub" cx="135" cy="360" r="9"/><circle class="bub" cx="160" cy="365" r="6"/></g>
+        </svg>
+        <div class="side"><div><b>♥</b>84k</div><div><b>✎</b>1,2k</div><div><b>↗</b>9k</div></div>
+        <div class="cap" id="cap">E se misturares <span>vinagre</span> com bicarbonato?</div>
+        <div class="prog"><i id="prog"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="stk" style="left:46%;top:60px;background:var(--p);transform:rotate(-8deg)">não tentes em casa*</div>
+  <div class="stk" style="left:56%;top:640px;background:var(--b);color:#fff;transform:rotate(6deg)">* tenta sim</div>
+  <div class="stk" style="right:3%;top:90px;background:var(--g);transform:rotate(10deg)">100% caseiro</div>
+</section>
+
+<div class="mq" aria-hidden="true"><div><span>Vulcões de cozinha</span><span>Ovos que saltam</span><span>Luz que dobra</span><span>Gelo instantâneo</span><span>Slime que pensa</span><span>Vulcões de cozinha</span><span>Ovos que saltam</span><span>Luz que dobra</span><span>Gelo instantâneo</span><span>Slime que pensa</span></div></div>
+
+<section id="videos">
+  <div class="wrap">
+    <div class="sh rv"><h2>Últimos<br>vídeos</h2><div class="tabs" role="group" aria-label="Filtrar vídeos"><button type="button" aria-pressed="true" data-f="all">Tudo</button><button type="button" aria-pressed="false" data-f="exp">Experiências</button><button type="button" aria-pressed="false" data-f="fac">Factos</button><button type="button" aria-pressed="false" data-f="res">Respostas</button></div></div>
+    <div class="vids" id="vids"></div>
+  </div>
+</section>
+
+<section id="pergunta" style="padding-top:20px">
+  <div class="wrap">
+    <div class="poll box rv">
+      <div><span class="mono">Pergunta da semana</span><h2 style="margin-top:14px">No vácuo, o que cai mais depressa?</h2><p style="margin:14px 0 0">Vota e descobre a resposta no vídeo de sexta.</p></div>
+      <div class="opts" id="opts"><button type="button" data-o="0"><i></i><span>Um martelo <em></em></span></button><button type="button" data-o="1"><i></i><span>Uma pena <em></em></span></button><button type="button" data-o="2"><i></i><span>Chegam juntos <em></em></span></button></div>
+    </div>
+  </div>
+</section>
+
+<section id="marcas" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sh rv"><h2>Para<br>marcas</h2><p>Uma comunidade curiosa, que vê os vídeos até ao fim e confia nas recomendações. Fazemos parcerias que ensinam alguma coisa.</p></div>
+    <div class="kit">
+      <div class="box rv"><span class="mono">Quem vê</span><h3 style="font-size:1.8rem;margin-top:8px">Idades</h3><div class="bars" data-bars><div>13–17<u><i data-w="22"></i></u>22%</div><div>18–24<u><i data-w="41"></i></u>41%</div><div>25–34<u><i data-w="24"></i></u>24%</div><div>35+<u><i data-w="13"></i></u>13%</div></div></div>
+      <div class="box rv"><span class="mono">De onde</span><h3 style="font-size:1.8rem;margin-top:8px">Países</h3><div class="bars" data-bars><div>Portugal<u><i data-w="58" style="background:var(--p)"></i></u>58%</div><div>Brasil<u><i data-w="27" style="background:var(--p)"></i></u>27%</div><div>Angola<u><i data-w="6" style="background:var(--p)"></i></u>6%</div><div>Outros<u><i data-w="9" style="background:var(--p)"></i></u>9%</div></div></div>
+    </div>
+    <div class="pk">
+      <div class="box rv"><h3>Short integrado</h3><div class="pr">450 € <small>/ vídeo</small></div><ul><li>Menção de 15 segundos</li><li>TikTok, Reels e Shorts</li><li>Link na descrição</li></ul></div>
+      <div class="box rv hot"><span class="tag mono">Mais pedido</span><h3>Experiência dedicada</h3><div class="pr">1 200 € <small>/ vídeo</small></div><ul><li>Vídeo pensado à volta do produto</li><li>Guião aprovado pela marca</li><li>Relatório de resultados</li></ul></div>
+      <div class="box rv"><h3>Série mensal</h3><div class="pr">3 000 € <small>/ mês</small></div><ul><li>Quatro vídeos por mês</li><li>Direto patrocinado</li><li>Exclusividade na categoria</li></ul></div>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:30px" class="rv"><a class="btn p" href="mailto:parcerias@lumalab.pt?subject=Parceria%20com%20a%20Luma%20Lab">Propor uma parceria</a><a class="btn w" href="#" id="kitB">Descarregar media kit (PDF)</a></div>
+  </div>
+</section>
+
+<section id="newsletter" style="padding-top:20px">
+  <div class="wrap">
+    <div class="nl box rv">
+      <span class="mono">Laboratório de domingo</span>
+      <h2 style="margin-top:12px">Uma experiência por semana,<br>direto no teu email.</h2>
+      <form id="nlF" novalidate><label for="em" style="position:absolute;clip-path:inset(50%)">O teu email</label><input id="em" type="email" placeholder="o.teu@email.pt" autocomplete="email"><button class="btn" type="submit">Quero experimentar</button></form>
+      <p class="msg" id="nlM" role="status"></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><div class="big">luma.lab</div><div class="soc"><a href="#">YouTube</a><a href="#">TikTok</a><a href="#">Instagram</a></div></div>
+    <p class="demo">Site de demonstração criado pela <a href="../../">Paradigmus Interactive</a>. A criadora, os números, os vídeos e os preços são fictícios.</p>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-label="Vídeo"><div class="pv" id="pv"></div></dialog>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* live status: Thursdays at 21h */
+function live(){const d=new Date(),w=d.getDay(),m=d.getHours()*60+d.getMinutes(),on=w===4&&m>=1260&&m<1350,el=$('#live');el.classList.toggle('on',on);
+  if(on){$('#liveT').textContent='Em direto agora';return}let t=new Date(d);t.setHours(21,0,0,0);while(t.getDay()!==4||t<=d)t.setDate(t.getDate()+1);
+  const h=Math.round((t-d)/36e5);$('#liveT').textContent=h<24?'Direto daqui a '+h+' h':'Próximo direto: quinta, 21h'}
+live();setInterval(live,60000);
+/* phone short: captions and progress loop */
+const CAPS=['E se misturares <span>vinagre</span> com bicarbonato?','Espera… está a <span>borbulhar</span>!','É dióxido de <span>carbono</span> a fugir.','Segue para a <span>parte 2</span> ✦'];let ci=0,t0=performance.now();
+(function loop(t){const k=((t-t0)%8000)/8000;$('#prog').style.width=(k*100)+'%';const n=Math.floor(k*4);if(n!==ci){ci=n;$('#cap').innerHTML=CAPS[n]}if(!reduce)requestAnimationFrame(loop)})(t0);
+/* draggable stickers */
+$$('.stk').forEach(s=>{let sx,sy,ox,oy,r=s.style.transform;s.addEventListener('pointerdown',e=>{s.setPointerCapture(e.pointerId);const b=s.getBoundingClientRect(),p=s.offsetParent.getBoundingClientRect();ox=b.left-p.left;oy=b.top-p.top;sx=e.clientX;sy=e.clientY;s.style.left=ox+'px';s.style.right='auto';s.style.top=oy+'px';s.style.zIndex=9});
+  s.addEventListener('pointermove',e=>{if(sx==null)return;s.style.left=ox+e.clientX-sx+'px';s.style.top=oy+e.clientY-sy+'px';s.style.transform='rotate('+((e.clientX-sx)*.05).toFixed(1)+'deg) scale(1.06)'});
+  s.addEventListener('pointerup',()=>{sx=null;s.style.transform=r})});
+/* videos with drawn thumbnails */
+const BG={exp:['#4c7dff','#2ee59d'],fac:['#ff5fa2','#ffd23f'],res:['#ff7a2f','#7b4cff']};
+const ART={volcano:'<path d="M90 200l60-110 60 110z" fill="#141218"/><path d="M135 92c-10-30 30-30 15-60M150 90c10-34 40-24 30-60" stroke="#ffd23f" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="150" cy="96" r="14" fill="#ff7a2f"/>',
+ egg:'<ellipse cx="160" cy="120" rx="44" ry="58" fill="#fff" stroke="#141218" stroke-width="6"/><path d="M110 190h100" stroke="#141218" stroke-width="6"/><path d="M120 60l-14-20M200 60l14-20M160 50V26" stroke="#141218" stroke-width="6" stroke-linecap="round"/>',
+ prism:'<path d="M160 50l60 110H100z" fill="#fff" fill-opacity=".85" stroke="#141218" stroke-width="6"/><path d="M20 110l110 0" stroke="#fff" stroke-width="8"/><g stroke-width="8"><path d="M190 110l110-40" stroke="#ff5fa2"/><path d="M190 115l110-10" stroke="#ffd23f"/><path d="M190 120l110 20" stroke="#2ee59d"/><path d="M190 125l110 50" stroke="#4c7dff"/></g>',
+ ice:'<rect x="110" y="70" width="90" height="90" rx="14" fill="#fff" fill-opacity=".9" stroke="#141218" stroke-width="6" transform="rotate(-10 155 115)"/><path d="M130 100l40 30M170 95l-35 40" stroke="#4c7dff" stroke-width="6" stroke-linecap="round"/>',
+ brain:'<path d="M110 130c-30-10-20-60 10-60 5-30 50-30 55 0 30-10 50 30 30 50 20 20-5 50-30 40-10 25-55 25-60 0-20 10-40-15-5-30z" fill="#ff5fa2" stroke="#141218" stroke-width="6"/><path d="M150 80v80M125 105c10 5 15 15 10 25M175 105c-10 5-15 15-10 25" stroke="#141218" stroke-width="5" fill="none"/>',
+ moon:'<circle cx="160" cy="110" r="60" fill="#ffd23f" stroke="#141218" stroke-width="6"/><circle cx="140" cy="95" r="10" fill="#141218" opacity=".2"/><circle cx="180" cy="130" r="14" fill="#141218" opacity=".2"/><path d="M60 40l6 12 12 6-12 6-6 12-6-12-12-6 12-6z" fill="#fff"/>'};
+const V=[{t:'Vulcão de cozinha',s:'Vulcão de vinagre, mas a sério',c:'exp',a:'volcano',d:'0:58',v:'2,1 M'},
+ {t:'Ovo saltitão',s:'Um ovo que salta sem partir',c:'exp',a:'egg',d:'0:47',v:'1,4 M'},
+ {t:'A luz dobra?',s:'Arco-íris com um copo de água',c:'fac',a:'prism',d:'1:00',v:'890 k'},
+ {t:'Gelo em 3 segundos',s:'Água sobrearrefecida explicada',c:'exp',a:'ice',d:'0:55',v:'3,3 M'},
+ {t:'O cérebro mente',s:'Três ilusões que te enganam',c:'fac',a:'brain',d:'0:59',v:'1,1 M'},
+ {t:'A Lua foge?',s:'Respondo às vossas perguntas',c:'res',a:'moon',d:'0:52',v:'640 k'}];
+const thumb=(v,big)=>{const [a,b]=BG[v.c];return '<svg viewBox="0 0 320 '+(big?570:200)+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="320" height="'+(big?570:200)+'" fill="'+a+'"/><circle cx="270" cy="30" r="90" fill="'+b+'" opacity=".55"/><g transform="translate('+(big?0:60)+' '+(big?170:0)+') '+(big?'scale(1)':'scale(.8)')+'">'+ART[v.a]+'</g></svg>'};
+$('#vids').innerHTML=V.map((v,i)=>'<button type="button" class="vd box rv" data-v="'+i+'" data-c="'+v.c+'"><div class="th">'+thumb(v)+'<div class="t">'+v.t+'</div><span class="du mono">'+v.d+'</span><span class="pl"><b>▶</b></span></div><div class="tx"><h3>'+v.s+'</h3><p>'+v.v+' visualizações</p></div></button>').join('');
+$$('.tabs button').forEach(b=>b.onclick=()=>{$$('.tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));$$('.vd').forEach(v=>v.classList.toggle('hide',b.dataset.f!=='all'&&v.dataset.c!==b.dataset.f))});
+document.addEventListener('click',e=>{const v=e.target.closest('.vd');if(v){const x=V[+v.dataset.v];$('#pv').innerHTML=thumb(x,1)+'<a class="yt" href="#">Ver no YouTube ↗</a><button class="x" type="button" aria-label="Fechar">×</button><div class="cap">'+x.s+'</div><div class="prog"><i id="pp"></i></div>';$('#dlg').showModal();
+  if(!reduce){const s=performance.now();(function f(t){const el=$('#pp');if(!el||!$('#dlg').open)return;el.style.width=(((t-s)%6000)/60)+'%';requestAnimationFrame(f)})(s)}return}
+  if(e.target.closest('.pv .x')||e.target.id==='dlg')$('#dlg').close()});
+/* poll, remembered */
+const base=[312,198,1240];let voted=null;try{voted=localStorage.getItem('luma-poll')}catch(e){}
+function showPoll(){const o=$('#opts'),votes=base.slice();if(voted!=null)votes[+voted]++;const tot=votes.reduce((a,b)=>a+b,0);o.classList.toggle('done',voted!=null);
+  $$('#opts button').forEach((b,i)=>{const p=Math.round(votes[i]/tot*100);b.classList.toggle('me',String(i)===voted);b.querySelector('i').style.width=voted!=null?p+'%':'0';b.querySelector('em').textContent=voted!=null?p+'%':'';b.setAttribute('aria-pressed',String(i)===voted)})}
+$$('#opts button').forEach(b=>b.onclick=()=>{if(voted!=null)return;voted=b.dataset.o;try{localStorage.setItem('luma-poll',voted)}catch(e){}showPoll();const r=b.getBoundingClientRect();confetti(r.left+r.width/2,r.top)});showPoll();
+/* newsletter */
+$('#nlF').addEventListener('submit',e=>{e.preventDefault();const v=$('#em').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){$('#nlM').textContent='Hmm, esse email parece ter um erro. Experimenta outra vez.';$('#em').focus();return}
+  $('#nlM').textContent='Estás dentro! A primeira experiência chega domingo de manhã.';$('#em').value='';const r=e.target.getBoundingClientRect();confetti(r.left+r.width/2,r.top)});
+$('#kitB').onclick=e=>{e.preventDefault();$('#kitB').textContent='Media kit enviado para o teu email (demonstração)'};
+function confetti(x,y){if(reduce)return;const C=['#ffd23f','#ff5fa2','#4c7dff','#2ee59d','#141218'];for(let i=0;i<34;i++){const c=document.createElement('i');Object.assign(c.style,{position:'fixed',left:x+'px',top:y+'px',width:'9px',height:'14px',background:C[i%5],border:'2px solid #141218',zIndex:99,pointerEvents:'none',borderRadius:'2px'});document.body.appendChild(c);
+  const a=-Math.PI/2+(Math.random()-.5)*2.4,v=120+Math.random()*180;c.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+Math.cos(a)*v+'px,'+(Math.sin(a)*v+220)+'px) rotate('+(Math.random()*720)+'deg)',opacity:0}],{duration:1200+Math.random()*500,easing:'cubic-bezier(.2,.6,.4,1)'}).onfinish=()=>c.remove()}}
+/* reveal, counters, bars */
+function count(el){const n=+el.dataset.n,sfx=el.dataset.s,t0=performance.now(),dec=n%1?1:0;const f=t=>{const k=Math.min(1,(t-t0)/1400),v=n*(1-Math.pow(1-k,3));el.textContent=v.toFixed(dec).replace('.',',')+sfx;if(k<1)requestAnimationFrame(f)};reduce?el.textContent=String(n).replace('.',',')+sfx:requestAnimationFrame(f)}
+$$('[data-n]').forEach(count);
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');e.target.querySelectorAll('[data-w]').forEach(i=>i.style.width=i.dataset.w+'%');io.unobserve(e.target)}),{threshold:.15});
+$$('.rv').forEach(el=>io.observe(el));
+/* bubbles follow the cursor over the hero */
+(()=>{if(reduce||!matchMedia('(pointer:fine)').matches)return;let last=0;$('#hero').addEventListener('pointermove',e=>{const t=performance.now();if(t-last<45)return;last=t;const b=document.createElement('i'),s=8+Math.random()*16;
+  Object.assign(b.style,{position:'fixed',left:e.clientX-s/2+'px',top:e.clientY-s/2+'px',width:s+'px',height:s+'px',borderRadius:'50%',border:'2px solid #141218',background:['#ffd23f','#ff5fa2','#4c7dff','#2ee59d'][Math.floor(Math.random()*4)],pointerEvents:'none',zIndex:4});document.body.appendChild(b);
+  b.animate([{transform:'translateY(0) scale(1)',opacity:1},{transform:'translateY(-60px) scale(.3)',opacity:0}],{duration:900,easing:'ease-out'}).onfinish=()=>b.remove()})})();
+</script>
+</body>
+</html>
