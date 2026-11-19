@@ -530,6 +530,14 @@ html.palx *,html.palx *::before,html.palx *::after{transition-property:transform
 /* phones: no live blur behind the header (it has to be recomputed on every scrolled frame); a slightly denser background looks the same */
 .coarse .top.solid{backdrop-filter:none;-webkit-backdrop-filter:none;background:color-mix(in srgb,var(--bg0) 94%,transparent)}
 .coarse dialog::backdrop{backdrop-filter:none;background:rgba(4,6,8,.92)}
+/* light mode: the scattered name is a pure compositor animation (no physics on the processor) */
+.hero.on.flipped .word span.sc,.hero.on .word span.sc,.word span.sc{animation:scat var(--dur,4s) both;animation-delay:var(--dl,0s)}
+@keyframes scat{0%{transform:none;animation-timing-function:cubic-bezier(.15,.7,.3,1)}
+  22%{transform:translate(var(--tx),var(--ty)) rotate(var(--r));animation-timing-function:cubic-bezier(.3,0,.6,1)}
+  27%{transform:translate(var(--tx2),var(--ty2)) rotate(var(--r2))}
+  64%{transform:translate(var(--tx2),var(--ty2)) rotate(var(--r2));animation-timing-function:cubic-bezier(.2,1.25,.3,1)}
+  100%{transform:none}}
+.word span.lg{transition:transform 1.1s cubic-bezier(.2,1.25,.3,1)}
 /* performance: offscreen sections skip layout and paint until they come near the screen */
 main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:auto 1100px}
 .glc{visibility:hidden}.glc.on{visibility:visible}
@@ -870,7 +878,7 @@ const worlds=(()=>{
   let palPrev=PALS[0],palT=0;const mixHex=(a,b,k)=>'#'+[1,3,5].map(j=>Math.round(parseInt(a.slice(j,j+2),16)*(1-k)+parseInt(b.slice(j,j+2),16)*k).toString(16).padStart(2,'0')).join('');
   function palette(i){const p=PALS[i],from=palPrev;palPrev=p;const lite=!fine||Q.level>0;root.classList.toggle('litepal',lite);clearTimeout(palT);
     if(lite&&!reduce){root.classList.add('palx');clearTimeout(root._px);root._px=setTimeout(()=>root.classList.remove('palx'),1600);let n=0;const N=Q.level>=2?4:8;const st=()=>{n++;const k=n/N;for(const c of ['cy','mg','bg','bg0'])root.style.setProperty('--'+c,mixHex(from[c],p[c],k));if(n<N)palT=setTimeout(st,1400/N)};st()}
-    else for(const k of ['cy','mg','bg','bg0'])root.style.setProperty('--'+k,p[k]);CY=rgb(p.cy);MG=rgb(p.mg);BG0=rgb(p.bg0);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=p.bg0;dispatchEvent(new CustomEvent('paradigm',{detail:p}));const mn=document.querySelector('.mark3d .mnm');if(mn)mn.textContent=defs[i].name}
+    else for(const k of ['cy','mg','bg','bg0'])root.style.setProperty('--'+k,p[k]);CY=rgb(p.cy);MG=rgb(p.mg);BG0=rgb(p.bg0);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=p.bg0;window.__pCy=p.cy;dispatchEvent(new CustomEvent('paradigm',{detail:p}));const mn=document.querySelector('.mark3d .mnm');if(mn)mn.textContent=defs[i].name}
   const slot=[{w:0,s:{}},{w:1,s:{}}];let cur=0,fading=false,fadeTick=0;
   function size(){const r=hero.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,[1.5,1.25,1][Q.level]);W=r.width;H=r.height;
     cv.forEach((c,i)=>{c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);cx[i].setTransform(dpr,0,0,dpr,0,0)});
@@ -1038,19 +1046,35 @@ const word=(()=>{
     }
     eng.gravity.x=gx;eng.gravity.y=gy;schedule();return true;
   }
+  const lite=()=>!fine&&Q.level>=2;
+  function liteScatter(d){const R=hero.getBoundingClientRect(),RS=L.map(s=>s.getBoundingClientRect());
+    L.forEach((s,i)=>{const r=RS[i],cx=r.left-R.left+r.width/2,cy=r.top-R.top+r.height/2;
+      // throw each letter toward the side the gravity points to, inside the hero, like the physics would
+      const gx=d[0],gy=d[1];let tx=(gx?(gx>0?R.width-r.width*.6-cx:r.width*.6-cx):(Math.random()-.5)*R.width*.5)*(.55+Math.random()*.45);
+        let ty=(gy>.5?R.height-r.height*.6-cy:gy<-.5?r.height*.6-cy:(Math.random()-.5)*R.height*.5)*(.55+Math.random()*.45),rot=(Math.random()-.5)*160,cl=(v,a,b)=>Math.max(a,Math.min(b,v));tx=cl(cx+tx,r.width*.5+8,R.width-r.width*.5-8)-cx;ty=cl(cy+ty,r.height*.5+70,R.height-r.height*.5-8)-cy;
+      s.style.transition='';s.style.transform='';s.style.setProperty('--tx',tx.toFixed(0)+'px');s.style.setProperty('--ty',ty.toFixed(0)+'px');s.style.setProperty('--r',rot.toFixed(0)+'deg');
+      s.style.setProperty('--tx2',(tx*.94).toFixed(0)+'px');s.style.setProperty('--ty2',(ty*.94).toFixed(0)+'px');s.style.setProperty('--r2',(rot*.9).toFixed(0)+'deg');s.style.setProperty('--dl',(i*.025)+'s');
+      s.classList.remove('sc')});requestAnimationFrame(()=>requestAnimationFrame(()=>{L.forEach(s=>s.classList.add('sc'));setTimeout(()=>quake(hero),850)}));
+    clearTimeout(L._t);L._t=setTimeout(()=>{L.forEach(s=>s.classList.remove('sc'));if(!reduce)restart(wd,'jolt')},4300)}
+  /* if a change still runs slowly on a phone, the next ones use the light mode */
+  function watchShift(){if(fine||Q.level>=2)return;let n=0,last=0,sum=0;const f=t=>{if(last){sum+=t-last;n++}last=t;if(n<70)requestAnimationFrame(f);else if(sum/n>24)Q.set(2)};requestAnimationFrame(f)}
   function shift(){
     const dirs=[[0,1.2],[0,-1.2],[-1.2,.2],[1.2,.2]],d=dirs[(Math.random()*dirs.length)|0];
+    if(lite()){liteScatter(d);worlds.next();quake(hero);glitch(1,520);sfx.shift();buzz([25,40,70]);window.turnMark&&turnMark();window.spin3d&&spin3d();return}
+    watchShift();
     if(PW&&activate(d[0],d[1]))PW.postMessage({t:'kick',d:d[1]});else if(!PW&&activate(d[0],d[1]))bodies.forEach(b=>{Mt.Body.setVelocity(b,{x:(Math.random()-.5)*14,y:(Math.random()-.5)*14-d[1]*4});Mt.Body.setAngularVelocity(b,(Math.random()-.5)*.35)});
     if(!reduce)restart(wd,'jolt');
     worlds.next();quake(hero);glitch(1,520);sfx.shift();buzz([25,40,70]);window.turnMark&&turnMark();window.spin3d&&spin3d();
   }
   L.forEach((s,i)=>{
     const pt=e=>{const R=hero.getBoundingClientRect();return {x:e.clientX-R.left,y:e.clientY-R.top}};
-    s.addEventListener('pointerdown',e=>{if(!activate(0,1))return;e.preventDefault();root.classList.add('dragging');try{getSelection().removeAllRanges()}catch(x){}try{s.setPointerCapture(e.pointerId)}catch(x){}const p=pt(e);
+    let ld=null;
+    s.addEventListener('pointerdown',e=>{if(lite()){e.preventDefault();try{s.setPointerCapture(e.pointerId)}catch(x){}s.classList.remove('sc','lg');ld={x:e.clientX,y:e.clientY,r:0};root.classList.add('dragging');return}
+      if(!activate(0,1))return;e.preventDefault();root.classList.add('dragging');try{getSelection().removeAllRanges()}catch(x){}try{s.setPointerCapture(e.pointerId)}catch(x){}const p=pt(e);
       if(PW){drag={i};PW.postMessage({t:'drag',i,x:p.x,y:p.y});clearTimeout(backT);return}const b=bodies[i];
       drag=Mt.Constraint.create({pointA:p,bodyB:b,pointB:{x:p.x-b.position.x,y:p.y-b.position.y},stiffness:.2,damping:.08,length:0});Mt.Composite.add(eng.world,drag);clearTimeout(backT)});
-    s.addEventListener('pointermove',e=>{if(PW){if(drag&&drag.i===i){const p=pt(e);PW.postMessage({t:'move',x:p.x,y:p.y})}return}if(drag&&drag.bodyB===bodies[i])drag.pointA=pt(e)});
-    const up=()=>{root.classList.remove('dragging');if(PW){if(drag){PW.postMessage({t:'up'});drag=null;schedule()}return}if(drag&&eng)Mt.Composite.remove(eng.world,drag);if(drag){drag=null;schedule()}};
+    s.addEventListener('pointermove',e=>{if(ld){const dx=e.clientX-ld.x,dy=e.clientY-ld.y;if(!ld.f)ld.f=requestAnimationFrame(()=>{ld&&(ld.f=0);s.style.transform='translate('+dx+'px,'+dy+'px) rotate('+(dx*.12).toFixed(1)+'deg)'});return}if(PW){if(drag&&drag.i===i){const p=pt(e);PW.postMessage({t:'move',x:p.x,y:p.y})}return}if(drag&&drag.bodyB===bodies[i])drag.pointA=pt(e)});
+    const up=()=>{root.classList.remove('dragging');if(ld){ld=null;s.classList.add('lg');s.style.transform='';setTimeout(()=>s.classList.remove('lg'),1200);return}if(PW){if(drag){PW.postMessage({t:'up'});drag=null;schedule()}return}if(drag&&eng)Mt.Composite.remove(eng.world,drag);if(drag){drag=null;schedule()}};
     s.addEventListener('pointerup',up);s.addEventListener('pointercancel',up);s.addEventListener('lostpointercapture',up);
   });
   addEventListener('resize',()=>{if(eng||pwOn){stop();L.forEach(s=>s.style.transform='')}});
@@ -1266,6 +1290,9 @@ try{window.claude?.hot?.snapshot?.(snap)}catch(e){}
 const restore=d=>{if(d)for(const k of ['nome','email','empresa','msg'])if(d[k])$('#'+k).value=d[k]};
 try{if(window.claude?.hot?.ready)window.claude.hot.ready(restore);else restore(window.claude?.hot?.data)}catch(e){}
 
+/* ===== on-device check: open the site with ?diag to see speed, mode and frame rate ===== */
+if(/[?&]diag/.test(location.search)){const d=document.createElement('div');Object.assign(d.style,{position:'fixed',left:'8px',bottom:'8px',zIndex:999,font:'12px/1.4 monospace',background:'rgba(0,0,0,.8)',color:'#0f0',padding:'6px 9px',borderRadius:'6px',pointerEvents:'none',whiteSpace:'pre'});document.body.appendChild(d);
+  let n=0,t0=performance.now(),last=t0,worst=0,fps=0;const f=t=>{n++;worst=Math.max(worst,t-last);last=t;if(t-t0>1000){fps=Math.round(n*1000/(t-t0));d.textContent='fps '+fps+'  pior '+Math.round(worst)+'ms\nmodo '+(Q.level>=2?'leve':'normal')+' (nível '+Q.level+')  velocidade '+(Q.speed||'?')+'\nfundo noutro núcleo: '+(typeof OffscreenCanvas!=='undefined'&&!fine?'sim':'não');n=0;t0=t;worst=0}requestAnimationFrame(f)};requestAnimationFrame(f)}
 /* ===== cheat code: type 2005 anywhere to reboot the site, intro and all ===== */
 {let buf='';addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||e.target.isContentEditable)return;
   if(!/^[0-9]$/.test(e.key)){buf='';return}buf=(buf+e.key).slice(-4);if(buf!=='2005')return;buf='';
@@ -1404,7 +1431,7 @@ if(THREE&&gl){
   R.setClearColor(0,0);R.outputColorSpace=THREE.SRGBColorSpace;
   const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(28,1,.1,100);cam.position.set(0,0,13.5);
   const css=k=>(root.style.getPropertyValue(k)||getComputedStyle(root).getPropertyValue(k)).trim()||'#c8f53c';
-  const accent=new THREE.Color(css('--cy')),accentT=accent.clone();
+  const accent=new THREE.Color(window.__pCy||css('--cy')),accentT=accent.clone();
   scene.add(new THREE.HemisphereLight(0xf4f2ea,0x101216,1.6));
   const key=new THREE.DirectionalLight(0xffffff,3);key.position.set(-4,6,8);scene.add(key);
   const rim=new THREE.PointLight(accent,60,30,1.6);rim.position.set(4,-2,-3);scene.add(rim);
@@ -1430,7 +1457,7 @@ if(THREE&&gl){
   // the spin: a full turn on an axis that changes every time, the halves pull apart along the fault and settle back
   const axes=[[0,1],[1,0],[1,1],[0,-1],[-1,1]];let ai=0,spin=null;
   const ease=t=>1-Math.pow(1-t,4),back=t=>{const c=1.6;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
-  window.spin3d=()=>{const nc=css('--cy');accentT.set(nc);btn.classList.add('used');btn.classList.add('pulse');clearTimeout(btn._pt);btn._pt=setTimeout(()=>btn.classList.remove('pulse'),1300);
+  window.spin3d=()=>{btn.classList.add('used');btn.classList.add('pulse');clearTimeout(btn._pt);btn._pt=setTimeout(()=>btn.classList.remove('pulse'),1300);
     if(reduce()){accent.copy(accentT);kick();return}
     const a=axes[ai++%axes.length];const TAU=Math.PI*2,fx=spinG.rotation.x,fy=spinG.rotation.y,tx=Math.round(fx/TAU)*TAU+a[0]*TAU,ty=Math.round(fy/TAU)*TAU+a[1]*TAU;spin={t0:performance.now(),dur:1300,fx,fy,ax:tx-fx,ay:ty-fy};kick()};
   // assembly when the hero first appears
