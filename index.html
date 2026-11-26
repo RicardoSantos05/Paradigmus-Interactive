@@ -1183,8 +1183,9 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
     const ax=A[0]+A[2]/2,ay=A[1]+A[3]/2,bx=B.left+B.width/2,by=B.top+B.height/2,s0=vert?A[2]/B.height:A[2]/B.width;
     const from='translate('+(ax-bx)+'px,'+(ay-by)+'px) rotate('+(vert?-90:0)+'deg) scale('+s0+')';
     fl.animate([{transform:from},{transform:'translate('+(ax-bx)*.9+'px,'+(ay-by)*.9+'px) rotate('+(vert?-80:0)+'deg) scale('+(s0+(1-s0)*.1)+')',offset:.2},{transform:'none'}],{duration:1000,easing:'cubic-bezier(.7,0,.2,1)',fill:'forwards'}).onfinish=()=>{fl.remove();land()}}
-  let fb=setTimeout(()=>finish(),5000);   // no sign of the cinematic after 5 s: open the site anyway
-  addEventListener('message',e=>{const d=e.data;if(d&&d.t==='pm-intro-start'){clearTimeout(fb);fb=setTimeout(()=>finish(),16000)}else if(d&&d.t==='pm-intro-done')finish(d.r);else if(d==='pm-intro-done')finish()});
+  let fb=setTimeout(()=>finish(),12000);   // if the cinematic never becomes ready, open the site anyway
+  addEventListener('message',e=>{if(e.source!==fx.contentWindow)return;const d=e.data;if(d&&d.t==='pm-intro-ready'){requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!done)fx.contentWindow.postMessage('pm-intro-play','*')}))}
+    else if(d&&d.t==='pm-intro-start'){clearTimeout(fb);fb=setTimeout(()=>finish(),16000)}else if(d&&d.t==='pm-intro-done')finish(d.r);else if(d==='pm-intro-done')finish()});
   $('#iSk').onclick=()=>finish();addEventListener('keydown',function k(e){if(e.key==='Escape'||e.key==='Enter'){finish();removeEventListener('keydown',k)}});
 })();
 
