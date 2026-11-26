@@ -147,10 +147,8 @@ p{margin:0 0 1em;max-width:64ch}
 .intro .mk .l{left:0;width:100%;top:calc(var(--u)*15.3);height:calc(var(--u)*1.4);background:var(--cy);box-shadow:0 0 14px var(--cy);transform:scaleX(0);transform-origin:0 50%}
 .intro .cnt{position:absolute;left:max(4vw,16px);bottom:28px;color:var(--mute);display:grid;gap:4px}
 .intro .cnt b{font:800 clamp(2.4rem,6vw,4.4rem)/1 Syne,sans-serif;color:var(--wh);letter-spacing:-.03em}
-.intro video{position:absolute;left:50%;top:50%;width:min(107.05vw,1280px);aspect-ratio:16/9;transform:translate(-50%,-50%);background:#000;z-index:1}
 .intro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#050607;visibility:hidden;pointer-events:none}
-.intro .intro-flash{position:absolute;inset:0;z-index:2;background:#f4ffe0;opacity:0;mix-blend-mode:screen;pointer-events:none}
-.intro.vector{background:var(--bg0)}.intro.vector video{display:none}.intro.vector iframe{visibility:visible;pointer-events:auto}
+.intro.vector{background:var(--bg0)}.intro.vector iframe{visibility:visible;pointer-events:auto}
 .intro .sk{z-index:3;position:absolute;right:max(4vw,16px);bottom:28px;background:none;border:1px solid var(--line);color:var(--mute);height:44px;padding:0 16px;cursor:pointer}
 
 /* hero */
@@ -571,9 +569,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 </defs></svg>
 
 <div class="intro" id="intro" aria-hidden="true">
-  <video id="introVideo" muted playsinline preload="auto" aria-hidden="true" tabindex="-1" src="img/intro.mp4"></video>
   <iframe id="introFx" title="Paradigmus" tabindex="-1" aria-hidden="true"></iframe>
-  <div class="intro-flash" id="introFlash" aria-hidden="true"></div>
   <button class="sk mono" id="iSk" type="button">Saltar</button>
 </div>
 
@@ -1168,19 +1164,17 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
 
 /* ===== intro: emblem, a thin line that fills, then the world ===== */
 (()=>{
-  const hero=$('#inicio');let seen=false;try{seen=sessionStorage.getItem('pm-in')==='1'}catch(e){}
+  const hero=$('#inicio');let seen=false;try{seen=sessionStorage.getItem('pm-in-vector')==='1'}catch(e){}
   if(reduce||seen){hero.classList.add('on');worlds.start();return}
   root.classList.add('js-intro','pre');
   worlds.pause();
   /* the intro is the cinematic: the two brothers, the <R>, the hooks and the laser. It tells us when it is done. */
-  const o=$('#intro'),fx=$('#introFx'),video=$('#introVideo'),flash=$('#introFlash');let done=false,videoStarted=false,videoEnded=false,vectorStarted=false,videoBounds=null,fb,endFallback,flashTimers=[];
-  fx.src='intro.html?embed=1&static=1';
+  const o=$('#intro'),fx=$('#introFx');let done=false,fb;
+  o.classList.add('vector');
+  fx.src='intro.html?embed=1&v=2';
   /* hand-off: the name at the end of the cinematic flies into the place of the name in the hero */
-  function finish(A){if(done)return;done=true;clearTimeout(fb);clearTimeout(endFallback);flashTimers.forEach(clearTimeout);flash.getAnimations().forEach(a=>a.cancel());try{sessionStorage.setItem('pm-in','1')}catch(e){}
-    video.pause();
+  function finish(source){if(done)return;done=true;clearTimeout(fb);try{sessionStorage.setItem('pm-in-vector','1')}catch(e){}
     fitWords();worlds.resume();
-    // Bounds of the visible word in the MP4's 1280x720 final frame.
-    const source=videoEnded&&video.videoWidth?(()=>{const r=video.getBoundingClientRect(),s=r.width/video.videoWidth;return[r.left+192*s,r.top+375*s,924*s,62*s]})():A;
     const hw=$('#h-hero'),B=hw.getBoundingClientRect(),vert=getComputedStyle(hw).writingMode.startsWith('vertical');
     const land=()=>{root.classList.remove('pre');hero.classList.add('on','flipped');hw.style.visibility='';quake(hero);glitch(1,500);hw.classList.remove('jolt');void hw.offsetWidth;hw.classList.add('jolt');sfx.shift();buzz([20,30,50])};
     o.animate([{opacity:1},{opacity:0}],{duration:source?650:800,delay:source?120:0,fill:'forwards',easing:'cubic-bezier(.4,0,.2,1)'}).onfinish=()=>{root.classList.remove('js-intro');fx.remove()};
@@ -1194,15 +1188,8 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
     const from='translate('+(ax-bx)+'px,'+(ay-by)+'px) rotate('+(vert?-90:0)+'deg) scale('+sx+','+sy+')';
     fl.animate([{transform:from},{transform:'translate('+(ax-bx)*.9+'px,'+(ay-by)*.9+'px) rotate('+(vert?-80:0)+'deg) scale('+(sx+(1-sx)*.1)+','+(sy+(1-sy)*.1)+')',offset:.2},{transform:'none'}],{duration:1000,easing:'cubic-bezier(.7,0,.2,1)',fill:'forwards'}).onfinish=()=>{fl.remove();land()}}
   fb=setTimeout(()=>finish(),12000);   // if the cinematic never becomes ready, open the site anyway
-  const vectorFallback=()=>{if(done||videoStarted||vectorStarted)return;vectorStarted=true;video.pause();o.classList.add('vector');fx.src='intro.html?embed=1'};
-  video.addEventListener('playing',()=>{videoStarted=true;clearTimeout(fb);fb=setTimeout(()=>finish(),16000);
-    [[1478,220,.55],[4542,273,.85]].forEach(([delay,duration,peak])=>flashTimers.push(setTimeout(()=>{if(!done)flash.animate([{opacity:0},{opacity:peak,offset:.12},{opacity:0}],{duration,fill:'none'})},delay)))},{once:true});
-  video.addEventListener('ended',()=>{videoEnded=true;if(videoBounds)finish(videoBounds);else endFallback=setTimeout(()=>{if(!done)finish()},1500)},{once:true});
-  video.addEventListener('error',vectorFallback,{once:true});
-  const play=video.play();if(play&&play.catch)play.catch(vectorFallback);
   addEventListener('message',e=>{if(e.source!==fx.contentWindow)return;const d=e.data;
-    if(d&&d.t==='pm-intro-static-ready'){videoBounds=d.r;if(videoEnded&&!done){clearTimeout(endFallback);finish(videoBounds)}}
-    else if(d&&d.t==='pm-intro-ready'){requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!done)fx.contentWindow.postMessage('pm-intro-play','*')}))}
+    if(d&&d.t==='pm-intro-ready'){requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!done)fx.contentWindow.postMessage('pm-intro-play','*')}))}
     else if(d&&d.t==='pm-intro-start'){clearTimeout(fb);fb=setTimeout(()=>finish(),16000)}else if(d&&d.t==='pm-intro-done')finish(d.r);else if(d==='pm-intro-done')finish()});
   $('#iSk').onclick=()=>finish();addEventListener('keydown',function k(e){if(e.key==='Escape'||e.key==='Enter'){finish();removeEventListener('keydown',k)}});
 })();
@@ -1369,7 +1356,7 @@ if(/[?&]diag/.test(location.search)){const d=document.createElement('div');Objec
 /* ===== cheat code: type 2005 anywhere to reboot the site, intro and all ===== */
 {let buf='';addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||e.target.isContentEditable)return;
   if(!/^[0-9]$/.test(e.key)){buf='';return}buf=(buf+e.key).slice(-4);if(buf!=='2005')return;buf='';
-  try{sessionStorage.removeItem('pm-in')}catch(x){}try{history.scrollRestoration='manual'}catch(x){}
+  try{sessionStorage.removeItem('pm-in-vector')}catch(x){}try{history.scrollRestoration='manual'}catch(x){}
   if(!reduce){glitch(1,700);quake(document.body);buzz&&buzz([30,40,90])}
   setTimeout(()=>{scrollTo(0,0);location.reload()},reduce?0:650)})}
 /* ===== scroll: header, progress, active nav ===== */
