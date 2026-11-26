@@ -72,6 +72,9 @@ p{margin:0 0 1em;max-width:64ch}
 .brand svg .sh{transition:transform .45s cubic-bezier(.3,1.7,.5,1)}.brand svg .fl{transition:opacity .3s}.brand:hover svg .sh{transform:translateX(-5px)}
 .brand svg.wm{width:auto;height:13px;color:var(--wh)}
 .brand svg.logo{width:auto;height:16px;overflow:visible;color:var(--wh)}
+.brand svg.logo>path{display:none}
+.brand svg.logo path[clip-path="url(#hdb)"]{transform:translateX(6.5px);transition:transform .5s var(--ease)}
+.brand:hover svg.logo path[clip-path="url(#hdb)"]{transform:translateX(17px)}
 .brand .hr{transition:opacity .25s}.brand.away .hr{opacity:.16}
 @media(max-width:700px){.brand svg.logo{height:14px}.rider{--u:.82px}}
 @media(max-width:700px){.brand svg.wm{height:11px}}
@@ -92,11 +95,11 @@ p{margin:0 0 1em;max-width:64ch}
 .top.riding .tk{opacity:1;transform:translateY(50%) scale(1)}
 .progress{position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--cy);transform-origin:0 50%;transform:scaleX(0)}
 /* the symbol rides the progress line: the line is its fault, the top half above it, the lower half hanging below */
-.rider{--u:.9375px;position:absolute;left:0;bottom:0;width:calc(var(--u)*36.64);height:0;padding:0;border:0;background:none;cursor:pointer;opacity:0;z-index:3;transform-origin:50% 0;will-change:transform}
+.rider{--u:.9375px;position:absolute;left:0;bottom:0;width:calc(var(--u)*36.64);height:0;padding:0;border:0;background:none;cursor:pointer;opacity:0;z-index:3;transform-origin:50% 0}
 .rider.on{opacity:1}
 .rider::before{content:"";position:absolute;left:-8px;right:-8px;top:-22px;height:44px}
 .rider i{position:absolute;display:block}
-.rider .rt,.rider .rb{left:0;width:100%;background-repeat:no-repeat;background-size:100% 100%;will-change:transform}
+.rider .rt,.rider .rb{left:0;width:100%;background-repeat:no-repeat;background-size:100% 100%}
 .rider .rt{height:calc(var(--u)*8.0)}
 .rider .rb{height:calc(var(--u)*8.26)}
 .rider .rt svg,.rider .rb svg{display:block;width:100%;height:100%;overflow:visible}
@@ -530,7 +533,7 @@ html.litepal{transition:none!important}
 html.palx *,html.palx *::before,html.palx *::after{transition-property:transform,opacity,scale,translate,rotate,--sh!important}
 /* the progress line and the rider's ride along it are tied to the scroll on the compositor:
    they stay perfectly smooth even when the phone's processor is busy */
-.rtrack{position:absolute;left:0;bottom:0;width:0;height:0;z-index:3;will-change:transform}
+.rtrack{position:absolute;left:0;bottom:0;width:0;height:0;z-index:3}
 @supports (animation-timeline:scroll()){
 }
 @keyframes pgk{0%{transform:scaleX(0)}.4%{transform:scaleX(var(--s0,0))}100%{transform:scaleX(var(--s1,1))}}
@@ -1359,8 +1362,8 @@ addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(o
   /* the R leaves the logo and plants itself at the start of the line; the scroll FIRES the ">" like the grappling hook of the intro:
      it flies along the line (the rope comes out of the R's cut), cutting the line white-hot, and bites where the page is; scroll back and it reels in */
   const TAU=Math.PI*2,lerp=(a,b,k)=>a+(b-a)*k,io=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2,oc=k=>1-Math.pow(1-k,3),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
-  let state='dock',t0=0,from={},x=0,dy=0,rot=0,o=0,vo=0,ang=0,vang=0,tilt=0,sq=0,vsq=0,lineA=1,raf=0,lastT=0,parts=[],CY='#c8f53c',MG='#ff6b3d',dpr=1,HH=0,W=1;
-  let uC=0,Z=1,gap=0,vgap=0,hx=0,hv=0,rk=0,vrk=0,bit=true,atEnd=false,hS=1;const ZR=()=>innerWidth<700?1.9:2.15;const U=()=>uC||(uC=parseFloat(getComputedStyle(rd).getPropertyValue('--u'))||.94);
+  let state='dock',t0=0,from={},x=0,dy=0,rot=0,o=0,vo=0,ang=0,vang=0,sq=0,vsq=0,lineA=1,raf=0,lastT=0,parts=[],CY='#c8f53c',MG='#ff6b3d',dpr=1,HH=0,W=1;
+  let uC=0,Z=1,hx=0,hv=0,bit=true,hS=1;const ZR=()=>innerWidth<700?1.5:1.6;const U=()=>uC||(uC=parseFloat(getComputedStyle(rd).getPropertyValue('--u'))||.94);
   let A=0,HALF=1;const size=()=>{dpr=Math.min(devicePixelRatio||1,2);HH=top.offsetHeight;W=top.clientWidth;const h=HH+160;cv.width=W*dpr;cv.height=h*dpr;cv.style.height=h+'px';cx.setTransform(dpr,0,0,dpr,0,0);
     {const hb=bsym.getBoundingClientRect();if(hb.width)rd.style.setProperty('--u',(hb.width*146/142.4/36.64).toFixed(4)+'px')}uC=0;HALF=18.32*U()*ZR();A=HALF+34;tkl.style.left=(A-HALF-28)+'px'};size();
   const H0=()=>A+HALF+10,H1=()=>W-30,htgt=p=>H0()+(H1()-H0())*p;
@@ -1371,8 +1374,8 @@ addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(o
     if(st==='leave'){const h=home();x=h.x;dy=h.y;from={x,dy,rot:0};rot=0;rd.classList.add('on');brand.classList.add('away');sfx.tick&&sfx.tick()}
     if(st==='back')sfx.tick&&sfx.tick()}
   const spark=(px,d,n,pw)=>{for(let i=0;i<n;i++)parts.push({k:'s',x:px,y:HH,vx:d*(60+Math.random()*260*pw)+(Math.random()-.5)*70,vy:-30-Math.random()*190*pw,l:0,m:.3+Math.random()*.35})};
-  function fire(u){vrk-=230;vsq+=9;vo-=40*u;parts.push({k:'m',x:A+HALF,l:0,m:.22});spark(A+HALF,1,6,1);sfx.tick&&sfx.tick()}   // recoil + muzzle flash
-  function bite(big){parts.push({k:'w',x:hx,l:0,m:.36+Math.min(.3,(hx-A)/2400),amp:big?6:3.6,cb:()=>{vsq+=big?8:5;vrk+=big?60:35}});if(big)spark(hx,-1,8,1);hS=big?1.6:1.3}   // the hook bites: the rope goes taut, a tension wave runs back to the R and tugs it
+  function fire(){parts.push({k:'m',x:A+HALF,l:0,m:.22});spark(A+HALF,1,6,1);sfx.tick&&sfx.tick()}
+  function bite(big){parts.push({k:'w',x:hx,l:0,m:.36+Math.min(.3,(hx-A)/2400),amp:big?6:3.6});if(big)spark(hx,-1,8,1);hS=big?1.6:1.3}
   function drawParts(dt){cx.clearRect(0,0,cv.width/dpr,cv.height/dpr);
     for(let i=parts.length-1;i>=0;i--){const q=parts[i];q.l+=dt;if(q.l>=q.m){parts.splice(i,1);q.cb&&q.cb();continue}const a=1-q.l/q.m;
       if(q.k==='s'){q.vy+=900*dt;q.x+=q.vx*dt;q.y+=q.vy*dt;cx.strokeStyle=CY;cx.globalAlpha=a;cx.lineWidth=1.5;cx.beginPath();cx.moveTo(q.x,q.y);cx.lineTo(q.x-q.vx*.025,q.y-q.vy*.025);cx.stroke()}
@@ -1384,72 +1387,48 @@ addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(o
           for(let s2=-R;s2<=R;s2+=2){const env=Math.cos(s2/R*Math.PI/2);const yy=HH+Math.sin(s2*.42-q.l*46)*am*env*env;s2===-R?cx.moveTo(c+s2,yy):cx.lineTo(c+s2,yy)}cx.stroke()}cx.shadowBlur=0}
       else if(q.k==='m'){cx.globalAlpha=a;cx.fillStyle=CY;cx.shadowColor=CY;cx.shadowBlur=18;cx.beginPath();cx.ellipse(q.x+8*(1-a),HH,14*a+2,3*a+1,0,0,TAU);cx.fill();cx.shadowBlur=0}}
     cx.globalAlpha=1}
-  function frame(t){raf=0;const dt=Math.min(.05,lastT?(t-lastT)/1000:.016);lastT=t;const u=U(),rest=0,p=prog01(),zr=ZR();
+  function frame(t){raf=0;const dt=Math.min(.05,lastT?(t-lastT)/1000:.016);lastT=t;const u=U(),p=prog01(),zr=ZR();
     const wantOut=p>.004;let sx=1,sy=1,moving=parts.length>0;
-    if(reduce){Z=wantOut?zr:1;if(wantOut){rd.classList.add('on');brand.classList.add('away');x=A;dy=0;state='ride';hx=htgt(p)}else{rd.classList.remove('on');brand.classList.remove('away');state='dock'}o=0;ang=0;rot=0;lineA=0;tilt=0}
+    if(reduce){Z=wantOut?zr:1;if(wantOut){rd.classList.add('on');brand.classList.add('away');x=A;dy=0;state='ride';hx=htgt(p)}else{rd.classList.remove('on');brand.classList.remove('away');state='dock'}rot=0;lineA=0}
     else{
       if(state==='dock'&&wantOut)begin('leave');
       if(state==='leave'){const k=Math.min(1,(t-t0)/720),pre=Math.min(1,k/.18),j=Math.max(0,(k-.18)/.82),e=io(j);
-        x=lerp(from.x,A,e);dy=lerp(from.dy,0,e)-Math.sin(Math.PI*j)*40;rot=360*io(j);   // crouch, leap, flip, plant itself at the start of the line
-        sx=1+.18*Math.sin(Math.PI*pre)*(1-j);sy=1-.24*Math.sin(Math.PI*pre)*(1-j);Z=lerp(1,zr,oc(j));o=Math.sin(Math.PI*j)*10*u;ang=Math.sin(TAU*j)*-20;lineA=0;moving=true;
-        if(k>=1){state='ride';rot=0;x=A;dy=0;vsq=10;hx=H0();hv=0;bit=true;for(let i=0;i<8;i++)spark(A,Math.random()<.5?1:-1,1,.6)}}
+        x=lerp(from.x,A,e);dy=lerp(from.dy,0,e)-Math.sin(Math.PI*j)*40;rot=360*io(j);Z=lerp(1,zr,oc(j));o=Math.sin(Math.PI*j)*10*u;ang=Math.sin(TAU*j)*-20;lineA=0;moving=true;
+        sx=1+.18*Math.sin(Math.PI*pre)*(1-j);sy=1-.24*Math.sin(Math.PI*pre)*(1-j);
+        if(k>=1){state='ride';rot=0;x=A;dy=0;sq=0;vsq=0;hx=H0();hv=0;bit=true;for(let i=0;i<8;i++)spark(A,Math.random()<.5?1:-1,1,.6)}
+      }
       else if(state==='back'){const k=Math.min(1,(t-t0)/820),h=home(),e=io(Math.max(0,(k-.12)/.88)),pre=Math.min(1,k/.12);
-        x=lerp(from.x,h.x,e);dy=lerp(from.dy,h.y,e)-Math.sin(Math.PI*e)*50;rot=-360*e;lineA=0;
-        Z=lerp(zr,1,e);sx=1-.12*Math.sin(Math.PI*pre);sy=1+.2*Math.sin(Math.PI*pre);o=-Math.sin(Math.PI*e)*10*u;ang=Math.sin(TAU*e)*24;moving=true;
+        x=lerp(from.x,h.x,e);dy=lerp(from.dy,h.y,e)-Math.sin(Math.PI*e)*50;rot=-360*e;Z=lerp(zr,1,e);o=-Math.sin(Math.PI*e)*10*u;ang=Math.sin(TAU*e)*24;lineA=0;moving=true;
+        sx=1-.12*Math.sin(Math.PI*pre);sy=1+.2*Math.sin(Math.PI*pre);
         if(k>=1){state='settle';Z=1;t0=t;rot=0;x=h.x;dy=h.y;vsq=12;vo=160*u;vang=0;ang=0}}
-      else if(state==='settle'){const h=home();x=h.x;dy=h.y;moving=true;vo+=(-o*170-vo*10)*dt;o+=vo*dt;tilt*=.85;
+      else if(state==='settle'){const h=home();x=h.x;dy=h.y;moving=true;vo+=(-o*170-vo*10)*dt;o+=vo*dt;
         if(wantOut&&t-t0>120){begin('leave')}
         else if(t-t0>650&&Math.abs(vo)+Math.abs(o)+Math.abs(sq)<.4){state='dock';rd.classList.remove('on');brand.classList.remove('away');o=0;sq=0}}
-      else if(state==='ride'){Z+=(zr-Z)*Math.min(1,dt*8);dy+=(0-dy)*Math.min(1,dt*12);
+      else if(state==='ride'){Z+=(zr-Z)*Math.min(1,dt*8);x=A;dy=0;rot=0;o=0;ang=0;
         const tg=wantOut?htgt(p):H0(),px=hx;hv+=((tg-hx)*320-hv*19)*dt;hx+=hv*dt;const sp=Math.abs(hv);   // stiff spring: it overshoots a hair and snaps = the bite
-        if(bit&&hv>240){bit=false;fire(u)}
+        if(bit&&hv>240){bit=false;fire()}
         if(!bit&&hv<-240){bit=false}
         if(!bit&&sp<22&&Math.abs(tg-hx)<1.5){bit=true;if(wantOut)bite(p>.995)}
         if(hv<-240&&bit)bit=false;
         if(sp>70)parts.push({k:'c',x0:px,x1:hx,l:0,m:.32});
         if(hv>160&&Math.random()<.6)spark(hx-10,-1,1,.6);
-        vrk+=(-rk*260-vrk*15)*dt;rk+=vrk*dt;x=A+rk;
-        tilt+=(cl(hv*.006,-9,9)-tilt)*Math.min(1,dt*10);                                          // the R leans into the pull of the rope
-        vo+=(-(o-cl(-hv*.004,-4,4)*u)*170-vo*11)*dt;o+=vo*dt;vang+=(-(ang-cl(-hv*.008,-8,8))*120-vang*8)*dt;ang+=vang*dt;
-        lineA+=(1-lineA)*Math.min(1,dt*6);
-        if(p>.995&&!atEnd)atEnd=true;if(p<.98)atEnd=false;
+        lineA=1;
         if(!wantOut&&hx-H0()<4&&sp<60)begin('back');
-        moving=moving||sp>.5||Math.abs(vrk)+Math.abs(vo)+Math.abs(vang)>.05||Math.abs(tg-hx)>.3}
-      {const gt=state==='ride'?Math.min(3.4*u,Math.abs(hv)*.004*u):0;vgap+=((gt-gap)*260-vgap*16)*dt;gap+=vgap*dt;if(Math.abs(vgap)>.01)moving=true}
-      if(state==='ride'||state==='settle'){vsq+=(-sq*220-vsq*12)*dt;sq+=vsq*dt;sx*=1+sq*.03;sy*=1-sq*.05}
+        moving=moving||sp>.5||Math.abs(tg-hx)>.3}
+      if(state==='settle'){vsq+=(-sq*220-vsq*12)*dt;sq+=vsq*dt;sx*=1+sq*.03;sy*=1-sq*.05}
     }
     const on=state==='ride';top.classList.toggle('riding',on);
     hS+=(1-hS)*Math.min(1,dt*9);if(Math.abs(hS-1)>.01)moving=true;
     hk.style.translate=(hx-12).toFixed(1)+'px 0';hk.style.rotate=cl(hv*.012,-14,14).toFixed(1)+'deg';hk.style.scale=(hS*(1+Math.min(.45,Math.abs(hv)/1600))).toFixed(3)+' '+(hS*(1-Math.min(.22,Math.abs(hv)/3200))).toFixed(3);
     pgl.style.transform=on?'translateX('+A.toFixed(1)+'px) scaleX('+Math.max(0,(hx-A)/W).toFixed(4)+')':'scaleX(0)';
     rd.style.transform='translate('+(x-18.32*u).toFixed(1)+'px,'+dy.toFixed(1)+'px) rotate('+rot.toFixed(1)+'deg) scale('+(sx*Z).toFixed(3)+','+(sy*Z).toFixed(3)+')';
-    rt.style.transform='translateY('+(-gap).toFixed(2)+'px) rotate('+tilt.toFixed(2)+'deg)';rb.style.transform='translate('+o.toFixed(1)+'px,'+gap.toFixed(2)+'px) rotate('+ang.toFixed(2)+'deg)';rl.style.opacity=lineA.toFixed(2);rl.style.transform='scaleY('+(1+gap/u*.6).toFixed(2)+')';
+    rt.style.transform='translateY(0)';rb.style.transform='translate('+o.toFixed(1)+'px,0) rotate('+ang.toFixed(1)+'deg)';rl.style.opacity=lineA.toFixed(2);rl.style.transform='scaleY(1)';
     drawParts(dt);
     if((moving||state==='leave'||state==='back'||state==='settle')&&!reduce)raf=requestAnimationFrame(frame);else lastT=0}
   const kick=()=>{if(!raf)raf=requestAnimationFrame(frame)};
   addEventListener('scroll',kick,{passive:true});addEventListener('resize',()=>{size();kick()});addEventListener('paradigm',()=>setTimeout(cols,1500));kick();
-  rd.onclick=()=>{vrk+=120;vsq=10;kick();scrollTo({top:0,behavior:reduce?'auto':'smooth'})};
+  rd.onclick=()=>{vsq=10;kick();scrollTo({top:0,behavior:reduce?'auto':'smooth'})};
 }
-/* ===== hovering the name in the header replays the intro in miniature: the R winds up, the hooks fire out and snap back,
-   the line shoots out of the R and cuts each letter open as it passes, the R's depth breathes out ===== */
-{const lg=$('.brand svg.logo');if(lg&&lg.animate&&!reduce){
-  const kids=[...lg.children].filter(e=>e.tagName!=='defs'),hr=lg.querySelector('.hr'),fl=lg.querySelector('.fl');
-  const lb=kids.slice(0,2),rbk=kids.filter(e=>e.tagName==='path').slice(-2),lets=kids.filter(e=>e.tagName==='g'&&!e.classList.contains('hr'));
-  let busy=0;
-  const go=()=>{const now=performance.now();if(now<busy)return;busy=now+900;
-    const rb=hr.getBBox(),rc=rb.x+rb.width/2,E='cubic-bezier(.2,.9,.25,1)',B='cubic-bezier(.3,1.7,.5,1)';
-    hr.style.transformBox='fill-box';hr.style.transformOrigin='50% 50%';
-    hr.animate([{scale:'1 1'},{scale:'.86 1.08',offset:.18},{scale:'1.1 .94',offset:.4},{scale:'1 1'}],{duration:560,easing:'ease-out'});
-    [...hr.children].filter(e=>e.tagName==='g').forEach((g,i,a)=>g.animate([{translate:'0 0'},{translate:((a.length-i)*3.2)+'px 0',offset:.45},{translate:'0 0'}],{duration:620,delay:60,easing:E}));
-    lb.forEach(e=>e.animate([{translate:'0 0'},{translate:'14px 0',offset:.12},{translate:'-46px 0',offset:.42},{translate:'6px 0',offset:.72},{translate:'0 0'}],{duration:720,easing:'ease-out'}));
-    rbk.forEach(e=>e.animate([{translate:'0 0'},{translate:'-14px 0',offset:.12},{translate:'46px 0',offset:.42},{translate:'-6px 0',offset:.72},{translate:'0 0'}],{duration:720,easing:'ease-out'}));
-    if(fl){const fb=fl.getBBox();fl.style.transformBox='fill-box';fl.style.transformOrigin=((rc-fb.x)/fb.width*100).toFixed(1)+'% 50%';
-      fl.animate([{scale:'0 1',opacity:1},{scale:'0 1',offset:.15},{scale:'1 2.2',offset:.5},{scale:'1 1',opacity:1}],{duration:600,easing:E})}
-    lets.forEach(g=>{const b=g.getBBox(),c=b.x+b.width/2,d=Math.abs(c-rc),dl=90+d*.32,sg=c<rc?-1:1,[t,bt]=g.querySelectorAll('path');
-      t.animate([{translate:'0 0'},{translate:(sg*16)+'px -9px',offset:.35},{translate:'0 0'}],{duration:420,delay:dl,easing:B});
-      bt.animate([{translate:'0 0'},{translate:(-sg*16)+'px 9px',offset:.35},{translate:'0 0'}],{duration:420,delay:dl,easing:B})})};
-  const br=$('.brand');br.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')go()});br.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')go()});
-}}
 toTop.onclick=()=>{scrollTo({top:0,behavior:reduce?'auto':'smooth'});$('.brand').focus({preventScroll:true})};
 const navLinks=$$('.nav a');
 const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting)navLinks.forEach(a=>a.setAttribute('aria-current',String(a.getAttribute('href')==='#'+e.target.id)))},{rootMargin:'-45% 0px -50% 0px'});
