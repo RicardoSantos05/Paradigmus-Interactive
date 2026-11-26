@@ -28,7 +28,7 @@ svg *{transform-box:view-box;transform-origin:0 0}
 <radialGradient id="coreG"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#e8ffb0"/><stop offset="1" stop-color="#c8f53c" stop-opacity="0"/></radialGradient>
 <radialGradient id="glow"><stop offset="0" stop-color="#c8f53c" stop-opacity=".55"/><stop offset="1" stop-color="#c8f53c" stop-opacity="0"/></radialGradient>
 </defs>
-<g id="cam"><g id="shake">
+<g id="cam"><g id="pan"><g id="shake">
 <ellipse id="halo" cx="297" cy="-30" rx="120" ry="75" fill="url(#glow)" opacity="0" style="transform:translate(610px,-32px) scale(2.3) translate(-291.4px,32px)"/>
 <g id="letters"></g><circle id="hkL" display="none" cx="-17.7" cy="-32.5" r="20" fill="none" stroke="#c8f53c" stroke-width="3" opacity="0"/><circle id="hkR" display="none" cx="1195.1" cy="-32.5" r="20" fill="none" stroke="#c8f53c" stroke-width="3" opacity="0"/><line id="ropeL" x1="224.7" y1="-32.5" x2="-33.2" y2="-32.5" stroke="#f4f2ea" stroke-width="2.5" opacity="0" style="transform-origin:224.7px -32.5px;transform:scaleX(0)"/><line id="ropeR" x1="378.1" y1="-32.5" x2="1211.6" y2="-32.5" stroke="#f4f2ea" stroke-width="2.5" opacity="0" style="transform-origin:378.1px -32.5px;transform:scaleX(0)"/>
 <line id="lnG" x1="-33.2" y1="-32.5" x2="1211.6" y2="-32.5" stroke="url(#lgf)" stroke-width="18" stroke-linecap="butt" opacity=".35" style="transform-origin:301.4px -32.5px;transform:scaleX(0)"/>
@@ -39,7 +39,7 @@ svg *{transform-box:view-box;transform-origin:0 0}
 <g id="rG"></g>
 <circle id="core" r="36" fill="url(#coreG)" opacity="0"/><circle id="boom" display="none" r="30" fill="none" stroke="#c8f53c" stroke-width="4" opacity="0"/><circle id="boom2" display="none" r="30" fill="none" stroke="#f4f2ea" stroke-width="2" opacity="0"/>
 <g clip-path="url(#wordClip)"><rect id="sweep" x="-260" y="-110" width="200" height="160" fill="url(#shine)" opacity=".9" style="transform:translateX(0) skewX(-20deg)"/></g>
-</g></g>
+</g></g></g>
 </svg><div class="tag" id="tag">INTERACTIVE</div></div>
 <canvas id="pc" class="fx"></canvas><div class="fx vig"></div><div class="fx flash" id="flash"></div>
 <div class="bar t" id="bt"></div><div class="bar b" id="bb"></div>
@@ -62,7 +62,7 @@ const R3=document.createElementNS(NS,'g');R3.id='R3';rG.appendChild(R3);const N=
 const mix=(a,b,k)=>'#'+[0,2,4].map(i=>Math.round(parseInt(a.substr(i+1,2),16)*(1-k)+parseInt(b.substr(i+1,2),16)*k).toString(16).padStart(2,'0')).join('');
 for(let i=N;i>=1;i--){const k=i/N,l=mkR(R3,i===N?'#c8f53c':mix('#2c3a0c','#94b828',k),null,0,'#c8f53c');l.k=k;layers.push(l)}
 const front=mkR(R3,'#f4f2ea');
-/* the code brackets of the symbol: they snap around the 3D R, then "compile" into the line and fly away */
+/* the code brackets of the symbol: they snap around the 3D R, fire out to slice the word, and shatter on the laser blast */
 const CK=.5,WL=6.8-14,WR=1171.6+14;function mkChev(left){const pts=left?[[58,-64],[88,-64],[34,-32],[88,0],[58,0],[4,-32]]:[[30,-64],[0,-64],[54,-32],[0,0],[30,0],[84,-32]],cx=left?236.7-12-42*CK:366.1+12+42*CK;
   const d='M'+pts.map(([x,y])=>(cx+(x-44)*CK).toFixed(2)+' '+(-32.5+(y+32.5)*CK).toFixed(2)).join(' L')+'Z';
   const o=document.createElementNS(NS,'g'),i=document.createElementNS(NS,'g');o.style.opacity=0;
@@ -70,16 +70,17 @@ const CK=.5,WL=6.8-14,WR=1171.6+14;function mkChev(left){const pts=left?[[58,-64
   const col=left?'#f4f2ea':'#c8f53c';i.innerHTML=lay+'<path class="cf" clip-path="url(#ct)" fill="'+col+'" d="'+d+'"/><g class="b"><path class="cf" clip-path="url(#cb)" fill="'+col+'" d="'+d+'" transform="translate(3 0)"/></g>';const w=document.createElementNS(NS,'g');w.appendChild(i);o.appendChild(w);o.w=w;o.col=col;if(!left)w.style.transform='translate(-'+20+'px,0px)';rG.insertBefore(o,R3);o.cx=cx;o.inner=i;o.lay=[...i.querySelectorAll('.cl')];o.lay.forEach(l=>l.style.opacity=0);return o}
 const chL=mkChev(true),chR=mkChev(false);
 [chC,chM].forEach(c=>{c.style.mixBlendMode='screen';c.style.opacity=0});[...gB,...gF].forEach(g=>g.style.opacity=0);
-/* animation helpers */
+/* animation helpers — balanced pacing (~5.5s total) */
 function knock(t,srcs){lets.forEach(l=>{let a=0,dly=1e9;srcs.forEach(([x,p,r])=>{const d=Math.abs(l.c-x),f=Math.exp(-d/(r||330));a+=Math.sign(l.c-x||1)*p*f;dly=Math.min(dly,d*.22)});
   if(Math.abs(a)<.4)return;const c=l.c,K=(dx,dy,r)=>'translate('+c+'px,-32px) rotate('+r+'deg) translate('+(-c+dx)+'px,'+(32+dy)+'px)';
   A(l.kw,[{transform:K(0,0,0)},{transform:K(a,-Math.abs(a)*.5,a*.5),offset:.16},{transform:K(-a*.38,Math.abs(a)*.12,-a*.14),offset:.42},{transform:K(a*.14,0,a*.05),offset:.68},{transform:K(0,0,0)}],{delay:t+dly,duration:820,easing:'cubic-bezier(.2,.7,.3,1)',fill:'none',composite:'add'})})}
-const WB=4200,WF=.7,W=t=>t<=WB?t*WF:WB*WF+(t-WB);
+const W=t=>t<=2330?t*.62:t<=4200?1444.6+(t-2330)*.58:t<=6050?2529.2+(t-4200)*.68:t<=7340?3787.2+(t-6050)*.56:4509.6+(t-7340)*.65;
 let anims=[],timers=[];const A=(el,k,o)=>{o=Object.assign({fill:'forwards'},o);const d=o.delay||0,du=o.duration||0;o.delay=W(d);o.duration=Math.max(1,W(d+du)-W(d));const a=el.animate(k,o);anims.push(a);return a},T=(f,t)=>timers.push(setTimeout(f,W(t)));
-const S=2.3,CX=610,CY=-32,DX=20,DY=0;
+const S=2.3,CX=610,CY=-32,DX=20,DY=0,PAN=CX-RC;
 const ext=(vx,vy)=>layers.map(l=>'translate('+(l.k*vx).toFixed(2)+'px,'+(l.k*vy).toFixed(2)+'px)');
 function extrude(seq,o){/* seq: list of [vx,vy,offset] */layers.forEach(l=>A(l,seq.map(([vx,vy,of])=>Object.assign({transform:'translate('+(l.k*vx).toFixed(2)+'px,'+(l.k*vy).toFixed(2)+'px)'},of!=null?{offset:of}:{})),o))}
 const big=(dx,dy,r,s)=>'translate('+CX+'px,'+CY+'px) rotate('+(r||0)+'deg) scale('+(s||S)+') translate('+(-RC+dx)+'px,'+(32+dy)+'px)';
+const mid=(dx,dy,r,s)=>'translate('+CX+'px,'+CY+'px) rotate('+(r||0)+'deg) scale('+(s||1)+') translate('+(-RC+dx)+'px,'+(32+dy)+'px)';
 const home=(dx,dy)=>'translate('+RC+'px,-32px) rotate(0deg) scale(1) translate('+(-RC+dx)+'px,'+(32+dy)+'px)';
 const cam=s=>'translate(610px,0px) scale('+s+') translate(-590px,0px)';
 /* particles + film grain on one canvas */
@@ -137,15 +138,17 @@ function play(){
   T(()=>{const [x,y]=toScreen(CX,CY);burst(x,y,140,1.1)},TI);T(()=>shake(0,34,520),TI);
   // 4b · the code brackets orbit in around the R and snap shut: "<R>"
   const TA=TI+260,hx=dx=>'translate('+RC+'px,-32px) rotate(0deg) scale(1) translate('+(-RC+dx)+'px,32px)';
+  const TS=2950,T2=TS+1250,T3=T2+550;
   [[chL,-1],[chR,1]].forEach(([c,sg])=>{
     if(sg<0)A(c,[{transform:big(0,0,4)},{transform:big(0,0,4),offset:.35},{transform:big(0,0,-1),offset:.7},{transform:big(0,0,0)}],{delay:TI,duration:520,easing:'cubic-bezier(.3,1.6,.5,1)'});
     if(sg>0){A(c,[{transform:big(EX,EY,-4)},{transform:big(EX,EY,0)}],{delay:TI,duration:260,easing:'cubic-bezier(.3,1.6,.5,1)'});
       A(c,[{transform:big(EX,EY,0)},{transform:big(0,0,0)}],{delay:TA,duration:1,fill:'forwards'});A(c.w,[{transform:'translate(-20px,0px)'},{transform:'translate(0px,0px)'}],{delay:TA,duration:1,fill:'forwards'})}
     /* the click: both brackets give a little snap against the R */
     A(c.inner,[{transform:'translate(0px,0px)'},{transform:'translate('+(sg*9)+'px,0px)',offset:.3},{transform:'translate('+(-sg*4)+'px,0px)',offset:.6},{transform:'translate(0px,0px)'}],{delay:TA,duration:380,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'none'});
-    // with the R inside, they glide to the two ends of the word, smaller
+    // stay centered while scaling down to word size, then hand off seamlessly to #pan as the word expands
     const fx=sg<0?WL-42*CK/2-c.cx:WR+42*CK/2-c.cx;
-    A(c,[{transform:big(0,0,0)},{transform:big(0,-6,-2,S*1.06),offset:.25},{transform:hx(0)}],{delay:4200,duration:900,easing:'cubic-bezier(.65,0,.2,1)'});
+    A(c,[{transform:big(0,0,0)},{transform:big(0,-4,0,S*1.04),offset:.2},{transform:mid(0,0,0,1)}],{delay:T2,duration:T3-T2,easing:'cubic-bezier(.65,0,.2,1)'});
+    A(c,[{transform:hx(0)},{transform:hx(0)}],{delay:T3,duration:1});
     const TF=4880,CHG=720,HOLD=90,FL=320,DUR=760,OV=90,tF=TF+CHG+HOLD,tH=tF+DUR*.46;
     const ctr=c.cx,spin=a=>'translate('+ctr+'px,-32.5px) rotate('+a+'deg) translate('+(-ctr)+'px,32.5px)',sc=k=>'translate('+ctr+'px,-32.5px) scale('+k+') translate('+(-ctr)+'px,32.5px)';
     // wind-up: they slowly draw back against the R, swell, tremble harder and harder, energy builds on them
@@ -171,14 +174,13 @@ function play(){
     A($('cam'),[{transform:cam(1)},{transform:cam(1.035),offset:.9},{transform:cam(1.045)}],{delay:TF,duration:810,easing:'cubic-bezier(.5,0,.9,.6)',fill:'none'});
     A($('cam'),[{transform:cam(1.045)},{transform:cam(.985),offset:.25},{transform:cam(1)}],{delay:tF,duration:520,easing:'cubic-bezier(.1,.9,.3,1)',fill:'none'});
     lets.forEach(l=>{const sg=Math.sign(l.c-RC),f=Math.exp(-Math.abs(l.c-RC)/500),c=l.c,K=(dx,r)=>'translate('+c+'px,-32px) rotate('+r+'deg) translate('+(-c+dx)+'px,32px)';
-      A(l.kw,[{transform:K(0,0)},{transform:K(sg*6*f,sg*3*f),offset:.9},{transform:K(sg*7*f,sg*4*f)}],{delay:TF,duration:810,easing:'ease-in',fill:'none',composite:'add'})});
+      A(l.kw,[{transform:K(0,0)},{transform:K(sg*6*f,sg*3*f),offset:.9},{transform:K(sg*7*f,sg*4*f)}],{delay:TF+340,duration:470,easing:'ease-in',fill:'none',composite:'add'})});
     T(()=>{shake(0,26,260);A($('flash'),[{opacity:0},{opacity:.3,offset:.15},{opacity:0}],{duration:220,fill:'none'})},tF);
     T(()=>shake(0,20,300),tH);
     knock(tH,[[-17.7,22,320],[1195.1,22,320]]);
     knock(tF,[[RC,12,260]])}
   T(()=>{shake(0,14,280);A($('flash'),[{opacity:0},{opacity:.2,offset:.2},{opacity:0}],{duration:220,fill:'none'})},TA+470);
-  // 5 · the merged R glides into its place in the word, the camera pulls back
-  const TS=2950;
+  // 5 · the merged R flexes in 3D in the dead center, then locks down to word size right in the middle
   [chL,chR].forEach(c=>{
     A(c,[{transform:big(0,0,0)},{transform:big(10,-4,-7,S*1.08),offset:.3},{transform:big(-8,-6,6,S*1.12),offset:.55},{transform:big(6,4,-4,S*1.05),offset:.8},{transform:big(0,0,0)}],{delay:TS,duration:1200,easing:'cubic-bezier(.45,0,.3,1)',fill:'none'});
     const seq=[[0,0,0],[DX,DY,.12],[-26,16,.33],[-20,-14,.5],[24,-12,.68],[DX,DY,.82],[0,0,1]];
@@ -186,17 +188,18 @@ function play(){
       A(l,[{opacity:0},{opacity:1,offset:.05},{opacity:1,offset:.95},{opacity:0}],{delay:TS-200,duration:1700})})});
   extrude([[DX,DY],[-26,16,.3],[-20,-14,.55],[24,-12,.8],[DX,DY]],{delay:TS,duration:1200,easing:'cubic-bezier(.45,0,.3,1)'});
   R(R3,[{transform:big(0,0,0)},{transform:big(10,-4,-7,S*1.08),offset:.3},{transform:big(-8,-6,6,S*1.12),offset:.55},{transform:big(6,4,-4,S*1.05),offset:.8},{transform:big(0,0,0)}],{delay:TS,duration:1200,easing:'cubic-bezier(.45,0,.3,1)'});
-  const T2=TS+1250,sh='cubic-bezier(.65,0,.2,1)';
-  R(R3,[{transform:big(0,0,0)},{transform:big(0,-6,-2,S*1.06),offset:.25},{transform:home(0,0)}],{delay:T2,duration:900,easing:sh});
-  A($('halo'),[{opacity:.35},{opacity:0}],{delay:T2,duration:900});
-  // 6 · the word is born from the R: letters flicker out from behind it, each landing kicks a few sparks
-  const T3=T2+700;
-  lets.forEach(l=>{const dx=RC-l.c,dist=Math.abs(dx),d=T3+dist*.16;
-    A(l.g,[{transform:'translateX('+dx+'px)',opacity:0},{opacity:1,offset:.08},{opacity:.15,offset:.14},{opacity:1,offset:.2},{transform:'translateX('+(-dx*.035)+'px)',offset:.72},{transform:'translateX(0px)',opacity:1}],{delay:d,duration:760,easing:'cubic-bezier(.15,.9,.25,1)',fill:'both'});
+  const sh='cubic-bezier(.65,0,.2,1)';
+  R(R3,[{transform:big(0,0,0)},{transform:big(0,-4,0,S*1.04),offset:.2},{transform:mid(0,0,0,1)}],{delay:T2,duration:T3-T2,easing:sh});
+  R(R3,[{transform:home(0,0)},{transform:home(0,0)}],{delay:T3,duration:1});
+  A($('halo'),[{opacity:.35},{opacity:0}],{delay:T2,duration:T3-T2});
+  // 6 · the word unfolds cleanly outward from the centered R in a wave (no letter pile-up) while the camera pans to frame it
+  A($('pan'),[{transform:'translateX('+PAN+'px)'},{transform:'translateX(0px)'}],{delay:T3,duration:760,easing:'cubic-bezier(.22,1,.36,1)'});
+  lets.forEach(l=>{const sg=Math.sign(l.c-RC),dist=Math.abs(l.c-RC),d=T3+dist*.22,sx=-sg*36;
+    A(l.g,[{transform:'translateX('+sx+'px)',opacity:0},{opacity:.95,offset:.22},{opacity:.25,offset:.34},{transform:'translateX('+(sg*4)+'px)',opacity:1,offset:.76},{transform:'translateX(0px)',opacity:1}],{delay:d,duration:380,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'});
     });
-  T(()=>shake(0,8,260),T3+700);
+  T(()=>shake(0,8,260),T3+560);
   // 7 · the laser: the 3D R charges up, explodes, and fires the line out both ways through the word
-  const T4=T3+1150,CH=1150,HOLD=140,LD=320,OX=RC+DX/2;
+  const T4=6050,CH=1150,HOLD=140,LD=320,OX=RC+DX/2;
   /* charge: the cut plane inside the R glows and pulses, a ball of light grows in its heart */
   const cs=k=>'translate('+OX+'px,-32.5px) scale('+k+')';
   A($('core'),[{transform:cs(0),opacity:0},{transform:cs(.35),opacity:.6,offset:.18},{transform:cs(.25),opacity:.4,offset:.3},{transform:cs(.55),opacity:.8,offset:.46},{transform:cs(.42),opacity:.6,offset:.56},{transform:cs(.8),opacity:.9,offset:.68},{transform:cs(.68),opacity:.8,offset:.75},{transform:cs(1.05),opacity:1,offset:.84},{transform:cs(.95),opacity:1,offset:.89},{transform:cs(1.3),opacity:1,offset:.95},{transform:cs(1.45),opacity:1}],{delay:T4,duration:CH,easing:'ease-in',fill:'both'});
@@ -229,15 +232,20 @@ function play(){
   lets.forEach(l=>{const tp=TB+(Math.abs(l.c-OX)/Math.max(OX+33.2,1211.6-OX))*LD;
     const st='steps(1,end)';l.g.querySelectorAll('path').forEach(p=>A(p,[{fill:OFF,easing:st},{fill:ON,offset:.1,easing:st},{fill:OFF,offset:.22,easing:st},{fill:'#c8f53c',offset:.32,easing:st},{fill:'#8d9298',offset:.45,easing:st},{fill:ON,offset:.6},{fill:ON}],{delay:tp,duration:420,fill:'both'}));
     A(l.g,[{filter:'drop-shadow(0 0 0px rgba(200,245,60,0))'},{filter:'drop-shadow(0 0 10px rgba(200,245,60,.9))',offset:.25},{filter:'drop-shadow(0 0 0px rgba(200,245,60,0))'}],{delay:tp,duration:900,easing:'ease-out'})});
-  /* the lower halves slide as the laser passes each letter */
-  const far=Math.max(OX+33.2,1211.6-OX);
-  const tHit=TB+(LD+80)*.9,st1='steps(1,end)';
+  /* when the green laser blast reaches the brackets, they flash, blast outward, shatter into sparks and vanish */
+  const tHit=TB+(LD+80)*.9;
   [[chL,-1,-33.2],[chR,1,1211.6]].forEach(([c,sg,hx])=>{
-    c.inner.querySelectorAll('.cf').forEach(p=>{A(p,[{fill:c.col},{fill:'#2a2d33'}],{delay:5800,duration:350});
-      A(p,[{fill:'#2a2d33',easing:st1},{fill:'#c8f53c',offset:.08,easing:st1},{fill:'#2a2d33',offset:.2,easing:st1},{fill:c.col,offset:.3,easing:st1},{fill:'#c8f53c',offset:.42,easing:st1},{fill:'#8d9298',offset:.52,easing:st1},{fill:c.col,offset:.64},{fill:c.col}],{delay:tHit,duration:520})});
-    A(c.inner,[{transform:'translate(0px,0px)',filter:'drop-shadow(0 0 0px rgba(200,245,60,0))'},{transform:'translate('+(sg*9)+'px,0px)',filter:'drop-shadow(0 0 12px rgba(200,245,60,1))',offset:.15},{transform:'translate('+(-sg*2)+'px,0px)',offset:.45},{transform:'translate(0px,0px)',filter:'drop-shadow(0 0 0px rgba(200,245,60,0))'}],{delay:tHit,duration:700,easing:'cubic-bezier(.2,.8,.3,1)'});
-    0});
-  T(()=>shake(0,10,240),tHit);
+    const ctr=c.cx,xf=(dx,s)=>'translate('+(ctr+dx)+'px,-32.5px) scale('+s+') translate('+(-ctr)+'px,32.5px)';
+    c.inner.querySelectorAll('.cf').forEach(p=>{
+      A(p,[{fill:c.col},{fill:'#2a2d33'}],{delay:5800,duration:350});
+      A(p,[{fill:'#ffffff'},{fill:'#c8f53c',offset:.35},{fill:'#c8f53c'}],{delay:tHit,duration:260})});
+    A(c.inner,[
+      {transform:xf(0,1),opacity:1,filter:'drop-shadow(0 0 0px rgba(200,245,60,0))'},
+      {transform:xf(sg*12,1.22),opacity:1,filter:'drop-shadow(0 0 18px rgba(200,245,60,1))',offset:.22},
+      {transform:xf(sg*42,1.45),opacity:0,filter:'drop-shadow(0 0 26px rgba(200,245,60,0))'}
+    ],{delay:tHit,duration:280,easing:'cubic-bezier(.15,.85,.3,1)'});
+    T(()=>{const [x,y]=scrW(hx,-32.5);burst(x,y,85,1.15)},tHit)});
+  T(()=>shake(0,12,260),tHit);
   knock(tHit,[[-33.2,12,220],[1211.6,12,220]]);
   document.querySelectorAll('#letters .b, #R3 .b').forEach(b=>{const g=b.parentNode,l=lets.find(x=>x.g===g),x=l?l.c:OX;
     /* each letter is cut the moment a flying bracket (hook) passes through it; the R is cut as they leave it */
@@ -254,8 +262,8 @@ function play(){
   A($('bb'),[{transform:'translateY(0)'},{transform:'translateY(100%)'}],{delay:T5+900,duration:900,easing:'cubic-bezier(.6,0,.2,1)'});
   T(()=>{if(EMBED){try{const a=$('letters').getBoundingClientRect(),b=$('R3').getBoundingClientRect(),x0=Math.min(a.left,b.left),x1=Math.max(a.right,b.right),y0=Math.min(a.top,b.top),y1=Math.max(a.bottom,b.bottom);parent.postMessage({t:'pm-intro-done',r:[x0,y0,x1-x0,y1-y0]},'*')}catch(e){}}else $('again')&&$('again').classList.add('on')},EMBED?T5+950:T5+1600);
 }
-function finalState(){back.style.opacity=0;R3.style.transform=home(0,0);layers.forEach(l=>l.style.transform='translate('+l.k*DX+'px,'+l.k*DY+'px)');
+function finalState(){back.style.opacity=0;chL.style.opacity=0;chR.style.opacity=0;R3.style.transform=home(0,0);layers.forEach(l=>l.style.transform='translate('+l.k*DX+'px,'+l.k*DY+'px)');
   $('ln').style.transform='none';document.querySelectorAll('.gp').forEach(e=>e.style.opacity=0);$('lnG').style.opacity=0;document.querySelectorAll('#letters .b,#rG .b').forEach(b=>b.style.transform='translateX(6.5px)');$('tag').style.clipPath='none';$('again')&&$('again').classList.add('on')}
 if(EMBED){document.body.style.cursor='default';$('again').remove();addEventListener('message',e=>{if(e.data==='pm-hide-word'){$('letters').style.visibility='hidden';$('R3').style.visibility='hidden';$('ln').style.opacity=0;$('lnG').style.opacity=0}})}else document.addEventListener('click',play);if(!EMBED)addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter')play()});
-setTimeout(play,300);
+setTimeout(play,60);
 </script></body></html>

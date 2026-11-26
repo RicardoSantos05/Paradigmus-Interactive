@@ -548,16 +548,9 @@ html.palx *,html.palx *::before,html.palx *::after{transition-property:transform
   .word span.r3::before{clip-path:polygon(51% 0,100% 0,100% 160%,51% 160%)}
   .word span.r3::after{clip-path:polygon(0 0,47% 0,47% 160%,0 160%)}}
 .foot .fw .r3f{text-shadow:0.016em 0 0 color-mix(in srgb,var(--cy) 6%,transparent),0.032em 0 0 color-mix(in srgb,var(--cy) 7%,transparent),0.048em 0 0 color-mix(in srgb,var(--cy) 8%,transparent),0.064em 0 0 color-mix(in srgb,var(--cy) 8%,transparent),0.080em 0 0 color-mix(in srgb,var(--cy) 9%,transparent),0.096em 0 0 color-mix(in srgb,var(--cy) 10%,transparent),0.112em 0 0 color-mix(in srgb,var(--cy) 11%,transparent),0.128em 0 0 color-mix(in srgb,var(--cy) 12%,transparent),0.144em 0 0 color-mix(in srgb,var(--cy) 13%,transparent),0.160em 0 0 color-mix(in srgb,var(--cy) 14%,transparent),0.176em 0 0 color-mix(in srgb,var(--cy) 14%,transparent),0.192em 0 0 color-mix(in srgb,var(--cy) 15%,transparent),0.208em 0 0 color-mix(in srgb,var(--cy) 16%,transparent),0.224em 0 0 color-mix(in srgb,var(--cy) 17%,transparent)}
-/* the code brackets around the name (the hooks of the intro) */
-.word .chv{flex:none;align-self:center;width:.4em;height:.3em;margin:0 .06em;background:var(--wh);position:relative;top:-.01em;transition:transform .5s var(--ease)}
-.word .chv.cl{clip-path:polygon(65.9% 0,100% 0,38.6% 50%,100% 100%,65.9% 100%,4.5% 50%)}
-.word .chv.cr{background:var(--cy);clip-path:polygon(34.1% 0,0 0,61.4% 50%,0 100%,34.1% 100%,95.5% 50%)}
-@media(max-width:700px){.word .chv{width:.3em;height:.4em;margin:.06em 0;top:0;left:.01em}
-  .word .chv.cl{clip-path:polygon(0 65.9%,0 100%,50% 38.6%,100% 100%,100% 65.9%,50% 4.5%)}
-  .word .chv.cr{clip-path:polygon(0 34.1%,0 0,50% 61.4%,100% 0,100% 34.1%,50% 95.5%)}}
 /* while the letters are loose the cut line fades (it comes from the R), and comes back when they line up again */
-.word .fault{transition:opacity .35s;left:.214em!important;right:.214em!important}
-@media(max-width:700px){.hero .word .fault{left:51%!important;right:auto!important;top:.214em!important;bottom:.214em!important}}.word.loose .fault{opacity:0}
+.word .fault{transition:opacity .35s}
+.word.loose .fault{opacity:0}
 /* performance: offscreen sections skip layout and paint until they come near the screen */
 main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:auto 1100px}
 .glc{visibility:hidden}.glc.on{visibility:visible}
@@ -623,7 +616,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
   </div>
   <div class="h-mark"><button class="mark3d" id="mark3d" type="button" aria-label="Mudar o paradigma"><span class="halo" aria-hidden="true"><i class="fade"></i><i class="r1"></i><i class="r2"></i><i class="br"></i></span><svg class="m2d" viewBox="0 0 38 32" aria-hidden="true"><g fill="#f4f2ea"><rect x="3.5" y="0" width="26" height="14.8"/><rect x="8.5" y="17.2" width="26" height="14.8"/></g><rect x="0" y="15.3" width="38" height="1.4" style="fill:var(--cy)"/></svg><span class="mcap mono" aria-hidden="true"><b class="mnm">Topografia</b><span class="mhint"><span class="fine-only">Clique no símbolo</span><span class="coarse-only">Toque <span class="shk2">ou agite </span>para mudar</span></span></span></button></div>
   <div class="h-floor">
-    <h1 class="word" id="h-hero" aria-label="Paradigmus Interactive"><b class="chv cl" aria-hidden="true"></b><span>P</span><span>A</span><span class="r3">R</span><span>A</span><span>D</span><span>I</span><span>G</span><span>M</span><span>U</span><span>S</span><b class="chv cr" aria-hidden="true"></b><i class="fault" aria-hidden="true"></i></h1>
+    <h1 class="word" id="h-hero" aria-label="Paradigmus Interactive"><span>P</span><span>A</span><span class="r3">R</span><span>A</span><span>D</span><span>I</span><span>G</span><span>M</span><span>U</span><span>S</span><i class="fault" aria-hidden="true"></i></h1>
     <div class="h-meta mono"><span>Interactive</span><span>Landing pages · Sites comerciais · Portfólios · Institucionais</span><span>Aveiro, Portugal</span></div>
   </div>
 </section>
@@ -1152,7 +1145,7 @@ window.doShift=()=>word.shift();window.__pw=()=>word._pw();{const m=$('#mark3d')
 /* fit the name exactly to the width of the screen */
 function fitWords(){for(const el of [$('#h-hero'),$('.foot .fw')]){if(!el)continue;el.style.fontSize='';const base=parseFloat(getComputedStyle(el).fontSize);
   if(el.id&&innerWidth<=700){const hero=$('#inicio'),meta=$('.h-meta'),avail=hero.clientHeight-92-(meta?meta.offsetHeight:0)-60;
-    const len=[...el.querySelectorAll('span,.chv')].reduce((t,x)=>{const cs=getComputedStyle(x);return t+x.getBoundingClientRect().height+parseFloat(cs.marginTop)+parseFloat(cs.marginBottom)},0)*1.03;
+    const len=[...el.querySelectorAll('span')].reduce((t,x)=>{const cs=getComputedStyle(x);return t+x.getBoundingClientRect().height+parseFloat(cs.marginTop)+parseFloat(cs.marginBottom)},0)*1.03;
     if(len>0){const fs=Math.min(base*avail/len,150);el.style.fontSize=fs+'px';root.style.setProperty('--wv',el.getBoundingClientRect().width+'px')}continue}
   root.style.removeProperty('--wv');
   const pc=getComputedStyle(el.parentElement),box=el.parentElement.clientWidth-parseFloat(pc.paddingLeft)-parseFloat(pc.paddingRight);
