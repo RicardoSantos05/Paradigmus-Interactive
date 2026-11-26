@@ -1486,7 +1486,8 @@ applyPrefs();
 /* ===== the mark in 3D: the <R> of the logo, solid: a light face, sides in the paradigm colour, cut by the line; every paradigm shift spins it ===== */
 const btn=document.getElementById('mark3d'),hero=document.getElementById('inicio'),root=document.documentElement;
 const reduce=()=>window.isCalm?window.isCalm():matchMedia('(prefers-reduced-motion: reduce)').matches;
-await new Promise(r=>{const go=()=>('requestIdleCallback' in window?requestIdleCallback(()=>r(),{timeout:2500}):setTimeout(r,500));document.readyState==='complete'?go():addEventListener('load',go,{once:true})});
+await new Promise(r=>{const idle=()=>('requestIdleCallback' in window?requestIdleCallback(()=>r(),{timeout:2500}):setTimeout(r,500));const ready=()=>{if(!hero.classList.contains('on'))return false;idle();return true};
+  if(!ready()){const mo=new MutationObserver(()=>{if(ready())mo.disconnect()});mo.observe(hero,{attributes:true,attributeFilter:['class']})}});
 const T3='https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js';
 /* the whole scene lives in this function, so it can run on the page (computers) or on its own thread (phones) */
 function make3d(THREE,cv,accHex,aa){
