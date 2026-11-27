@@ -150,7 +150,11 @@ p{margin:0 0 1em;max-width:64ch}
 .intro .cnt b{font:800 clamp(2.4rem,6vw,4.4rem)/1 Syne,sans-serif;color:var(--wh);letter-spacing:-.03em}
 .intro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#050607;visibility:hidden;pointer-events:none}
 .intro.vector{background:var(--bg0)}.intro.vector iframe{visibility:visible;pointer-events:auto}
-.intro .sk{z-index:3;position:absolute;right:max(4vw,16px);bottom:28px;background:none;border:1px solid var(--line);color:var(--mute);height:44px;padding:0 16px;cursor:pointer}
+.intro .sk{display:none!important}
+.intro .ihint{position:absolute;left:50%;bottom:7vh;transform:translateX(-50%);z-index:3;font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:#8a93a8;opacity:0;transition:opacity .8s;pointer-events:none;white-space:nowrap}
+.intro .ihint.on{opacity:1;animation:ihp 2.2s ease-in-out .8s infinite}@keyframes ihp{50%{opacity:.45}}
+.intro .icatch{position:absolute;inset:0;z-index:2;pointer-events:none;cursor:pointer}.intro .icatch.on{pointer-events:auto}
+.intro .sk-old{z-index:3;position:absolute;right:max(4vw,16px);bottom:28px;background:none;border:1px solid var(--line);color:var(--mute);height:44px;padding:0 16px;cursor:pointer}
 
 /* hero */
 @property --sh{syntax:'<length>';inherits:true;initial-value:0px}
@@ -595,7 +599,8 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 
 <div class="intro" id="intro" aria-hidden="true">
   <iframe id="introFx" title="Paradigmus" tabindex="-1" aria-hidden="true"></iframe>
-  <button class="sk mono" id="iSk" type="button">Saltar</button>
+  <button class="sk mono" id="iSk" type="button" hidden>Saltar</button>
+  <div class="ihint mono" id="iHint">Clica para entrar</div><div class="icatch" id="iCatch"></div>
 </div>
 
 <header class="top" id="top">
@@ -1207,9 +1212,11 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
   /* the intro is the cinematic: the two brothers, the <R>, the hooks and the laser. It tells us when it is done. */
   const o=$('#intro'),fx=$('#introFx');let done=false,fb;
   o.classList.add('vector');
-  fx.src=IF+'?embed=1&v='+Date.now();if(IF==='intro4.html')$('#iSk').style.display='none';   // this intro shows its own "click to enter" once the R exists   // always the newest intro, never a cached one
+  fx.src=IF+'?embed=1&v='+Date.now();let ownHint=false;   // this intro shows its own "click to enter" once the R exists and takes the click itself
+  if(window.matchMedia('(pointer:coarse)').matches)$('#iHint').textContent='Toca para entrar';
+  const enableSkip=()=>{if(done||ownHint)return;$('#iHint').classList.add('on');$('#iCatch').classList.add('on')};$('#iCatch').onclick=()=>finish();   // always the newest intro, never a cached one
   /* hand-off: the name at the end of the cinematic flies into the place of the name in the hero */
-  function finish(source){if(done)return;done=true;clearTimeout(fb);try{sessionStorage.setItem('pm-in-vector','1')}catch(e){}
+  function finish(source){if(done)return;done=true;$('#iHint').classList.remove('on');$('#iCatch').classList.remove('on');clearTimeout(fb);try{sessionStorage.setItem('pm-in-vector','1')}catch(e){}
     fitWords();worlds.resume();
     const hw=$('#h-hero'),vert=getComputedStyle(hw).writingMode.startsWith('vertical'),B=(()=>{
       /* the box of the LETTERS themselves (not the h1, which is wider than its content): first letter's left to last letter's right,
@@ -1232,7 +1239,7 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
   fb=setTimeout(()=>finish(),12000);   // if the cinematic never becomes ready, open the site anyway
   addEventListener('message',e=>{if(e.source!==fx.contentWindow)return;const d=e.data;
     if(d&&d.t==='pm-intro-ready'){requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!done)fx.contentWindow.postMessage('pm-intro-play','*')}))}
-    else if(d&&d.t==='pm-intro-skippable'){$('#iSk').style.display='none'}else if(d&&d.t==='pm-intro-start'){clearTimeout(fb);fb=setTimeout(()=>finish(),16000)}else if(d&&d.t==='pm-intro-done')finish(d.r);else if(d==='pm-intro-done')finish()});
+    else if(d&&d.t==='pm-intro-ownhint'){ownHint=true;$('#iHint').classList.remove('on');$('#iCatch').classList.remove('on')}else if(d&&d.t==='pm-intro-skippable'){}else if(d&&d.t==='pm-intro-start'){setTimeout(enableSkip,2600);clearTimeout(fb);fb=setTimeout(()=>finish(),16000)}else if(d&&d.t==='pm-intro-done')finish(d.r);else if(d==='pm-intro-done')finish()});
   $('#iSk').onclick=()=>finish();addEventListener('keydown',function k(e){if(e.key==='Escape'||e.key==='Enter'){finish();removeEventListener('keydown',k)}});
 })();
 

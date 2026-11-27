@@ -98,7 +98,7 @@ const flashEl=$('flash');function flash(a,dur){flashEl.animate([{opacity:a},{opa
 
 /* ---------- timeline (ms) ---------- */
 const CHG=1450;const T_IN=250,T_GO=1050,T_B=1400,T_FACE=1000,T_CONT=780,T_EXT0=T_B+T_CONT+40,T_EXT=420,T_CHL=T_B+T_FACE+80,T_CHR=T_EXT0+T_EXT+60,T_CHD=260,
-  T_BOARD=Math.max(T_CHL,T_CHR)+T_CHD+170,T_ON=T_BOARD+420,T_ZM=T_ON+380,T_ZMD=720,T_SW=T_ZM+T_ZMD,T_OUT=T_SW+60,T_OUTD=1120,T_BACK=T_OUT+T_OUTD+170,T_BACKD=620,T_DOCK=T_BACK+T_BACKD,T_DONE=T_DOCK+CHG+3700;
+  T_BOARD=Math.max(T_CHL,T_CHR)+T_CHD+170,T_ON=T_BOARD+420,T_ZM=T_ON+380,T_ZMD=720,T_SW=T_ZM+T_ZMD,T_OUT=T_SW+60,T_OUTD=1120,T_BACK=T_OUT+T_OUTD+120,T_BACKD=380,T_DOCK=T_BACK+T_BACKD,T_DONE=T_DOCK+CHG+3700;
 
 /* ---------- geometry ---------- */
 let S=1,M=null,UL=-80,UR=1260;
@@ -109,7 +109,7 @@ let ms=1,mtx=610,mty=0;const mp=(x,y)=>wp(mtx+ms*(x-301.4),mty+ms*(y+32));
 
 /* ---------- per frame ---------- */
 const tag=$('tag'),zoom=$('zoom'),cam=$('cam'),mark=$('mark'),sheenG=$('sheenG'),sheen=$('sheen'),fillR=$('fillRr'),mOut=$('mOut'),mBP=$('mBP'),mCut=$('mCut'),mLo=$('mLo'),mRo=$('mRo'),mLf=$('mL').querySelector('.cf'),mRf=$('mR').querySelector('.cf'),mL=$('mL'),mR=$('mR'),hL=$('hL'),hR=$('hR');
-const TA=[],TB=[];let hookBite=0,hookFired=0,t0=0,last=0,running=false,typed=0,swapped=false,onFx=false,dockFx=false,doneSent=false,mbx=-1,A=[0,0],B=[0,0],prevA=null,prevB=null;
+const TA=[],TB=[];let hooksGone=false,hookPos=[0,0],SHARDS=[],hookBite=0,hookFired=0,t0=0,last=0,running=false,typed=0,swapped=false,onFx=false,dockFx=false,doneSent=false,mbx=-1,A=[0,0],B=[0,0],prevA=null,prevB=null;
 const hookT=(x,k)=>'translate('+x.toFixed(2)+' 0) translate(0 -32.5) scale('+k.toFixed(4)+') translate(0 32.5)';
 function frame(now){if(!running)return;requestAnimationFrame(frame);const t=now-t0,dt=Math.min(50,now-(last||now));last=now;
   const g=cx2;g.setTransform(DPR,0,0,DPR,0,0);g.globalCompositeOperation='source-over';g.clearRect(0,0,W,H);
@@ -183,27 +183,27 @@ function frame(now){if(!running)return;requestAnimationFrame(frame);const t=now-
         const wob=Math.sin(q*20)*18*Math.exp(-q*3.2);rotL=wob;rotR=-wob;tens=clamp(q*4)}
       const bq=clamp((t-T_OUT-T_OUTD)/220);if(bq>0&&bq<1){k=1+.28*Math.sin(bq*Math.PI)}
       if(bq>0&&!hookBite){hookBite=1;[[UL,.2],[UR,.9]].forEach(([x,b])=>{const [X,Y]=wp(x,-32.5);sparks(X,Y,MOBILE?6:12,5,420,b)})}}
-    else{const q=clamp((t-T_BACK)/T_BACKD),e=q<.12?-.04*Math.sin(q/.12*Math.PI):Math.pow((q-.12)/.88,1.7);xl=lerp(UL,291.4,e);xr=lerp(UR,291.4,e);k=1-clamp((q-.82)/.18);rotL=Math.sin(q*30)*5*(1-q);rotR=-rotL}
+    else{const st=Math.sin(t/55)*.6;xl=UL-st;xr=UR+st;rotL=Math.sin(t/70)*2.5;rotR=-rotL;tens=1}
     const hk=(x,cx,k,r,sx)=>'translate('+x.toFixed(2)+' -32.5) rotate('+r.toFixed(2)+') scale('+(k*sx).toFixed(4)+' '+(k/Math.sqrt(sx)).toFixed(4)+') translate(0 32.5)';
-    if(t<T_DOCK){hL.setAttribute('transform',hk(xl,0,k,rotL,sx));hR.setAttribute('transform',hk(xr,0,k,rotR,sx))}else if($('hooks').style.visibility!=='hidden')$('hooks').style.visibility='hidden';
+    if(!hooksGone){hL.setAttribute('transform',hk(xl,0,k,rotL,sx));hR.setAttribute('transform',hk(xr,0,k,rotR,sx))}else if($('hooks').style.visibility!=='hidden')$('hooks').style.visibility='hidden';hookPos=[xl,xr];
     const out=t<T_BACK,back=t>=T_BACK&&t<T_DOCK+30;
     /* the rail they run on */
-    if(t<T_DOCK&&t>=T_OUT){const [c,y]=wp(291.4,-32.5),pl=wp(xl,-32.5)[0],pr=wp(xr,-32.5)[0];
+    if(!hooksGone&&t>=T_OUT){const [c,y]=wp(291.4,-32.5),pl=wp(xl,-32.5)[0],pr=wp(xr,-32.5)[0];
       [[pl,'244,242,234'],[pr,'110,150,255']].forEach(([p,col],i)=>{const sag=(out?(1-tens)*26+6*Math.sin(t/90+i):3)*(Math.abs(p-c)/W*2),wv=out?Math.sin(t/40+i*2)*3*(1-tens):0;
         g.strokeStyle='rgba('+col+',.55)';g.lineWidth=1.3;g.beginPath();g.moveTo(c,y);g.quadraticCurveTo((c+p)/2,y+sag+wv,p,y);g.stroke()})}
     LT.forEach(L=>{
       if(L.tp<0&&out&&((L.side<0&&xl<=L.x)||(L.side>0&&xr>=L.x)))L.tp=t;
-      if(L.tc<0&&back&&((L.side<0&&xl>=L.x-8)||(L.side>0&&xr<=L.x+8))){L.tc=t;split(L);L.ps.forEach(p=>p.setAttribute('fill','#3a3f4a'));setTimeout(()=>L.tl<0&&L.ps.forEach(p=>p.setAttribute('fill',OFFC)),90);const [X,Y]=wp(L.x,-32.5);sparks(X,Y,MOBILE?5:11,rnd(3,6),460,L.side>0?.8:.3,L.side,-.3,1.4);shake(t,2.5,90)}
+      if(L.tc<0&&L.tp>=0&&t>=L.tp+300){L.tc=t;split(L);L.ps.forEach(p=>p.setAttribute('fill','#3a3f4a'));setTimeout(()=>L.tl<0&&L.ps.forEach(p=>p.setAttribute('fill',OFFC)),90);const [X,Y]=wp(L.x,-32.5);sparks(X,Y,MOBILE?5:11,rnd(3,6),460,L.side>0?.8:.3,L.side,-.3,1.4);shake(t,2.5,90)}
       if(L.tp>=0&&L.pd!==1){const q=clamp((t-L.tp)/300),h=68*eOC(q);L.clip.setAttribute('y',(2-h).toFixed(2));L.clip.setAttribute('height',h.toFixed(2));
         if(q<1){const [x0,y]=wp(L.x0-3,2-h),x1=wp(L.x1+3,0)[0];g.strokeStyle='rgba(190,210,255,.85)';g.lineWidth=1.6;g.beginPath();g.moveTo(x0,y);g.lineTo(x1,y);g.stroke();if(Math.random()<.6)sparks(lerp(x0,x1,Math.random()),y,1,2,300,.6,0,-1,2)}
         else{L.pd=1;L.pr.removeAttribute('clip-path')}}
-      if(L.tc>=0&&L.tl<0){const k=t-L.tc,dir=L.x<LC?1:-1,j=k<600?Math.sin(clamp(k/600)*Math.PI*2)*Math.exp(-k/180)*10:0,o=OFF(L.i),cl=L.x-o,rt=k<600?Math.sin(clamp(k/600)*Math.PI*3)*Math.exp(-k/160)*4*dir:0;L.g.setAttribute('transform','translate('+(o+dir*j+cl).toFixed(2)+' -32.5) rotate('+rt.toFixed(2)+') translate('+(-cl)+' 32.5)')}
+      if(L.tc>=0&&L.tl<0){const k=t-L.tc,dir=L.x<LC?-1:1,j=k<600?Math.sin(clamp(k/600)*Math.PI*2)*Math.exp(-k/180)*10:0,o=OFF(L.i),cl=L.x-o,rt=k<600?Math.sin(clamp(k/600)*Math.PI*3)*Math.exp(-k/160)*4*dir:0;L.g.setAttribute('transform','translate('+(o+dir*j+cl).toFixed(2)+' -32.5) rotate('+rt.toFixed(2)+') translate('+(-cl)+' 32.5)')}
       /* the generator: after the blast the letters power up one after another, outward from the R, flickering before they hold */
       if(L.tl<0&&dockFx&&t-T_DOCK-CHG>=120+L.rank*115){L.tl=t;const [X,Y]=wp(L.x,-32.5);sparks(X,Y,MOBILE?4:9,rnd(2,5),420,.6,0,-1,2.6)}
       if(L.tl>=0){const k=t-L.tl,seq=[1,0,1,0,0,1,0,1,1,0,1],st=Math.floor(k/45),on=st>=seq.length?1:seq[st];if(on!==L.on){L.on=on;L.ps.forEach(p=>{p.setAttribute('fill',on?(st>=seq.length?WH:'#ffffff'):'#2a2f3a');p.setAttribute('stroke-opacity',on?'0':'.55')})}if(on&&k<900){const [X,Y]=wp(L.x,-32),gw=(wp(L.x1,0)[0]-wp(L.x0,0)[0])*.9,a=.28*(1-k/900),gg=g2.createRadialGradient(X,Y,0,X,Y,gw);gg.addColorStop(0,'rgba(200,218,255,'+a+')');gg.addColorStop(1,'rgba(91,140,255,0)');g2.globalCompositeOperation='lighter';g2.fillStyle=gg;g2.fillRect(X-gw,Y-gw,gw*2,gw*2)}{const dir=L.x<LC?-1:1,b=k<700?Math.sin(clamp(k/700)*Math.PI)*Math.exp(-k/260)*14:0,sc=1+(k<500?.12*Math.exp(-k/120):0);const o=OFF(L.i),cl=L.x-o;L.g.setAttribute('transform','translate('+(o+dir*b+cl).toFixed(2)+' -32.5) scale('+sc.toFixed(4)+') translate('+(-cl)+' 32.5)')}if(k>420&&!L.warm){L.warm=1;L.ps.forEach(p=>p.setAttribute('fill',WH))}
         const x=6.5*spring(clamp((k-460)/620));if(x!==L.sl){L.sl=x;L.bs.forEach(b=>b.style.transform='translateX('+x.toFixed(3)+'px)')}}});
     /* dock: the hooks return into the R, the name is complete */
-    if(!dockFx&&t>=T_DOCK){dockFx=true;const [X,Y]=wp(291.4,-32.5);shake(t,7,300);ring(t,X,Y,W*.75,900,'91,140,255',3,.18);ring(t+60,X,Y,W*.5,700,'244,242,234',1.5,.12);sparks(X,Y,MOBILE?16:34,7,600,.6)}
+    if(!dockFx&&t>=T_DOCK){dockFx=true}
     g2.setTransform(DPR,0,0,DPR,0,0);g2.clearRect(0,0,W,H);if(dockFx){laser(g,t-T_DOCK-CHG);const q=clamp((t-T_DOCK)/500);if(q<1){const [a,y]=wp(232,-32.5),b=wp(372,-32.5)[0],gr=g.createLinearGradient(a,0,b,0);gr.addColorStop(0,'rgba(91,140,255,0)');gr.addColorStop(.5,'rgba(220,230,255,'+(1-q)+')');gr.addColorStop(1,'rgba(91,140,255,0)');g.strokeStyle=gr;g.lineWidth=3;g.beginPath();g.moveTo(a,y);g.lineTo(b,y);g.stroke()}
       const tl=t-T_DOCK;zoom.style.transform='scale('+(1+.035*eIO(clamp(tl/2300))).toFixed(5)+')';
       const n=Math.min(11,Math.floor(clamp((tl-CHG-2300)/600)*12));if(tl>CHG+2250&&n!==typed){typed=n;tag.innerHTML='INTERACTIVE'.slice(0,n)+'<i></i>'}
@@ -216,6 +216,8 @@ function frame(now){if(!running)return;requestAnimationFrame(frame);const t=now-
   let sx=0,sy=0;for(let i=SH.length-1;i>=0;i--){const s=SH[i],q=(t-s.t0)/s.dur;if(q>=1){SH.splice(i,1);continue}if(q<0)continue;const a=s.amp*Math.pow(1-q,2);sx+=rnd(-a,a);sy+=rnd(-a,a)*.7}
   cam.style.transform=sx||sy?'translate('+sx.toFixed(1)+'px,'+sy.toFixed(1)+'px)':'';
   if(t>=T_ON+300&&!skippable){skippable=true;const h=$('hint');h.textContent=MOBILE?'TOCA PARA ENTRAR':'CLICA PARA ENTRAR';h.style.opacity=1;h.animate([{opacity:1},{opacity:.45},{opacity:1}],{duration:2200,iterations:Infinity,delay:800});if(EMBED)try{parent.postMessage({t:'pm-intro-skippable'},'*')}catch(e){}}
+  if(SHARDS.length){g2.globalCompositeOperation='source-over';for(let i=SHARDS.length-1;i>=0;i--){const p=SHARDS[i];p.l-=dt;if(p.l<=0){SHARDS.splice(i,1);continue}p.vx*=Math.pow(.95,dt/16);p.vy=p.vy*Math.pow(.95,dt/16)+.18*dt/16;p.x+=p.vx*dt/16;p.y+=p.vy*dt/16;p.r+=p.vr*dt/16;
+    g2.save();g2.translate(p.x,p.y);g2.rotate(p.r);g2.globalAlpha=Math.min(1,p.l/400);g2.fillStyle='rgb('+p.c+')';g2.beginPath();g2.moveTo(-p.s,-p.s*.6);g2.lineTo(p.s,0);g2.lineTo(-p.s*.4,p.s*.7);g2.closePath();g2.fill();g2.restore()}g2.globalAlpha=1}
   if(t>=T_DONE&&!doneSent){doneSent=true;cam.style.transform='';$('hint').style.opacity=0;done()}}
 let skippable=false;addEventListener('pointerdown',()=>{if(!skippable||doneSent)return;doneSent=true;running=false;$('hint').style.opacity=0;cam.style.transform='';try{cx2.clearRect(0,0,cv.width,cv.height);g2.setTransform(1,0,0,1,0,0);g2.clearRect(0,0,cv2.width,cv2.height)}catch(e){}$('hooks').style.visibility='hidden';sheenG.style.visibility='hidden';finalState();done()});
 
@@ -243,7 +245,8 @@ function laser(gx,tl){const g=g2;const [c,y]=wp(LC,-32.5),u=wp(1,0)[0]-wp(0,0)[0
   else if(tl<LGROW+LHOLD+LRET){const k=tl-LGROW,f=k<LHOLD?1:1-clamp((k-LHOLD)/LRET),e=1-f;beam(g,l,r,y,Math.pow(f,1.3)*1.15,w*(1+1.6*e));
     /* the shock: a thin bright line that spreads up and down off the beam as it dies */
     if(k>=LHOLD){const sh=w*(2+40*e),gs=g.createLinearGradient(0,y-sh,0,y+sh);gs.addColorStop(0,'rgba(91,140,255,0)');gs.addColorStop(.5,'rgba(150,180,255,'+(.35*f)+')');gs.addColorStop(1,'rgba(91,140,255,0)');g.fillStyle=gs;g.fillRect(l,y-sh,r-l,sh*2)}
-    if(!laser.ends){laser.ends=1;[l,r].forEach((x,i)=>sparks(x,y,MOBILE?10:22,8,600,.6,i?1:-1,0,1.6))}}}
+    if(!laser.ends){laser.ends=1;hooksGone=true;$('hooks').style.visibility='hidden';
+      hookPos.forEach((hx,i)=>{const [X,Y]=wp(hx,-32.5),col=i?'91,140,255':'244,242,234',d=i?1:-1;for(let n=0;n<(MOBILE?9:16);n++){const a=(i?0:Math.PI)+(Math.random()-.5)*2.2,v=rnd(3,13);SHARDS.push({x:X+rnd(-8,8),y:Y+rnd(-10,10),vx:Math.cos(a)*v,vy:Math.sin(a)*v-rnd(0,3),r:Math.random()*6,vr:rnd(-.35,.35),s:rnd(3,9)*(wp(1,0)[0]-wp(0,0)[0]),c:col,l:rnd(700,1200)})}sparks(X,Y,MOBILE?14:30,10,700,i?.9:.15,d,0,2)});[l,r].forEach((x,i)=>sparks(x,y,MOBILE?10:22,8,600,.6,i?1:-1,0,1.6))}}}
 function rect(){const a=$('letters').getBoundingClientRect(),b=$('R3').getBoundingClientRect(),x0=Math.min(a.left,b.left),x1=Math.max(a.right,b.right),y0=Math.min(a.top,b.top),y1=Math.max(a.bottom,b.bottom);return [x0,y0,x1-x0,y1-y0]}
 function done(){if(EMBED){try{parent.postMessage({t:'pm-intro-done',r:rect()},'*')}catch(e){}setTimeout(()=>{running=false},1500)}else{$('again').classList.add('on');setTimeout(()=>{running=false},4000)}}
 function finalState(){mark.style.visibility='hidden';zoom.style.transform='';LT.forEach(L=>{L.g.setAttribute('transform','translate('+OFF(L.i)+' 0)');L.g.style.opacity=1});['letters','rG'].forEach(id=>$(id).style.visibility='visible');split(R3);R3.bs.forEach(b=>b.style.transform='translateX(6.5px)');LT.forEach(L=>{L.ps.forEach(p=>{p.setAttribute('fill',WH);p.setAttribute('stroke-opacity','0')});L.pr.removeAttribute('clip-path');split(L);L.bs.forEach(b=>b.style.transform='translateX(6.5px)')});tag.innerHTML='INTERACTIVE<i></i>'}
@@ -253,6 +256,6 @@ addEventListener('resize',size);
 if(EMBED){$('again').remove();
   addEventListener('message',e=>{if(e.source!==parent)return;if(e.data==='pm-hide-word'){$('letters').style.visibility='hidden';$('rG').style.visibility='hidden'}else if(e.data==='pm-intro-play'&&!STATIC)reduce?(finalState(),setTimeout(()=>parent.postMessage({t:'pm-intro-done',r:rect()},'*'),500)):start()});
   if(STATIC){finalState();requestAnimationFrame(()=>parent.postMessage({t:'pm-intro-done',r:rect()},'*'))}
-  else requestAnimationFrame(()=>requestAnimationFrame(()=>parent.postMessage({t:'pm-intro-ready'},'*')))}
+  else requestAnimationFrame(()=>requestAnimationFrame(()=>{parent.postMessage({t:'pm-intro-ownhint'},'*');parent.postMessage({t:'pm-intro-ready'},'*')}))}
 else{if(reduce){finalState();$('again').classList.add('on')}else setTimeout(start,350)}
 </script></body></html>
