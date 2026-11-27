@@ -1200,14 +1200,14 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
 
 /* ===== intro: emblem, a thin line that fills, then the world ===== */
 (()=>{
-  const hero=$('#inicio');let seen=false;try{seen=sessionStorage.getItem('pm-in-vector')==='1'}catch(e){}
+  const hero=$('#inicio'),IQ=(location.search.match(/[?&]intro=(\d)/)||[])[1],IF=IQ==='2'?'intro2.html':IQ==='3'?'intro3.html':IQ==='4'?'intro4.html':'intro.html';let seen=false;try{seen=!IQ&&sessionStorage.getItem('pm-in-vector')==='1'}catch(e){}
   if(reduce||seen){hero.classList.add('on');worlds.start();return}
   root.classList.add('js-intro','pre');
   worlds.pause();
   /* the intro is the cinematic: the two brothers, the <R>, the hooks and the laser. It tells us when it is done. */
   const o=$('#intro'),fx=$('#introFx');let done=false,fb;
   o.classList.add('vector');
-  fx.src='intro.html?embed=1&v='+Date.now();   // always the newest intro, never a cached one
+  fx.src=IF+'?embed=1&v='+Date.now();if(IF==='intro4.html')$('#iSk').style.display='none';   // this intro shows its own "click to enter" once the R exists   // always the newest intro, never a cached one
   /* hand-off: the name at the end of the cinematic flies into the place of the name in the hero */
   function finish(source){if(done)return;done=true;clearTimeout(fb);try{sessionStorage.setItem('pm-in-vector','1')}catch(e){}
     fitWords();worlds.resume();
@@ -1232,7 +1232,7 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
   fb=setTimeout(()=>finish(),12000);   // if the cinematic never becomes ready, open the site anyway
   addEventListener('message',e=>{if(e.source!==fx.contentWindow)return;const d=e.data;
     if(d&&d.t==='pm-intro-ready'){requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!done)fx.contentWindow.postMessage('pm-intro-play','*')}))}
-    else if(d&&d.t==='pm-intro-start'){clearTimeout(fb);fb=setTimeout(()=>finish(),16000)}else if(d&&d.t==='pm-intro-done')finish(d.r);else if(d==='pm-intro-done')finish()});
+    else if(d&&d.t==='pm-intro-skippable'){$('#iSk').style.display='none'}else if(d&&d.t==='pm-intro-start'){clearTimeout(fb);fb=setTimeout(()=>finish(),16000)}else if(d&&d.t==='pm-intro-done')finish(d.r);else if(d==='pm-intro-done')finish()});
   $('#iSk').onclick=()=>finish();addEventListener('keydown',function k(e){if(e.key==='Escape'||e.key==='Enter'){finish();removeEventListener('keydown',k)}});
 })();
 
