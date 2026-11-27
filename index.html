@@ -183,10 +183,12 @@ p{margin:0 0 1em;max-width:64ch}
 .h-meta{position:relative;z-index:1;pointer-events:none}
 html.dragging,html.dragging *{user-select:none!important;-webkit-user-select:none!important;cursor:grabbing!important}
 .word{position:relative;display:flex;justify-content:space-between;font:800 clamp(2.2rem,9.6vw,11rem)/.82 Syne,sans-serif;letter-spacing:-.02em;margin:0 0 0 -.04em;color:var(--wh)}
-.word span{flex:none;position:relative;display:inline-block;color:transparent;will-change:transform;user-select:none;-webkit-user-select:none;--sh:.05em;transition:--sh .5s var(--ease)}
+.word span{flex:none;position:relative;display:inline-block;color:transparent;will-change:transform;user-select:none;-webkit-user-select:none;--sh:.067em;transition:--sh .5s var(--ease)}
+.word span.r3{margin-right:.2255em}
+@media(max-width:700px){.hero .word span.r3{margin-right:0;margin-bottom:.2255em}}
 .word span::before,.word span::after{content:attr(data-c);position:absolute;left:0;top:0;color:var(--wh)}
-.word span::before{clip-path:inset(0 0 49% 0)}
-.word span::after{clip-path:inset(53% 0 0 0);transform:translateX(var(--sh))}
+.word span::before{clip-path:inset(0 0 51.3% 0)}
+.word span::after{clip-path:inset(52.7% 0 0 0);transform:translateX(var(--sh))}
 .word span:nth-child(3n+2){--sh:.09em}.word span:nth-child(4n){--sh:.02em}
 .word:hover span{--sh:.16em}
 .word .br{display:none}
@@ -547,8 +549,8 @@ html.palx *,html.palx *::before,html.palx *::after{transition-property:transform
 .word.pwh span{visibility:hidden}
 /* the 3D R of the logo, inside the name: depth in lime, built from stacked shadows; the clip of each half is widened so the depth shows */
 .word span.r3::before,.word span.r3::after{text-shadow:0.016em 0 0 color-mix(in srgb,var(--cy) 26%,#0b0d10),0.032em 0 0 color-mix(in srgb,var(--cy) 30%,#0b0d10),0.048em 0 0 color-mix(in srgb,var(--cy) 34%,#0b0d10),0.064em 0 0 color-mix(in srgb,var(--cy) 39%,#0b0d10),0.080em 0 0 color-mix(in srgb,var(--cy) 43%,#0b0d10),0.096em 0 0 color-mix(in srgb,var(--cy) 47%,#0b0d10),0.112em 0 0 color-mix(in srgb,var(--cy) 51%,#0b0d10),0.128em 0 0 color-mix(in srgb,var(--cy) 55%,#0b0d10),0.144em 0 0 color-mix(in srgb,var(--cy) 59%,#0b0d10),0.160em 0 0 color-mix(in srgb,var(--cy) 63%,#0b0d10),0.176em 0 0 color-mix(in srgb,var(--cy) 68%,#0b0d10),0.192em 0 0 color-mix(in srgb,var(--cy) 72%,#0b0d10),0.208em 0 0 color-mix(in srgb,var(--cy) 76%,#0b0d10),0.224em 0 0 var(--cy)}
-.word span.r3::before{clip-path:polygon(0 0,160% 0,160% 51%,0 51%)}
-.word span.r3::after{clip-path:polygon(0 53%,160% 53%,160% 100%,0 100%)}
+.word span.r3::before{clip-path:polygon(0 0,160% 0,160% 48.7%,0 48.7%)}
+.word span.r3::after{clip-path:polygon(0 52.7%,160% 52.7%,160% 100%,0 100%)}
 @media(max-width:700px){.word span.r3::before,.word span.r3::after{text-shadow:0 0.016em 0 color-mix(in srgb,var(--cy) 26%,#0b0d10),0 0.032em 0 color-mix(in srgb,var(--cy) 30%,#0b0d10),0 0.048em 0 color-mix(in srgb,var(--cy) 34%,#0b0d10),0 0.064em 0 color-mix(in srgb,var(--cy) 39%,#0b0d10),0 0.080em 0 color-mix(in srgb,var(--cy) 43%,#0b0d10),0 0.096em 0 color-mix(in srgb,var(--cy) 47%,#0b0d10),0 0.112em 0 color-mix(in srgb,var(--cy) 51%,#0b0d10),0 0.128em 0 color-mix(in srgb,var(--cy) 55%,#0b0d10),0 0.144em 0 color-mix(in srgb,var(--cy) 59%,#0b0d10),0 0.160em 0 color-mix(in srgb,var(--cy) 63%,#0b0d10),0 0.176em 0 color-mix(in srgb,var(--cy) 68%,#0b0d10),0 0.192em 0 color-mix(in srgb,var(--cy) 72%,#0b0d10),0 0.208em 0 color-mix(in srgb,var(--cy) 76%,#0b0d10),0 0.224em 0 var(--cy)}
   .word span.r3::before{clip-path:polygon(51% 0,100% 0,100% 160%,51% 160%)}
   .word span.r3::after{clip-path:polygon(0 0,47% 0,47% 160%,0 160%)}}
@@ -562,6 +564,26 @@ html.palx *,html.palx *::before,html.palx *::after{transition-property:transform
 main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:auto 1100px}
 .glc{visibility:hidden}.glc.on{visibility:visible}
 .mark3d.webgl .m2d{display:none}
+
+/* ===== the hero name uses the LOGO's glyphs (same paths as the intro and the header), laid out exactly like the logo:
+   same letter shapes, same spacing, same gap after the R, same cut and the same slide — so the hand-off from the intro is seamless.
+   Units: logo glyphs are 64 units tall (cap); here the cap is .656em; the box drawn is 68 units (-66..2) to fit overshoots. */
+@media(min-width:701px){
+  .word{justify-content:flex-start;letter-spacing:0}
+  .word span{width:calc(var(--gw)*1em);margin-left:calc(var(--ml)*1em);isolation:isolate}
+  .word span,.word span:nth-child(3n+2),.word span:nth-child(4n){--sh:.0666em}
+  .word:hover span,.word:hover span:nth-child(3n+2),.word:hover span:nth-child(4n){--sh:.16em}
+  .word span:nth-child(2){transition-delay:.03s}.word span:nth-child(3){transition-delay:.06s}.word span:nth-child(4){transition-delay:.09s}.word span:nth-child(5){transition-delay:.12s}.word span:nth-child(6){transition-delay:.15s}.word span:nth-child(7){transition-delay:.18s}.word span:nth-child(8){transition-delay:.21s}.word span:nth-child(9){transition-delay:.24s}.word span:nth-child(10){transition-delay:.27s}
+  .word span.r3{margin-right:0}
+  .word span::before,.word span::after,.word span.r3::before,.word span.r3::after{content:'';top:.072em;height:.697em;width:100%;color:transparent;text-shadow:none;background:var(--wh);-webkit-mask:var(--m) 0 0/100% 100% no-repeat;mask:var(--m) 0 0/100% 100% no-repeat;z-index:1}
+  .word span::before,.word span.r3::before{clip-path:inset(0 0 53.1% 0)}
+  .word span::after,.word span.r3::after{clip-path:inset(51.6% 0 0 0)}
+  .word span .dp{display:block;position:absolute;left:0;top:.072em;height:.697em;width:calc(var(--dw)*1em);z-index:0;pointer-events:none}
+  .word span .dp::before,.word span .dp::after{content:'';position:absolute;inset:0;background:var(--mdc) 0 0/100% 100% no-repeat,var(--cy);background-blend-mode:multiply;-webkit-mask:var(--md) 0 0/100% 100% no-repeat;mask:var(--md) 0 0/100% 100% no-repeat}
+  .word span .dp::before{clip-path:inset(0 0 53.1% 0)}
+  .word span .dp::after{clip-path:inset(51.6% 0 0 0);transform:translateX(var(--sh))}
+}
+@media(max-width:700px){.word span .dp{display:none}}
 </style>
 </head>
 <body>
@@ -1028,6 +1050,11 @@ const sfx=(()=>{
 function buzz(p){if(reduce)return;try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 const word=(()=>{
   const hero=$('#inicio'),wd=$('#h-hero'),L=$$('#h-hero span');L.forEach((s,i)=>{s.dataset.c=s.textContent;s.style.setProperty('--i',i)});
+  /* the logo's glyphs for the hero (see the CSS note): width/spacing in em, a mask per letter, the R's depth as one extruded mask */
+  const HL=["M31.8 -16.5V0H6.8V-64H76.2Q83.7 -64 90.2 -63Q96.8 -61.9 101.7 -59.2Q106.6 -56.5 109.4 -51.6Q112.2 -46.7 112.2 -39Q112.2 -31.3 109.4 -26.8Q106.6 -22.3 101.7 -20.1Q96.8 -17.9 90.2 -17.2Q83.7 -16.5 76.2 -16.5ZM31.8 -34H80.1Q83.1 -34 85.2 -35Q87.2 -35.9 87.2 -39Q87.2 -42.2 85.2 -43.1Q83.1 -44 80.1 -44H31.8Z", "M116.7 0 159.6 -64H187.4L230.7 0H203.2L196.9 -9.7H150.4L144.2 0ZM187.2 -24.7 173.6 -45.7 160.1 -24.7Z", "M236.7 0V-64H314Q323.1 -64 330.4 -62Q337.6 -59.9 341.9 -55.1Q346.1 -50.3 346.1 -42Q346.1 -36.5 344.1 -32.9Q342.1 -29.3 338.6 -27.3Q335.1 -25.3 330.6 -24.4Q329.7 -24.2 328.9 -24.1Q330.7 -23.9 332.3 -23.7Q338.7 -22.8 341.2 -20.5Q343.8 -18.1 343.8 -13.7V0H318.8V-10.7Q318.8 -13.7 317.6 -15.2Q316.5 -16.8 312.6 -17.4Q308.8 -18 300.8 -18H261.7V0ZM261.7 -34.7H314Q317 -34.7 319.1 -35.7Q321.1 -36.7 321.1 -39.5Q321.1 -42.1 319.1 -43Q317 -44 314 -44H261.7Z", "M351.9 0 394.8 -64H422.6L465.9 0H438.4L432.1 -9.7H385.6L379.4 0ZM422.4 -24.7 408.8 -45.7 395.3 -24.7Z", "M543.9 -64Q557.4 -64 566.2 -61.4Q575 -58.8 580 -54.3Q585 -49.8 587 -44.1Q589.1 -38.3 589.1 -32Q589.1 -25.7 586.8 -20Q584.5 -14.2 579.2 -9.7Q574 -5.2 565.4 -2.6Q556.7 0 543.9 0H471.9V-64ZM496.9 -20H542.9Q548.5 -20 552.4 -20.8Q556.3 -21.5 558.6 -23Q561 -24.5 562 -26.8Q563.1 -29 563.1 -32Q563.1 -35 562 -37.2Q561 -39.5 558.6 -41Q556.3 -42.5 552.4 -43.2Q548.5 -44 542.9 -44H496.9Z", "M601.6 -64H626.6V0H601.6Z", "M698.4 2Q685.4 2 674.5 0.4Q663.7 -1.1 655.8 -4.8Q647.8 -8.6 643.5 -15.1Q639.1 -21.6 639.1 -31.5Q639.1 -41.4 643.5 -48.1Q647.9 -54.7 656.1 -58.7Q664.4 -62.6 675.9 -64.3Q687.3 -66 701.4 -66Q719.9 -66 732.5 -62.6Q745 -59.2 751.6 -53Q758.2 -46.7 758.7 -38.1H732.7Q731.5 -40.3 728.3 -42.4Q725.1 -44.4 718.7 -45.7Q712.3 -47 701.4 -47Q688.6 -47 680.6 -45.5Q672.6 -43.9 668.9 -40.5Q665.2 -37.1 665.2 -31.5Q665.2 -26.6 669 -23.4Q672.8 -20.2 681.2 -18.6Q689.6 -17 703.4 -17Q713.1 -17 720.2 -17.9Q727.4 -18.7 733.3 -20.5Q736.3 -21.4 739.3 -22.6H706.8V-33.1H760.1V0H740.5Q740.5 -3 741.3 -6.8Q742.1 -10.6 743.4 -14.8Q743.7 -15.8 744 -16.8Q738.2 -8.9 728.9 -4.2Q716.7 2 698.4 2Z", "M844 -15.4 891.1 -64H916.1V0H891.1V-32.8L859.1 0H829.1L797.1 -32.6V0H772.1V-64H797.1Z", "M1018 -36.5V-64H1043V-32Q1043 -23.5 1039.8 -17.6Q1036.7 -11.6 1031.1 -7.8Q1025.5 -3.9 1018.2 -1.8Q1010.9 0.3 1002.6 1.1Q994.2 2 985.6 2Q976.5 2 968 1.1Q959.5 0.3 952.2 -1.8Q945 -3.9 939.6 -7.8Q934.2 -11.6 931.2 -17.6Q928.1 -23.5 928.1 -32V-64H953.1V-36.5Q953.1 -28.5 957 -24.3Q960.9 -20.1 968.1 -18.6Q975.4 -17 985.6 -17Q995.5 -17 1002.8 -18.6Q1010.1 -20.1 1014 -24.3Q1018 -28.5 1018 -36.5Z", "M1051.5 -23.5H1078.8Q1079.5 -21.4 1082.9 -20Q1086.3 -18.5 1092 -17.8Q1097.8 -17 1105.4 -17Q1112.9 -17 1117.2 -17.5Q1121.6 -17.9 1123.4 -19.1Q1125.2 -20.2 1125.2 -22.2Q1125.2 -24.1 1122.3 -25.2Q1119.4 -26.2 1112 -26.6Q1104.6 -27 1091.2 -27Q1081.2 -27 1074 -28Q1066.7 -28.9 1062.1 -31Q1057.4 -33 1055.2 -36.2Q1053 -39.3 1053 -43.7Q1053 -51.3 1058.2 -56.2Q1063.3 -61.2 1073.8 -63.7Q1084.2 -66.1 1099.9 -66.1Q1122.9 -66.1 1135.1 -59.5Q1147.2 -52.8 1147.2 -40.3H1121.3Q1120.8 -43.6 1115.1 -45.4Q1109.4 -47.1 1098.9 -47.1Q1088.5 -47.1 1083.5 -45.9Q1078.4 -44.7 1078.4 -41.8Q1078.4 -40.3 1079.8 -39.4Q1081.2 -38.5 1084.7 -38Q1088.1 -37.4 1094.4 -37.2Q1100.7 -37 1110.4 -37Q1121.1 -37 1128.6 -36Q1136.1 -34.9 1140.8 -32.8Q1145.4 -30.7 1147.5 -27.5Q1149.6 -24.2 1149.6 -19.8Q1149.6 -12.2 1144.8 -7.4Q1140 -2.6 1129.6 -0.3Q1119.2 2 1102.4 2Q1092.9 2 1085 0.9Q1077 -0.2 1070.8 -2.4Q1064.6 -4.5 1060.3 -7.7Q1056 -10.8 1053.8 -14.8Q1051.5 -18.7 1051.5 -23.5Z"],HB=[[6.8, 112.2], [116.7, 230.7], [236.7, 346.1], [351.9, 465.9], [471.9, 589.1], [601.6, 626.6], [639.1, 760.1], [772.1, 916.1], [928.1, 1043], [1051.5, 1149.6]];
+  {const CAP=.656,u=v=>(v/64*CAP).toFixed(4),X=i=>i>2?22:0,svg=(vb,body)=>'url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'" preserveAspectRatio="none">'+body+'</svg>')+'")';
+   L.forEach((s,i)=>{const [a,b]=HB[i];s.style.setProperty('--gw',u(b-a));s.style.setProperty('--ml',i?u(a+X(i)-(HB[i-1][1]+X(i-1))):'0');s.style.setProperty('--m',svg(a+' -66 '+(b-a)+' 68','<path d="'+HL[i]+'"/>'));
+     if(s.classList.contains('r3')){let lay='';for(let k=1;k<=14;k++)lay+='<path transform="translate('+(20*k/14).toFixed(2)+' 0)" d="'+HL[i]+'"/>';s.style.setProperty('--dw',u(b-a+20));s.style.setProperty('--md',svg(a+' -66 '+(b-a+20)+' 68',lay));let lc='';for(let k=14;k>=1;k--){const v=k===14?255:Math.round(255*(.17+(.72-.17)*k/14));lc+='<path fill="rgb('+v+','+v+','+v+')" transform="translate('+(20*k/14).toFixed(2)+' 0)" d="'+HL[i]+'"/>'}s.style.setProperty('--mdc',svg(a+' -66 '+(b-a+20)+' 68',lc));const dp=document.createElement('i');dp.className='dp';dp.setAttribute('aria-hidden','true');s.appendChild(dp)}})}
   let eng=null,bodies=[],home=[],raf=0,drag=null,backT=0;
   /* phones: the letters' physics runs on its own thread too; the page only receives ten positions per frame */
   let PW=null,pwOn=false,pos=null,pwRaf=0,OV=null,backing=false,bmKey='',ovKey='',sz=[];
@@ -1071,12 +1098,14 @@ const word=(()=>{
   function makeBM(RS){const cs=getComputedStyle(wd),fs=parseFloat(cs.fontSize),vert=cs.writingMode.indexOf('vertical')===0,S=Math.min(devicePixelRatio||1,2);
     const CYc=(getComputedStyle(document.documentElement).getPropertyValue('--cy').trim()||'#c8f53c');const key=CYc+'|'+fs+'|'+vert+'|'+S+'|'+RS.map(r=>r.width.toFixed(1)+'x'+r.height.toFixed(1)).join(',');if(key===bmKey)return;bmKey=key;
     const font=cs.fontStyle+' '+cs.fontWeight+' '+fs+'px '+cs.fontFamily,col=getComputedStyle(L[0],'::before').color,list=[],tr=[];
-    L.forEach((s,i)=>{const r=RS[i],w=r.width,h=r.height,ch=s.dataset.c,v=getComputedStyle(s).getPropertyValue('--sh').trim(),sh=v.endsWith('em')?parseFloat(v)*fs:parseFloat(v)||0,dep=s.classList.contains('r3')?.224*fs:0,pad=Math.ceil(Math.abs(sh)+dep)+4;
+    L.forEach((s,i)=>{const r=RS[i],w=r.width,h=r.height,ch=s.dataset.c,v=getComputedStyle(s).getPropertyValue('--sh').trim(),sh=v.endsWith('em')?parseFloat(v)*fs:parseFloat(v)||0,dep=s.classList.contains('r3')?(vert?.224*fs:20*.697*fs/68):0,pad=Math.ceil(Math.abs(sh)+dep)+4;
       const oc=new OffscreenCanvas(Math.ceil((w+2*pad)*S),Math.ceil((h+2*pad)*S)),g=oc.getContext('2d');g.scale(S,S);g.translate(pad,pad);g.font=font;g.fillStyle=col;
       const mt=g.measureText(ch),A=mt.fontBoundingBoxAscent,D=mt.fontBoundingBoxDescent;
-      const glyph=()=>{if(vert){g.save();g.translate(w,0);g.rotate(Math.PI/2);g.fillText(ch,0,(w-(A+D))/2+A);g.restore()}else g.fillText(ch,0,(h-(A+D))/2+A)};
-      const halves=(ox,oy)=>{g.save();g.translate(ox,oy);g.beginPath();vert?g.rect(w*.51,0,w*.49,h):g.rect(0,0,w,h*.51);g.clip();glyph();g.restore();
-        g.save();g.translate(ox,oy);vert?g.translate(0,sh):g.translate(sh,0);g.beginPath();vert?g.rect(0,0,w*.47,h):g.rect(0,h*.53,w,h*.47);g.clip();glyph();g.restore()};
+      /* desktop: the same logo glyph the page shows (Path2D), same cut and slide; phones keep the font */
+      const kk=.697*fs/68,top=.072*fs,gp=!vert&&HL[i]?new Path2D(HL[i]):null,ga=!vert&&HB[i]?HB[i][0]:0,cutA=top+(66-34.1)*kk,cutB=top+(66-30.9)*kk;
+      const glyph=()=>{if(gp){g.save();g.translate(0,top+66*kk);g.scale(kk,kk);g.translate(-ga,0);g.fill(gp);g.restore()}else if(vert){g.save();g.translate(w,0);g.rotate(Math.PI/2);g.fillText(ch,0,(w-(A+D))/2+A);g.restore()}else g.fillText(ch,0,(h-(A+D))/2+A)};
+      const halves=(ox,oy)=>{g.save();g.translate(ox,oy);g.beginPath();vert?g.rect(w*.51,0,w*.49,h):g.rect(-w,-h,w*3,(gp?cutA:h*.51)+h);g.clip();glyph();g.restore();
+        g.save();g.translate(ox,oy);vert?g.translate(0,sh):g.translate(sh,0);g.beginPath();vert?g.rect(0,0,w*.47,h):g.rect(-w,gp?cutB:h*.53,w*3,h*2);g.clip();glyph();g.restore()};
       if(dep){const mx=(a,b,k)=>'#'+[1,3,5].map(i=>Math.round(parseInt(a.substr(i,2),16)*(1-k)+parseInt(b.substr(i,2),16)*k).toString(16).padStart(2,'0')).join('');
         for(let k=14;k>=1;k--){g.fillStyle=k===14?CYc:mx('#0b0d10',CYc.length===7?CYc:'#c8f53c',.22+.58*k/14);const o=dep*k/14;halves(vert?0:o,vert?o:0)}g.fillStyle=col}
       halves(0,0);
@@ -1182,14 +1211,20 @@ addEventListener('keydown',e=>{if((e.key==='p'||e.key==='P')&&!e.ctrlKey&&!e.met
   /* hand-off: the name at the end of the cinematic flies into the place of the name in the hero */
   function finish(source){if(done)return;done=true;clearTimeout(fb);try{sessionStorage.setItem('pm-in-vector','1')}catch(e){}
     fitWords();worlds.resume();
-    const hw=$('#h-hero'),B=hw.getBoundingClientRect(),vert=getComputedStyle(hw).writingMode.startsWith('vertical');
+    const hw=$('#h-hero'),vert=getComputedStyle(hw).writingMode.startsWith('vertical'),B=(()=>{
+      /* the box of the LETTERS themselves (not the h1, which is wider than its content): first letter's left to last letter's right,
+         and vertically the glyph box (.072em..769em of each line), exactly what the intro measures on its side */
+      const sp=[...hw.querySelectorAll('span')],r=sp.map(e=>e.getBoundingClientRect());if(vert||!r.length)return hw.getBoundingClientRect();
+      const fs=parseFloat(getComputedStyle(hw).fontSize),l=Math.min(...r.map(x=>x.left)),rt=Math.max(...r.map(x=>x.right)),t=r[0].top+.072*fs,b=r[0].top+.769*fs;
+      return {left:l,top:t,width:rt-l,height:b-t}})();
     const land=()=>{root.classList.remove('pre');hero.classList.add('on','flipped');hw.style.visibility='';quake(hero);glitch(1,500);hw.classList.remove('jolt');void hw.offsetWidth;hw.classList.add('jolt');sfx.shift();buzz([20,30,50])};
     o.animate([{opacity:1},{opacity:0}],{duration:source?650:800,delay:source?120:0,fill:'forwards',easing:'cubic-bezier(.4,0,.2,1)'}).onfinish=()=>{root.classList.remove('js-intro');fx.remove()};
     if(!source||reduce||!B.width){root.classList.remove('pre');hero.classList.add('on');setTimeout(()=>glitch(.6,300),250);return}
-    try{const d=fx.contentDocument;['letters','R3'].forEach(id=>{const e=d.getElementById(id);e.animate([{opacity:1},{opacity:0}],{duration:240,fill:'forwards',easing:'ease-out'})});['ln','lnG'].forEach(id=>d.getElementById(id).style.visibility='hidden')   /* the laser is already gone: never animate it back from 1 */}catch(e){try{fx.contentWindow.postMessage('pm-hide-word','*')}catch(x){}}   // same frame as the flying copy appears: no doubled word
+    try{const d=fx.contentDocument;['letters','rG'].forEach(id=>{const e=d.getElementById(id);e.style.opacity=0});['ln','lnG'].forEach(id=>d.getElementById(id).style.visibility='hidden')   /* the laser is already gone: never animate it back from 1 */}catch(e){try{fx.contentWindow.postMessage('pm-hide-word','*')}catch(x){}}   // same frame as the flying copy appears: no doubled word
     const fl=hw.cloneNode(true);fl.removeAttribute('id');fl.setAttribute('aria-hidden','true');fl.classList.remove('jolt');
-    fl.style.cssText+=';position:fixed;left:'+B.left+'px;top:'+B.top+'px;width:'+B.width+'px;height:'+B.height+'px;margin:0;right:auto;z-index:260;pointer-events:none;transform-origin:50% 50%';
-    hw.style.visibility='hidden';document.body.appendChild(fl);fl.querySelectorAll('span').forEach(e=>{e.style.opacity=1;e.style.animation='none'});fl.animate([{opacity:0},{opacity:1}],{duration:240,easing:'ease-out'});   // the two words cross-fade instead of swapping on one frame
+    const R0=hw.getBoundingClientRect();   // the copy sits exactly where the real h1 is; it turns/scales around the letters' centre
+    fl.style.cssText+=';position:fixed;left:'+R0.left+'px;top:'+R0.top+'px;width:'+R0.width+'px;height:'+R0.height+'px;margin:0;right:auto;z-index:260;pointer-events:none;transform-origin:'+(B.left+B.width/2-R0.left)+'px '+(B.top+B.height/2-R0.top)+'px';
+    hw.style.visibility='hidden';document.body.appendChild(fl);fl.querySelectorAll('span').forEach(e=>{e.style.opacity=1;e.style.animation='none'});   // the copy lands exactly on the intro's word, so the two swap on one frame: no cross-fade (that dimmed the word)
     const ax=source[0]+source[2]/2,ay=source[1]+source[3]/2,bx=B.left+B.width/2,by=B.top+B.height/2,
       sx=vert?source[2]/B.height:source[2]/B.width,sy=sx;
     const from='translate('+(ax-bx)+'px,'+(ay-by)+'px) rotate('+(vert?-90:0)+'deg) scale('+sx+','+sy+')';
